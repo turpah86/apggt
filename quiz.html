@@ -95,10 +95,10 @@
             
             const fData = new FormData();
             // Проверь эти ID еще раз, они должны быть такими:
-            fData.append('entry.1458374118', studentInfo);                      // ФИО
-            fData.append('entry.1320096689', localStorage.getItem('user_group')); // Группа
-            fData.append('entry.1906150515', percent + "% (" + score + "/" + questions.length + ")"); 
-            fData.append('entry.168840307', mark);
+            fData.append('entry.1143436087', studentInfo);                      // ФИО
+            fData.append('entry.1440209558', localStorage.getItem('user_group')); // Группа
+            fData.append('entry.450991632', percent + "% (" + score + "/" + questions.length + ")"); 
+            fData.append('entry.62117074', mark);
         
             fetch(fURL, {
                 method: 'POST',
