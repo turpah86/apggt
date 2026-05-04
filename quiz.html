@@ -98,10 +98,10 @@
             const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/viewform';
             
             const fData = new URLSearchParams();
-            fData.append('entry.1458374110', studentInfo); 
-            fData.append('entry.1330806689', userGroup);   
-            fData.append('entry.1906158515', `${percent}% (${score}/${questions.length})`); 
-            fData.append('entry.1180008307', mark);
+            fData.append('entry.1458374118', studentInfo); 
+            fData.append('entry.1320096689', userGroup);   
+            fData.append('entry.1688940307', `${percent}% (${score}/${questions.length})`); 
+            fData.append('entry.1906150515', mark);
 
             fetch(fURL, {
                 method: 'POST',
