@@ -131,51 +131,42 @@
 
     <script>
     async function loadLatestAchievements() {
-        // 1. ВСТАВЬ СЮДА СВОЮ ПУБЛИЧНУЮ ССЫЛКУ НА ПАПКУ ЯНДЕКС ДИСКА
-        const pubLink = 'https://disk.yandex.ru/d/_6_7mQfZhLgZLA'; 
-        
-        // API запрос: берем 4 последних файла, только картинки, сортировка по дате создания
-        const apiURL = `https://yandex.net{encodeURIComponent(pubLink)}&limit=4&preview_size=600x600&sort=-created`;
-
+        // ВСТАВЬ СЮДА ССЫЛКУ, КОТОРУЮ ДАЛ GOOGLE SCRIPT
+        const scriptURL = 'ТВОЯ_ССЫЛКА_ОТ_GOOGLE';
+    
         const container = document.getElementById('main-achievements');
-
+    
         try {
-            const response = await fetch(apiURL);
+            const response = await fetch(scriptURL);
             const data = await response.json();
             
             if (data._embedded && data._embedded.items) {
-                // Фильтруем только изображения
                 const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
                 
                 if (items.length === 0) {
-                    container.innerHTML = '<div class="loading-text">В папке пока нет фото наград</div>';
+                    container.innerHTML = '<div class="loading-text">Папка пуста</div>';
                     return;
                 }
-
-                container.innerHTML = ''; // Очищаем текст загрузки
-                
+    
+                container.innerHTML = ''; 
                 items.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'achievement-card';
-                    // При клике открываем оригинал файла
                     card.onclick = () => window.open(item.public_url || item.file, '_blank');
                     
                     card.innerHTML = `
-                        <img src="${item.preview}" alt="${item.name}" loading="lazy">
-                        <p title="${item.name}">${item.name.replace(/\.[^/.]+$/, "")}</p>
+                        <img src="${item.preview}" alt="${item.name}">
+                        <p>${item.name.replace(/\.[^/.]+$/, "")}</p>
                     `;
                     container.appendChild(card);
                 });
-            } else {
-                throw new Error('Пустая папка');
             }
         } catch (e) {
-            console.error("Ошибка Диска:", e);
-            container.innerHTML = '<div class="loading-text">Настройте доступ к папке Яндекс.Диска</div>';
+            container.innerHTML = '<div class="loading-text">Ошибка синхронизации</div>';
         }
     }
-
     document.addEventListener('DOMContentLoaded', loadLatestAchievements);
     </script>
+
 </body>
 </html>
