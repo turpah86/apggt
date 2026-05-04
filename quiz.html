@@ -90,14 +90,15 @@
         
             // --- ПРЯМАЯ ОТПРАВКА ---
             // ВАЖНО: Это ID твоей формы (взято из твоих прошлых скринов)
-            const fURL = `https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse`;
-            
-            const fData = new URLSearchParams();
-            // Проверь эти ID еще раз, они должны быть такими:
-            fData.append('entry.1458374118', studentInfo);                      // ФИО
-            fData.append('entry.1320096689', localStorage.getItem('user_group')); // Группа
-            fData.append('entry.1906150515', percent + "% (" + score + "/" + questions.length + ")"); 
-            fData.append('entry.1688940307', mark);
+            const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/viewform';
+            const formData = new FormData();
+
+            const group = localStorage.getItem('user_group') || 'Не указана';
+
+            formData.append('entry.1143436887', studentInfo); 
+            formData.append('entry.1458374118', group);
+            formData.append('entry.1017387222', percent + '% (' + score + '/' + questions.length + ')');
+            formData.append('entry.2069796030', mark);
         
             fetch(fURL, {
                 method: 'POST',
