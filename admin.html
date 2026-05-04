@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель управления | P.A.N.</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://googleapis.com" rel="stylesheet">
+    <script>
+        // Защита страницы: пускает только если залогинился как Admin
+        if (localStorage.getItem('access_admin.html') !== 'true') {
+            window.location.href = 'students.html';
+        }
+    </script>
+    <style>
+        .admin-section { display: none; animation: fadeInUp 0.5s ease; }
+        .active { display: block; }
+        
+        /* Стилизация вкладок */
+        .tab-btns { 
+            margin-bottom: 30px; 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+        }
+        
+        .tab-btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Стиль для активной вкладки */
+        .tab-btn.active-tab {
+            background: var(--gold);
+            color: var(--dark);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        textarea { 
+            width: 100%; background: rgba(0,0,0,0.3); color: #2ed573; 
+            border: 1px solid var(--glass-border); padding: 15px; 
+            border-radius: 10px; font-family: monospace; font-size: 0.9rem; margin-top: 15px;
+            resize: vertical; outline: none;
+        }
+        
+        .input-row { 
+            background: rgba(255,255,255,0.02); padding: 20px; 
+            border-radius: 15px; margin-bottom: 15px; border: 1px solid var(--glass-border);
+            text-align: left;
+        }
+        
+        input { 
+            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); 
+            color: white; padding: 12px; border-radius: 8px; margin: 5px 0;
+        }
+
+        input:focus { border-color: var(--gold); outline: none; }
+        
+        .correct-hint { font-size: 0.7rem; color: var(--gold); margin-top: 8px; display: block; opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <nav class="glass-nav">
+        <div class="logo">P.A.N. ADMIN</div>
+        <div class="nav-links">
+            <a href="index.html">На сайт</a>
+            <a href="index.html" onclick="localStorage.removeItem('access_admin.html')" style="color: var(--gold);">Выход</a>
+        </div>
+    </nav>
+
+    <main class="main-centered" style="padding-top: 100px; flex-direction: column;">
+        
+        <!-- Переключатели вкладок -->
+        <div class="tab-btns">
+            <button onclick="showTab('tab-users', this)" class="tab-btn active-tab">👥 Группы доступа</button>
+            <button onclick="showTab('tab-quiz', this)" class="tab-btn">📝 Конструктор тестов</button>
+        </div>
+
+        <!-- ВКЛАДКА: ГРУППЫ -->
+        <div id="tab-users" class="admin-section active">
+            <div class="glass-card" style="max-width: 850px;">
+                <h2 class="group-title">Управление доступом</h2>
+                <div id="users-list">
+                    <div class="input-row user-item">
+                        <input type="text" class="u-name" placeholder="Группа (ОГР-23)" style="width: 30%;">
+                        <input type="text" class="u-pass" placeholder="Пароль" style="width: 30%;">
+                        <input type="text" class="u-link" placeholder="Файл (ogr23.html)" style="width: 35%;">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button onclick="addUserRow()" class="btn-secondary" style="flex: 1;">+ Группа</button>
+                    <button onclick="genUsers()" class="btn-primary" style="flex: 2;">💾 Скачать config.js</button>
+                </div>
+                <textarea id="out-users" rows="5" placeholder="Код для config.js появится здесь..." readonly></textarea>
+            </div>
+        </div>
+
+        <!-- ВКЛАДКА: ТЕСТЫ -->
+        <div id="tab-quiz" class="admin-section">
+            <div class="glass-card" style="max-width: 850px;">
+                <h2 class="group-title">Создание теста</h2>
+                <div id="quiz-list">
+                    <div class="input-row quiz-item">
+                        <input type="text" class="q-text" placeholder="Введите текст вопроса" style="width: 100%; border-bottom: 1px solid var(--gold);">
+                        <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <input type="text" class="ans" placeholder="Вариант 1 (ВЕРНЫЙ)">
+                            <input type="text" class="ans" placeholder="Вариант 2">
+                            <input type="text" class="ans" placeholder="Вариант 3">
+                            <input type="text" class="ans" placeholder="Вариант 4">
+                        </div>
+                        <span class="correct-hint">☝️ Первый вариант всегда верный. В самом тесте они перемешаются автоматически.</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button onclick="addQuizRow()" class="btn-secondary" style="flex: 1;">+ Вопрос</button>
+                    <button onclick="genQuiz()" class="btn-primary" style="flex: 2;">💾 Скачать quiz-data.js</button>
+                </div>
+                <textarea id="out-quiz" rows="5" placeholder="Код для quiz-data.js появится здесь..." readonly></textarea>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function showTab(tabId, btn) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active-tab');
+        }
+
+        function addUserRow() {
+            const container = document.getElementById('users-list');
+            const row = container.querySelector('.user-item').cloneNode(true);
+            row.querySelectorAll('input').forEach(i => i.value = '');
+            container.appendChild(row);
+        }
+
+        function addQuizRow() {
+            const container = document.getElementById('quiz-list');
+            const row = container.querySelector('.quiz-item').cloneNode(true);
+            row.querySelectorAll('input').forEach(i => i.value = '');
+            container.appendChild(row);
+        }
+
+        function downloadJS(filename, text) {
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/javascript;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function genUsers() {
+            let data = {};
+            document.querySelectorAll('.user-item').forEach(item => {
+                const name = item.querySelector('.u-name').value.trim();
+                if(name) {
+                    data[name] = {
+                        password: item.querySelector('.u-pass').value.trim(),
+                        redirect: item.querySelector('.u-link').value.trim()
+                    };
+                }
+            });
+            const res = "const USERS = " + JSON.stringify(data, null, 4) + ";";
+            document.getElementById('out-users').value = res;
+            if(confirm("Скачать новый config.js?")) downloadJS("config.js", res);
+        }
+
+        function genQuiz() {
+            let data = [];
+            document.querySelectorAll('.quiz-item').forEach(item => {
+                const q = item.querySelector('.q-text').value.trim();
+                const ans = Array.from(item.querySelectorAll('.ans')).map(i => i.value.trim()).filter(v => v !== '');
+                if(q && ans.length > 0) {
+                    data.push({ q: q, o: ans, a: 0 });
+                }
+            });
+            const res = "const questions = " + JSON.stringify(data, null, 4) + ";";
+            document.getElementById('out-quiz').value = res;
+            if(confirm("Скачать новый quiz-data.js?")) downloadJS("quiz-data.js", res);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Группа ОГР-23 | P.A.N.</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://googleapis.com" rel="stylesheet">
+    <script>
+        // Защита: пускает только если залогинился под этой группой
+        if (localStorage.getItem('access_ogr23.html') !== 'true') {
+            window.location.href = 'students.html';
+        }
+    </script>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <nav class="glass-nav">
+        <div class="logo">P.A.N.</div>
+        <div class="nav-links">
+            <a href="index.html">Главная</a>
+            <!-- Очищаем вход при выходе -->
+            <a href="index.html" onclick="localStorage.clear()" style="color: var(--gold);">Выйти</a>
+        </div>
+    </nav>
+
+    <main class="main-centered" style="flex-direction: column; padding-top: 120px; padding-bottom: 40px;">
+        <section class="glass-card fadeInUp" style="max-width: 600px; width: 90%;">
+            <h2 class="group-title">📦 Группа ОГР-23</h2>
+            
+            <!-- Инфо-блок дисциплины -->
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 20px; border-radius: 15px; margin: 25px 0; text-align: center;">
+                <p style="opacity: 0.5; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Дисциплина:</p>
+                <p style="font-size: 1.1rem; font-weight: 700; color: var(--gold);">Технология открытых горных работ</p>
+            </div>
+            
+            <!-- Кнопки действий -->
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 30px;">
+                <!-- Ссылка на Яндекс.Диск -->
+                <a href="ССЫЛКА_НА_ЯНДЕКС_ДИСК" class="btn-primary" target="_blank" style="display: block; text-align: center;">📚 Учебные материалы</a>
+                
+                <!-- Ссылка на страницу с тестом -->
+                <a href="quiz.html" class="btn-secondary" style="display: block; text-align: center; margin-left: 0;">📝 Пройти тестирование</a>
+            </div>
+
+            <!-- Теги -->
+            <div class="skills-grid" style="margin-top: 35px; opacity: 0.7;">
+                <span>Лекции</span>
+                <span>МДК.01.01</span>
+                <span>Практика</span>
+            </div>
+        </section>
+    </main>
+
+    <footer style="text-align: center; padding: 20px; opacity: 0.3; font-size: 0.7rem;">
+        Личный кабинет студента ГГТ
+    </footer>
+</body>
+</html>

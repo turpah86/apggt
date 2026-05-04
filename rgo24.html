@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Группа РГО-24 | P.A.N.</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://googleapis.com" rel="stylesheet">
+    <script>
+        // Защита: если студент не ввел пароль, его перекинет на страницу входа
+        if (localStorage.getItem('access_rgo24.html') !== 'true') {
+            window.location.href = 'students.html';
+        }
+    </script>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <nav class="glass-nav">
+        <div class="logo">P.A.N.</div>
+        <div class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="students.html" onclick="localStorage.clear()">Выход</a>
+        </div>
+    </nav>
+
+    <main class="main-centered">
+        <section class="glass-card fadeInUp">
+            <h2 class="group-title">📦 Группа РГО-24</h2>
+            <div class="info-block">
+                <p><strong>Дисциплина:</strong> Разведка горных объектов</p>
+                <p><strong>Семестр:</strong> 4</p>
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <a href="ССЫЛКА_ЯНДЕКС_ДИСК_РГО" class="btn-primary" target="_blank">Открыть учебные материалы</a>
+            </div>
+
+            <div class="skills-grid">
+                <span>Лекции</span>
+                <span>Практические</span>
+                <span>ГОСТы</span>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

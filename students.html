@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход | P.A.N.</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+</head>
+<body class="main-centered">
+    <div class="background-overlay"></div>
+    <div class="glass-card fadeInUp">
+        <h2 style="margin-bottom: 30px;">🔐 Авторизация</h2>
+        <input type="text" id="login" class="pass-input" placeholder="Логин (Группа)">
+        <input type="password" id="pass" class="pass-input" placeholder="Пароль">
+        <button onclick="login()" class="btn-primary" style="width: 100%; margin-top: 20px;">Войти</button>
+        <p id="error" style="color: #ff6b6b; display: none; margin-top: 15px;">Ошибка доступа</p>
+    </div>
+
+    <script>
+        function login() {
+            const user = document.getElementById('login').value.trim();
+            const pass = document.getElementById('pass').value.trim();
+            if (USERS[user] && USERS[user].password === pass) {
+                localStorage.setItem('user_group', user);
+                localStorage.setItem('access_' + USERS[user].redirect, 'true');
+                window.location.href = USERS[user].redirect;
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
