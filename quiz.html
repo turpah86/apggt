@@ -92,7 +92,7 @@
             // ВАЖНО: Это ID твоей формы (взято из твоих прошлых скринов)
             const fURL = `https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/viewform`;
             
-            const fData = new FormData();
+            const fData = new URLSearchParams();
             // Проверь эти ID еще раз, они должны быть такими:
             fData.append('entry.1458374118', studentInfo);                      // ФИО
             fData.append('entry.1320096689', localStorage.getItem('user_group')); // Группа
