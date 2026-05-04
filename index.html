@@ -104,39 +104,33 @@
     <footer style="text-align: center; padding: 40px; opacity: 0.4; font-size: 0.8rem; letter-spacing: 1px;">
         © 2024 ПЕРМЯКОВ А.Н. | ГГТ
     </footer>
-
     <script>
     async function loadLatest() {
-        // Вставляем твою ссылку целиком
+        // Твоя ссылка
         const pubLink = 'https://disk.yandex.ru/d/_6_7mQfZhLgZLA';
-        
-        // Формируем запрос к API Яндекса
+        // Прямой URL к API Яндекса
         const apiURL = `https://yandex.net{encodeURIComponent(pubLink)}&limit=5&sort=-modified`;
-        
-        // Используем прокси, чтобы Гитхаб не ругался на Яндекс (CORS)
-        const proxyURL = `https://allorigins.win{encodeURIComponent(apiURL)}`;
     
         try {
-            const response = await fetch(proxyURL);
-            const proxyData = await response.json();
+            const response = await fetch(apiURL);
             
-            // Превращаем текст в понятные данные
-            const data = JSON.parse(proxyData.contents);
+            if (!response.ok) throw new Error('Ошибка ответа сети');
+            
+            const data = await response.json();
             const container = document.getElementById('main-achievements');
             
             if (data._embedded && data._embedded.items) {
-                // Фильтруем только картинки
                 const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
                 
                 if (items.length > 0) {
-                    container.innerHTML = ''; // Убираем текст загрузки
+                    container.innerHTML = ''; 
                     items.slice(0, 4).forEach(item => {
                         const card = document.createElement('div');
                         card.className = 'achievement-card';
                         card.onclick = () => window.open(item.file, '_blank');
                         
-                        // Улучшаем качество превью
-                        const highResPreview = item.preview.replace('size=S', 'size=400x');
+                        // Улучшаем качество превью (заменяем размер S на 400x400)
+                        const highResPreview = item.preview.replace('size=S', 'size=400x400');
                         
                         card.innerHTML = `
                             <img src="${highResPreview}" alt="">
@@ -145,17 +139,17 @@
                         container.appendChild(card);
                     });
                 } else {
-                    container.innerHTML = '<p style="color:white; opacity:0.5;">Добавьте фото в папку на Диске</p>';
+                    container.innerHTML = '<p style="color:white; opacity:0.5;">Папка пуста</p>';
                 }
             }
         } catch (e) {
-            console.error("Ошибка Диска:", e);
-            document.getElementById('main-achievements').innerHTML = '<p style="color:white; opacity:0.5;">Не удалось загрузить награды</p>';
+            console.error("Детальная ошибка:", e);
+            // Если и прямой метод не сработал, выведем более понятную ошибку
+            document.getElementById('main-achievements').innerHTML = 
+                '<p style="color:white; opacity:0.5;">Яндекс временно недоступен. Попробуйте обновить страницу.</p>';
         }
     }
     document.addEventListener('DOMContentLoaded', loadLatest);
     </script>
-
-
 </body>
 </html>
