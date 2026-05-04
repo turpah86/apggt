@@ -107,31 +107,35 @@
 
     <script>
     async function loadLatest() {
-        const pubLink = 'https://yandex.ru';
+        // Вставляем твою ссылку целиком
+        const pubLink = 'https://disk.yandex.ru/d/_6_7mQfZhLgZLA';
+        
+        // Формируем запрос к API Яндекса
         const apiURL = `https://yandex.net{encodeURIComponent(pubLink)}&limit=5&sort=-modified`;
         
-        // Используем прокси, чтобы обойти блокировку CORS
+        // Используем прокси, чтобы Гитхаб не ругался на Яндекс (CORS)
         const proxyURL = `https://allorigins.win{encodeURIComponent(apiURL)}`;
     
         try {
             const response = await fetch(proxyURL);
             const proxyData = await response.json();
             
-            // Данные приходят внутри поля contents в виде строки, их надо превратить в объект
+            // Превращаем текст в понятные данные
             const data = JSON.parse(proxyData.contents);
             const container = document.getElementById('main-achievements');
             
             if (data._embedded && data._embedded.items) {
+                // Фильтруем только картинки
                 const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
                 
                 if (items.length > 0) {
-                    container.innerHTML = ''; 
+                    container.innerHTML = ''; // Убираем текст загрузки
                     items.slice(0, 4).forEach(item => {
                         const card = document.createElement('div');
                         card.className = 'achievement-card';
                         card.onclick = () => window.open(item.file, '_blank');
                         
-                        // Увеличиваем размер превью для четкости
+                        // Улучшаем качество превью
                         const highResPreview = item.preview.replace('size=S', 'size=400x');
                         
                         card.innerHTML = `
@@ -141,16 +145,17 @@
                         container.appendChild(card);
                     });
                 } else {
-                    container.innerHTML = '<p style="color:white; opacity:0.5;">В папке пока пусто</p>';
+                    container.innerHTML = '<p style="color:white; opacity:0.5;">Добавьте фото в папку на Диске</p>';
                 }
             }
         } catch (e) {
             console.error("Ошибка Диска:", e);
-            document.getElementById('main-achievements').innerHTML = '<p style="color:white; opacity:0.5;">Ошибка связи с облаком</p>';
+            document.getElementById('main-achievements').innerHTML = '<p style="color:white; opacity:0.5;">Не удалось загрузить награды</p>';
         }
     }
     document.addEventListener('DOMContentLoaded', loadLatest);
     </script>
+
 
 </body>
 </html>
