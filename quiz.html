@@ -80,45 +80,34 @@
         }
 
         function showResults() {
-            // Расчет процента и оценки
             const percent = Math.round((score / questions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
-            let message = percent >= 50 ? "Тест пройден" : "Тест не пройден";
-
-            // Скрываем/показываем карточки
-            const quizCard = document.getElementById('quiz-card');
-            const resultScreen = document.getElementById('result-screen');
-            if (quizCard) quizCard.style.display = 'none';
-            if (resultScreen) resultScreen.style.display = 'block';
-
-            // Заполняем данные на экране (с проверкой на наличие ID)
-            const valEl = document.getElementById('score-val');
-            const nameEl = document.getElementById('res-student-name');
-            const textEl = document.getElementById('score-text');
-
-            if (valEl) valEl.innerText = mark;
-            if (nameEl) nameEl.innerText = studentInfo;
-            if (textEl) textEl.innerText = message + " (" + percent + "%)";
-
-            // --- ОТПРАВКА В GOOGLE ---
-            const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/viewform';
-            const formData = new FormData();
+        
+            document.getElementById('quiz-card').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('score-val').innerText = mark;
+            document.getElementById('res-student-name').innerText = studentInfo;
+        
+            // --- ПРЯМАЯ ОТПРАВКА ---
+            // ВАЖНО: Это ID твоей формы (взято из твоих прошлых скринов)
+            const fID = "1FAIpQLSeZEOfnHtkT42e9B-L50TTTrU3U6VveA6ey-iWq4r3ffWwzuc";
+            const fURL = `https://google.com{fID}/formResponse`;
             
-            const group = localStorage.getItem('user_group') || 'Не указана';
-
-            formData.append('entry.1458374118', studentInfo); 
-            formData.append('entry.1320096689', localStorage.getItem('user_group'));
-            formData.append('entry.1906150515', percent + '% (' + score + '/' + questions.length + ')');
-            formData.append('entry.1688940307', mark);
-
-            fetch(formURL, {
+            const fData = new FormData();
+            // Проверь эти ID еще раз, они должны быть такими:
+            fData.append('entry.1458374118', studentInfo);                      // ФИО
+            fData.append('entry.1320096689', localStorage.getItem('user_group')); // Группа
+            fData.append('entry.1906150515', percent + "% (" + score + "/" + questions.length + ")"); 
+            fData.append('entry.168840307', mark);
+        
+            fetch(fURL, {
                 method: 'POST',
                 mode: 'no-cors',
-                body: formData
-            }).catch(e => console.log("Локальная блокировка отправки. Ждем публикации на GitHub."));
+                body: fData
+            }).then(() => {
+                console.log("Данные успешно отправлены в Google!");
+            }).catch(e => console.error("Ошибка:", e));
         }
-
-
     </script>
 </body>
 </html>
