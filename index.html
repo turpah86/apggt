@@ -106,37 +106,51 @@
     </footer>
 
     <script>
-        async function loadLatest() {
-            const pubLink = 'https://disk.yandex.ru/d/_6_7mQfZhLgZLA';
-            // Сортировка -modified подтянет самые новые файлы
-            const apiURL = `https://yandex.net{encodeURIComponent(pubLink)}&limit=4&sort=-modified`;
-
-            try {
-                const response = await fetch(apiURL);
-                const data = await response.json();
-                const container = document.getElementById('main-achievements');
+    async function loadLatest() {
+        const pubLink = 'https://yandex.ru';
+        const apiURL = `https://yandex.net{encodeURIComponent(pubLink)}&limit=5&sort=-modified`;
+        
+        // Используем прокси, чтобы обойти блокировку CORS
+        const proxyURL = `https://allorigins.win{encodeURIComponent(apiURL)}`;
+    
+        try {
+            const response = await fetch(proxyURL);
+            const proxyData = await response.json();
+            
+            // Данные приходят внутри поля contents в виде строки, их надо превратить в объект
+            const data = JSON.parse(proxyData.contents);
+            const container = document.getElementById('main-achievements');
+            
+            if (data._embedded && data._embedded.items) {
+                const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
                 
-                if (data._embedded && data._embedded.items) {
-                    container.innerHTML = '';
-                    data._embedded.items.forEach(item => {
-                        if (item.mime_type && item.mime_type.includes('image')) {
-                            const card = document.createElement('div');
-                            card.className = 'achievement-card';
-                            card.onclick = () => window.open(item.file, '_blank');
-                            card.innerHTML = `
-                                <img src="${item.preview.replace('size=S', 'size=400x')}" alt="">
-                                <p>${item.name.replace(/\.[^/.]+$/, "")}</p>
-                            `;
-                            container.appendChild(card);
-                        }
+                if (items.length > 0) {
+                    container.innerHTML = ''; 
+                    items.slice(0, 4).forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'achievement-card';
+                        card.onclick = () => window.open(item.file, '_blank');
+                        
+                        // Увеличиваем размер превью для четкости
+                        const highResPreview = item.preview.replace('size=S', 'size=400x');
+                        
+                        card.innerHTML = `
+                            <img src="${highResPreview}" alt="">
+                            <p>${item.name.replace(/\.[^/.]+$/, "")}</p>
+                        `;
+                        container.appendChild(card);
                     });
+                } else {
+                    container.innerHTML = '<p style="color:white; opacity:0.5;">В папке пока пусто</p>';
                 }
-            } catch (e) {
-                console.error("Ошибка Диска:", e);
-                document.getElementById('main-achievements').innerHTML = "";
             }
+        } catch (e) {
+            console.error("Ошибка Диска:", e);
+            document.getElementById('main-achievements').innerHTML = '<p style="color:white; opacity:0.5;">Ошибка связи с облаком</p>';
         }
-        document.addEventListener('DOMContentLoaded', loadLatest);
+    }
+    document.addEventListener('DOMContentLoaded', loadLatest);
     </script>
+
 </body>
 </html>
