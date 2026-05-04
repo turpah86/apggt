@@ -6,41 +6,64 @@
     <title>Пермяков А.Н. | Главная</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Стили для сетки достижений на главной */
+        :root {
+            --gold: #ffd700;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Сетки достижений */
         .achievements-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             margin-top: 25px;
         }
+
         .achievement-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 10px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 12px;
             text-align: center;
-            transition: 0.3s;
+            transition: all 0.4s ease;
             cursor: pointer;
         }
+
         .achievement-card:hover {
-            transform: translateY(-5px);
-            border-color: #ffd700;
+            transform: translateY(-8px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background: rgba(255, 255, 255, 0.08);
         }
+
         .achievement-card img {
             width: 100%;
-            height: 140px;
+            height: 160px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 10px;
+            margin-bottom: 10px;
         }
+
         .achievement-card p {
             color: white;
-            font-size: 0.75rem;
-            margin-top: 8px;
-            opacity: 0.8;
+            font-size: 0.85rem;
+            margin: 5px 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            opacity: 0.9;
+        }
+
+        .loading-text {
+            color: white;
+            opacity: 0.5;
+            text-align: center;
+            width: 100%;
+            grid-column: 1 / -1;
+            padding: 40px;
         }
     </style>
 </head>
@@ -63,8 +86,8 @@
             </div>
             <div class="text-wrapper">
                 <span class="badge">Первая категория</span>
-                <h1 style="font-size: 3.5rem;">Пермяков<br>
-                    <span class="accent-text" style="font-size: 3rem;">Афанасий Николаевич</span>
+                <h1>Пермяков<br>
+                    <span class="accent-text">Афанасий Николаевич</span>
                 </h1>
                 <p class="subtitle">Специальные дисциплины горно-геологического профиля.</p>
                 <div class="hero-btns">
@@ -89,14 +112,15 @@
             </div>
         </div>
 
-        <!-- НОВЫЙ БЛОК: Последние достижения -->
+        <!-- СЕКЦИЯ ДОСТИЖЕНИЙ НА ГЛАВНОЙ -->
         <div class="glass-card fadeInUp" style="margin-top: 30px; width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h2 style="margin: 0;">Новые достижения</h2>
-                <a href="achievements.html" style="color: #ffd700; text-decoration: none; font-size: 0.9rem;">Смотреть все →</a>
+                <a href="achievements.html" style="color: var(--gold); text-decoration: none; font-size: 0.9rem;">Смотреть все →</a>
             </div>
+            
             <div id="main-achievements" class="achievements-grid">
-                <p style="color: white; opacity: 0.5;">Загрузка...</p>
+                <div class="loading-text">Синхронизация с облаком...</div>
             </div>
         </div>
     </section>
@@ -104,39 +128,54 @@
     <footer style="text-align: center; padding: 40px; opacity: 0.4; font-size: 0.8rem; letter-spacing: 1px;">
         © 2024 ПЕРМЯКОВ А.Н. | ГГТ
     </footer>
+
     <script>
-    async function loadLatest() {
-        // ВСТАВЬ СЮДА ССЫЛКУ ИЗ ПУНКТА 1
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxYIKWu0eHFgD4AGaPq-e1CQLxW8BeEmRozLSyx0Le_Kmna9V-3heAyzbZQlCokTPQzpQ/exec';
-    
+    async function loadLatestAchievements() {
+        // 1. ВСТАВЬ СЮДА СВОЮ ПУБЛИЧНУЮ ССЫЛКУ НА ПАПКУ ЯНДЕКС ДИСКА
+        const pubLink = 'ССЫЛКА_НА_ВАШУ_ПАПКУ'; 
+        
+        // API запрос: берем 4 последних файла, только картинки, сортировка по дате создания
+        const apiURL = `https://yandex.net{encodeURIComponent(pubLink)}&limit=4&preview_size=600x600&sort=-created`;
+
+        const container = document.getElementById('main-achievements');
+
         try {
-            const response = await fetch(scriptURL);
+            const response = await fetch(apiURL);
             const data = await response.json();
-            const container = document.getElementById('main-achievements');
             
             if (data._embedded && data._embedded.items) {
+                // Фильтруем только изображения
                 const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
-                container.innerHTML = ''; 
                 
-                items.slice(0, 4).forEach(item => {
+                if (items.length === 0) {
+                    container.innerHTML = '<div class="loading-text">В папке пока нет фото наград</div>';
+                    return;
+                }
+
+                container.innerHTML = ''; // Очищаем текст загрузки
+                
+                items.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'achievement-card';
-                    card.onclick = () => window.open(item.file, '_blank');
-                    const preview = item.preview.replace('size=S', 'size=400x400');
+                    // При клике открываем оригинал файла
+                    card.onclick = () => window.open(item.public_url || item.file, '_blank');
                     
                     card.innerHTML = `
-                        <img src="${preview}" alt="">
-                        <p>${item.name.replace(/\.[^/.]+$/, "")}</p>
+                        <img src="${item.preview}" alt="${item.name}" loading="lazy">
+                        <p title="${item.name}">${item.name.replace(/\.[^/.]+$/, "")}</p>
                     `;
                     container.appendChild(card);
                 });
+            } else {
+                throw new Error('Пустая папка');
             }
         } catch (e) {
-            console.error(e);
-            document.getElementById('main-achievements').innerHTML = '<p style="color:white;opacity:0.5;">Облако на техобслуживании</p>';
+            console.error("Ошибка Диска:", e);
+            container.innerHTML = '<div class="loading-text">Настройте доступ к папке Яндекс.Диска</div>';
         }
     }
-    document.addEventListener('DOMContentLoaded', loadLatest);
+
+    document.addEventListener('DOMContentLoaded', loadLatestAchievements);
     </script>
 </body>
 </html>
