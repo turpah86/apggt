@@ -105,50 +105,44 @@
         © 2024 ПЕРМЯКОВ А.Н. | ГГТ
     </footer>
     <script>
-    async function loadLatest() {
-        // Твоя ссылка
+    function loadLatest() {
         const pubLink = 'https://disk.yandex.ru/d/_6_7mQfZhLgZLA';
-        // Прямой URL к API Яндекса
         const apiURL = `https://yandex.net{encodeURIComponent(pubLink)}&limit=5&sort=-modified`;
-    
-        try {
-            const response = await fetch(apiURL);
-            
-            if (!response.ok) throw new Error('Ошибка ответа сети');
-            
-            const data = await response.json();
-            const container = document.getElementById('main-achievements');
-            
-            if (data._embedded && data._embedded.items) {
-                const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
-                
-                if (items.length > 0) {
-                    container.innerHTML = ''; 
-                    items.slice(0, 4).forEach(item => {
-                        const card = document.createElement('div');
-                        card.className = 'achievement-card';
-                        card.onclick = () => window.open(item.file, '_blank');
-                        
-                        // Улучшаем качество превью (заменяем размер S на 400x400)
-                        const highResPreview = item.preview.replace('size=S', 'size=400x400');
-                        
-                        card.innerHTML = `
-                            <img src="${highResPreview}" alt="">
-                            <p>${item.name.replace(/\.[^/.]+$/, "")}</p>
-                        `;
-                        container.appendChild(card);
-                    });
-                } else {
-                    container.innerHTML = '<p style="color:white; opacity:0.5;">Папка пуста</p>';
+        
+        // Используем другой сервис (ThingProxy), он сейчас самый стабильный
+        fetch('https://freeboard.io' + apiURL)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('main-achievements');
+                if (data._embedded && data._embedded.items) {
+                    const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
+                    
+                    if (items.length > 0) {
+                        container.innerHTML = ''; 
+                        items.slice(0, 4).forEach(item => {
+                            const card = document.createElement('div');
+                            card.className = 'achievement-card';
+                            card.onclick = () => window.open(item.file, '_blank');
+                            
+                            // Заменяем превью на крупное
+                            const preview = item.preview.replace('size=S', 'size=500x500');
+                            
+                            card.innerHTML = `
+                                <img src="${preview}" alt="">
+                                <p>${item.name.replace(/\.[^/.]+$/, "")}</p>
+                            `;
+                            container.appendChild(card);
+                        });
+                    }
                 }
-            }
-        } catch (e) {
-            console.error("Детальная ошибка:", e);
-            // Если и прямой метод не сработал, выведем более понятную ошибку
-            document.getElementById('main-achievements').innerHTML = 
-                '<p style="color:white; opacity:0.5;">Яндекс временно недоступен. Попробуйте обновить страницу.</p>';
-        }
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('main-achievements').innerHTML = 
+                    '<p style="color:white; opacity:0.5;">Сервер Яндекса не ответил. Попробуйте позже.</p>';
+            });
     }
+    
     document.addEventListener('DOMContentLoaded', loadLatest);
     </script>
 </body>
