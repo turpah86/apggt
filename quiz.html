@@ -95,7 +95,7 @@
             document.getElementById('score-text').innerText = `Вы набрали ${percent}% (${score}/${questions.length})`;
         
             // --- ОТПРАВКА В GOOGLE ТАБЛИЦУ ---
-            const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/viewform';
+            const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse';
             
             const fData = new URLSearchParams();
             fData.append('entry.1458374118', studentInfo); 
