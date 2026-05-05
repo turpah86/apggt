@@ -144,25 +144,28 @@
                     container.innerHTML = ''; 
     
                     data.forEach(file => {
-                        const isImage = file.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|svg))$/);
+                        // 1. Проверяем картинки (добавил jpeg в список)
+                        const isImage = file.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|svg)$/);
                         
                         if (isImage) {
-                            // Отрезаем расширение для красивого заголовка
-                            const displayName = file.name.substring(0, file.name.lastIndexOf('.'));
+                            // 2. Убираем расширение для заголовка (image10.jpeg -> image10)
+                            const displayName = file.name.replace(/\.[^/.]+$/, "");
                             
                             const imgCard = `
                                 <div class="achievement-item">
                                     <div class="img-frame">
-                                        <img src="img/${file.name}" alt="${displayName}" loading="lazy">
+                                        <img src="img/${file.name}" alt="${displayName}" loading="lazy" 
+                                             style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
                                     <div class="info-overlay">
-                                        <h3>${displayName}</h3>
+                                        <h3 style="color: white; margin-top: 10px;">${displayName}</h3>
                                     </div>
                                 </div>
                             `;
                             container.insertAdjacentHTML('beforeend', imgCard);
                         }
                     });
+
     
                     if (container.innerHTML === '') {
                         container.innerHTML = '<p style="color: white; grid-column: 1/-1;">В папке img пока пусто.</p>';
