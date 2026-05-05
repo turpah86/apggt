@@ -87,21 +87,19 @@ body {
 }
 
 .photo-wrapper img {
-    width: 100%;          /* Растягивается на всю ширину контейнера */
-    max-width: 320px;     /* Ограничиваем максимальную ширину */
-    height: auto;         /* ВАЖНО: высота теперь вычисляется сама по фото */
+    width: 320px;         /* Оставляем комфортную ширину */
+    height: auto;          /* КЛЮЧЕВОЕ: высота теперь сама подстроится под фото */
     display: block;
-    object-fit: initial;  /* Отменяем любое принудительное вписывание */
-    border-radius: 25px;
+    object-fit: initial;   /* Отключаем любое растягивание */
+    border-radius: 30px;
     border: 1px solid var(--glass-border);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
 .photo-wrapper {
-    flex-shrink: 0;       /* Чтобы контейнер не сжимался */
-    display: flex;
-    align-items: flex-start; /* Прижимаем фото к верху */
+    align-self: flex-start; /* Чтобы рамка не растягивалась по высоте текста */
 }
+
 
 
 
