@@ -89,11 +89,13 @@ body {
 .photo-wrapper img {
     width: 280px;
     height: 350px;
-    object-fit: cover;
+    object-fit: contain; 
+    background: rgba(255, 255, 255, 0.03); 
     border-radius: 30px;
-    border: 2px solid var(--glass-border);
+    border: 1px solid var(--glass-border);
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
+
 
 .text-wrapper h1 {
     font-size: 3rem;
