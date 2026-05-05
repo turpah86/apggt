@@ -144,7 +144,7 @@
                     container.innerHTML = ''; 
     
                     data.forEach(file => {
-                        const isImage = file.name.toLowerCase().match(/\.(jpe?g|png|gif|svg)$/);
+                        const isImage = file.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|svg))$/);
                         
                         if (isImage) {
                             // Отрезаем расширение для красивого заголовка
