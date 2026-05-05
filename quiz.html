@@ -103,27 +103,29 @@
             });
         }
 
-        function showResults() {
-            const percent = Math.round((score / questions.length) * 100);
-            let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
+    function showResults() {
+        const percent = Math.round((score / questions.length) * 100);
+        let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
         
-            document.getElementById('quiz-card').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'block';
-            document.getElementById('score-val').innerText = mark;
-            document.getElementById('res-student-name').innerText = studentInfo;
+        // ВОТ ЭТА СТРОЧКА ДОЛЖНА БЫТЬ ОБЯЗАТЕЛЬНО:
+        const userGroup = localStorage.getItem('user_group') || "огр"; 
+    
+        document.getElementById('quiz-card').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('score-val').innerText = mark;
+        document.getElementById('res-student-name').innerText = studentInfo;
+    
+        // Дальше идет твой блок отправки fetch...
+        const fURL = 'https://google.com';
+        const fData = new URLSearchParams();
+        fData.append('entry.1458374118', studentInfo); 
+        fData.append('entry.1320096689', userGroup); // Теперь она определена!
+        fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
+        fData.append('entry.1688940307', mark);
+    
+        fetch(fURL, { method: 'POST', mode: 'no-cors', body: fData.toString() });
+    }
 
-            // ОТПРАВКА В ТАБЛИЦУ
-            const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse';
-            
-            const fData = new URLSearchParams();
-            fData.append('entry.1458374118', studentInfo); 
-            fData.append('entry.1320096689', userGroup);   
-            fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
-            fData.append('entry.1688940307', mark);
-
-
-            fetch(fURL, { method: 'POST', mode: 'no-cors', body: fData.toString() });
-        }
     </script>
 </body>
 </html>
