@@ -1,5 +1,5 @@
 const USERS = {
-    "ОГР": {
+    "огр": {
         password: "123",
         redirect: "ogr23.html",
         quizPrefix: "ogr_razdel"
