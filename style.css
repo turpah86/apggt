@@ -254,20 +254,37 @@ body {
 /* Адаптивность для мобильных */
 @media (max-width: 768px) {
     .hero-content {
-        flex-direction: column;
-        text-align: center;
+        flex-direction: column; /* Выстраиваем фото и текст в колонку */
+        text-align: center;      /* Центрируем весь текст */
+        gap: 30px;               /* Отступ между фото и текстом */
     }
-    .text-wrapper h1 {
-        font-size: 2.2rem;
+
+    .photo-wrapper {
+        display: flex;
+        justify-content: center; /* Центрируем контейнер с фото */
+        width: 100%;
     }
+
     .photo-wrapper img {
-        width: 200px;
-        height: 250px;
+        width: 240px;            /* Чуть уменьшим на мобильных */
+        margin: 0 auto;          /* Финальное центрирование */
     }
-    .glass-nav {
-        padding: 15px 20px;
+
+    .text-wrapper h1 {
+        font-size: 2.2rem;       /* Уменьшаем шрифт, чтобы не вылезал */
     }
-    .nav-links {
-        display: none; /* Для мобильных лучше потом сделать бургер-меню */
+
+    .hero-btns {
+        display: flex;
+        flex-direction: column;  /* Кнопки на мобильном лучше ставить друг под другом */
+        align-items: center;
+        gap: 15px;
+    }
+
+    .btn-primary, .btn-secondary {
+        margin: 0;               /* Убираем боковые отступы */
+        width: 100%;             /* Кнопки на всю ширину для удобства нажатия */
+        max-width: 280px;
     }
 }
+
