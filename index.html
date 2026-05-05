@@ -165,7 +165,7 @@
                     // Используем спец-ссылку на превью
                     const imgUrl = item.preview;
                     
-                    card.onclick = () => window.open(item.public_url, '_blank');
+                    card.onclick = () => {window.location.href = 'achievements.html';};
                     
                     card.innerHTML = `
                         <div class="img-frame" style="background: rgba(255,255,255,0.05); min-height: 180px; display: flex; align-items: center; justify-content: center;">
