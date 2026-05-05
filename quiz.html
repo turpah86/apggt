@@ -53,7 +53,10 @@
     <script>
         // Проверка авторизации
         const group = localStorage.getItem('user_group');
-        if (group !== 'огр') { window.location.href = 'students.html'; }
+        if (group !== 'огр') { 
+            console.log("Доступ запрещен для:", group); // Для отладки
+            window.location.href = 'students.html'; 
+        }
 
         let currentQuestion = 0; let score = 0; let studentInfo = "";
 
