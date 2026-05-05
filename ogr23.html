@@ -15,11 +15,16 @@
 </head>
 <body>
     <div class="background-overlay"></div>
-    
     <nav class="glass-nav">
-        <div class="logo">P.A.N.</div>
+        <div class="logo">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="logo-ggt.png" alt="ГГТ Лого" class="nav-logo-img">
+                <span class="logo-text">АПГГТ</span>
+            </a>
+        </div>
         <div class="nav-links">
             <a href="index.html">Главная</a>
+            <a href="achievements.html">Достижения</a>
             <!-- Очищаем вход при выходе -->
             <a href="index.html" onclick="localStorage.clear()" style="color: var(--gold);">Выйти</a>
         </div>
