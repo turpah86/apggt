@@ -129,35 +129,33 @@
     </footer>
 
 <script>
-    // 1. ПРАВИЛЬНАЯ ССЫЛКА (проверь каждую букву!)
-    const folderUrl = 'https://api.github.com/repos/turpah86/apggt/contents/img';
+    const folderUrl = 'https://github.com';
 
     function loadAchievements() {
-        const container = document.getElementById('achievements-container');
+        // Исправлено: теперь ищем id="gallery", который у тебя в HTML
+        const container = document.getElementById('gallery');
         
         fetch(folderUrl)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Ошибка: Репозиторий должен быть PUBLIC');
-                }
+                if (!response.ok) throw new Error('Репозиторий должен быть PUBLIC');
                 return response.json();
             })
             .then(data => {
-                container.innerHTML = ''; // Очищаем текст загрузки
+                container.innerHTML = ''; 
 
                 data.forEach(file => {
-                    // Проверяем, что файл — это картинка
                     const isImage = file.name.toLowerCase().match(/\.(jpe?g|png|gif|svg)$/);
                     
                     if (isImage) {
+                        // Исправлено: используем твои классы achievement-item и img-frame
                         const imgCard = `
-                            <div class="glass-card" style="margin-bottom: 25px; text-align: center; animation: fadeIn 0.5s ease forwards;">
-                                <img src="${file.download_url}" 
-                                     style="width: 100%; border-radius: 12px; border: 1px solid var(--glass-border);" 
-                                     alt="Достижение">
-                                <p style="color: var(--gold); margin-top: 12px; font-weight: bold; font-size: 1.1rem;">
-                                    ${file.name.split('.')[0]}
-                                </p>
+                            <div class="achievement-item">
+                                <div class="img-frame">
+                                    <img src="${file.download_url}" alt="Достижение">
+                                </div>
+                                <div class="info-overlay">
+                                    <h3>${file.name.split('.')[0]}</h3>
+                                </div>
                             </div>
                         `;
                         container.insertAdjacentHTML('beforeend', imgCard);
@@ -165,21 +163,15 @@
                 });
 
                 if (container.innerHTML === '') {
-                    container.innerHTML = '<p style="color: white;">В папке img пока нет картинок.</p>';
+                    container.innerHTML = '<p style="color: white;">В папке img пока нет картинки.</p>';
                 }
             })
             .catch(error => {
                 console.error('Ошибка:', error);
-                container.innerHTML = `
-                    <div style="color: #ff4d4d; padding: 20px;">
-                        <p>⚠️ Не удалось загрузить список наград.</p>
-                        <p style="font-size: 0.8rem; opacity: 0.7;">Убедитесь, что репозиторий PUBLIC и папка img существует.</p>
-                    </div>
-                `;
+                container.innerHTML = `<p style="color: #ff4d4d;">⚠️ Ошибка загрузки. Проверьте доступ к репозиторию.</p>`;
             });
     }
 
-    // Запускаем загрузку при открытии страницы
     document.addEventListener('DOMContentLoaded', loadAchievements);
 </script>
 
