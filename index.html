@@ -148,7 +148,9 @@
             const data = await response.json();
             
             if (data._embedded && data._embedded.items) {
-                const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
+                const items = data._embedded.items.filter(i => 
+                    (i.mime_type && i.mime_type.includes('image')) || i.preview
+                );
                 
                 if (items.length === 0) {
                     container.innerHTML = '<div class="loading-text">В папке нет изображений</div>';
