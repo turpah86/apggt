@@ -127,54 +127,55 @@
     <footer style="text-align: center; padding: 60px; opacity: 0.4; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05);">
         © 2026 ПЕРМЯКОВ А.Н. | ГБПОУ РС(Я) ГГТ
     </footer>
-
-<script>
-    const folderUrl = 'https://github.com';
-
-    function loadAchievements() {
-        // Исправлено: теперь ищем id="gallery", который у тебя в HTML
-        const container = document.getElementById('gallery');
-        
-        fetch(folderUrl)
-            .then(response => {
-                if (!response.ok) throw new Error('Репозиторий должен быть PUBLIC');
-                return response.json();
-            })
-            .then(data => {
-                container.innerHTML = ''; 
-
-                data.forEach(file => {
-                    const isImage = file.name.toLowerCase().match(/\.(jpe?g|png|gif|svg)$/);
-                    
-                    if (isImage) {
-                        // Исправлено: используем твои классы achievement-item и img-frame
-                        const imgCard = `
-                            <div class="achievement-item">
-                                <div class="img-frame">
-                                    <img src="${file.download_url}" alt="Достижение">
+    <script>
+        const folderUrl = 'https://github.com';
+    
+        function loadAchievements() {
+            // Используем id="gallery", так как он у тебя в HTML
+            const container = document.getElementById('gallery');
+            if (!container) return; // Защита от ошибок
+    
+            fetch(folderUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Ошибка доступа');
+                    return response.json();
+                })
+                .then(data => {
+                    container.innerHTML = ''; 
+    
+                    data.forEach(file => {
+                        const isImage = file.name.toLowerCase().match(/\.(jpe?g|png|gif|svg)$/);
+                        
+                        if (isImage) {
+                            // Отрезаем расширение для красивого заголовка
+                            const displayName = file.name.substring(0, file.name.lastIndexOf('.'));
+                            
+                            const imgCard = `
+                                <div class="achievement-item">
+                                    <div class="img-frame">
+                                        <img src="${file.download_url}" alt="${displayName}" loading="lazy">
+                                    </div>
+                                    <div class="info-overlay">
+                                        <h3>${displayName}</h3>
+                                    </div>
                                 </div>
-                                <div class="info-overlay">
-                                    <h3>${file.name.split('.')[0]}</h3>
-                                </div>
-                            </div>
-                        `;
-                        container.insertAdjacentHTML('beforeend', imgCard);
+                            `;
+                            container.insertAdjacentHTML('beforeend', imgCard);
+                        }
+                    });
+    
+                    if (container.innerHTML === '') {
+                        container.innerHTML = '<p style="color: white; grid-column: 1/-1;">В папке img пока пусто.</p>';
                     }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    container.innerHTML = `<p style="color: #ff4d4d; grid-column: 1/-1;">⚠️ Ошибка загрузки данных.</p>`;
                 });
-
-                if (container.innerHTML === '') {
-                    container.innerHTML = '<p style="color: white;">В папке img пока нет картинки.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                container.innerHTML = `<p style="color: #ff4d4d;">⚠️ Ошибка загрузки. Проверьте доступ к репозиторию.</p>`;
-            });
-    }
-
-    document.addEventListener('DOMContentLoaded', loadAchievements);
-</script>
-
+        }
+    
+        document.addEventListener('DOMContentLoaded', loadAchievements);
+    </script>
 </body>
 </html>
 
