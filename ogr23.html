@@ -52,10 +52,17 @@
             container.innerHTML = '<p style="padding: 20px; opacity: 0.5;">Загрузка...</p>';
             
             // Формируем URL с учетом вложенности
-            let apiUrl = `https://yandex.net{encodeURIComponent(publicKey)}`;
-            if (path) {
-                apiUrl += `&path=${encodeURIComponent(path)}`;
-            }
+            // Используем бесплатный прокси для обхода блокировки CORS
+            const proxyUrl = 'https://corsproxy.io?'; 
+            const targetUrl = `https://yandex.net{encodeURIComponent(publicKey)}${path ? '&path=' + encodeURIComponent(path) : ''}`;
+    
+            try {
+                const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
+                
+                if (!response.ok) throw new Error('Ошибка сервера');
+                
+                const data = await response.json();
+                // ... остальной код отрисовки (items и т.д.)
     
             try {
                 const response = await fetch(apiUrl);
