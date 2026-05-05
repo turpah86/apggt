@@ -1,3 +1,4 @@
+// База вопросов по Разделу 1 (Темы 1.2 — 1.7)
 const questions = [
     {
         q: "К какой группе по происхождению относятся известняк, глины и пески?",
@@ -100,3 +101,63 @@ const questions = [
         a: 1
     }
 ];
+
+// Функция перемешивания вопросов
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Запуск перемешивания при загрузке скрипта
+shuffle(questions);
+
+// Переменные теста
+let currentQuestion = 0;
+let score = 0;
+
+// Функция отображения вопроса
+function loadQuestion() {
+    const q = questions[currentQuestion];
+    document.getElementById('question').innerText = q.q;
+    const options = document.querySelectorAll('.option');
+    options.forEach((option, index) => {
+        option.innerText = q.o[index];
+        // Убираем старые цвета, если они были
+        option.classList.remove('correct', 'wrong');
+    });
+}
+
+// Функция обработки ответа (без показа правильного варианта)
+function selectOption(index) {
+    if (index === questions[currentQuestion].a) {
+        score++;
+    }
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+        loadQuestion();
+    } else {
+        showResult();
+    }
+}
+
+// Функция вывода только оценки
+function showResult() {
+    document.getElementById('quiz-container').style.display = 'none';
+    const resultElement = document.getElementById('result');
+    resultElement.style.display = 'block';
+
+    let grade = "";
+    if (score >= 18) grade = "Оценка: 5";
+    else if (score >= 15) grade = "Оценка: 4";
+    else if (score >= 10) grade = "Оценка: 3";
+    else grade = "Оценка: 2";
+
+    resultElement.innerText = grade;
+}
+
+// Инициализация при старте
+window.onload = loadQuestion;
