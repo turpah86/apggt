@@ -39,38 +39,91 @@
         .file-explorer::-webkit-scrollbar { width: 5px; }
         .file-explorer::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
     </style>
-    <script>
-        if (localStorage.getItem('access_ogr23.html') !== 'true') {
-            window.location.href = 'students.html';
+<script>
+    if (localStorage.getItem('access_ogr23.html') !== 'true') {
+        window.location.href = 'students.html';
+    }
+
+    const publicKey = 'https://yandex.ru';
+    let currentPath = ''; // Храним текущий путь внутри папки
+
+    async function loadYandexFiles(path = '') {
+        const container = document.getElementById('file-list');
+        container.innerHTML = '<p style="padding: 20px; opacity: 0.5;">Загрузка...</p>';
+        
+        // Формируем URL с учетом вложенности
+        let apiUrl = `https://yandex.net{encodeURIComponent(publicKey)}`;
+        if (path) {
+            apiUrl += `&path=${encodeURIComponent(path)}`;
         }
 
-        // Функция загрузки файлов
-        async function loadYandexFiles() {
-            const publicKey = 'https://disk.yandex.ru/d/a3BaNEAyqeVHVw';
-            const url = `https://yandex.net{encodeURIComponent(publicKey)}`;
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            const items = data._embedded.items;
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                const items = data._embedded.items;
-                
-                const container = document.getElementById('file-list');
-                container.innerHTML = items.map(item => `
-                    <a href="${item.file}" class="file-item" target="_blank">
-                        <div class="file-icon">${item.type === 'dir' ? '📁' : '📄'}</div>
+            let html = '';
+
+            // Добавляем кнопку "Назад", если мы внутри папки
+            if (path !== '') {
+                html += `
+                    <div class="file-item" onclick="goBack()" style="cursor:pointer; border-bottom: 2px solid var(--gold);">
+                        <div class="file-icon">⬅️</div>
                         <div class="file-info">
-                            <div class="file-name">${item.name}</div>
-                            <div class="file-size">${item.type === 'dir' ? 'Папка' : (item.size / 1024 / 1024).toFixed(2) + ' МБ'}</div>
+                            <div class="file-name" style="color:var(--gold)">Назад к дисциплинам</div>
                         </div>
-                    </a>
-                `).join('');
-            } catch (error) {
-                document.getElementById('file-list').innerHTML = '<p style="padding:20px; opacity:0.5;">Ошибка загрузки файлов...</p>';
+                    </div>
+                `;
             }
-        }
 
-        window.onload = loadYandexFiles;
-    </script>
+            html += items.map(item => {
+                if (item.type === 'dir') {
+                    // Если это папка, вызываем загрузку этой папки по клику
+                    return `
+                        <div class="file-item" onclick="openFolder('${item.path}')" style="cursor:pointer;">
+                            <div class="file-icon">📁</div>
+                            <div class="file-info">
+                                <div class="file-name">${item.name}</div>
+                                <div class="file-size">Папка с материалами</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Если это файл, оставляем обычную ссылку на скачивание
+                    return `
+                        <a href="${item.file}" class="file-item" target="_blank">
+                            <div class="file-icon">📄</div>
+                            <div class="file-info">
+                                <div class="file-name">${item.name}</div>
+                                <div class="file-size">${(item.size / 1024 / 1024).toFixed(2)} МБ</div>
+                            </div>
+                        </a>
+                    `;
+                }
+            }).join('');
+
+            container.innerHTML = html;
+            currentPath = path;
+
+        } catch (error) {
+            container.innerHTML = '<p style="padding:20px; opacity:0.5;">Ошибка доступа. Проверьте интернет или ссылку.</p>';
+        }
+    }
+
+    function openFolder(path) {
+        loadYandexFiles(path);
+    }
+
+    function goBack() {
+        // Убираем последнюю папку из пути
+        const segments = currentPath.split('/');
+        segments.pop();
+        loadYandexFiles(segments.join('/'));
+    }
+
+    window.onload = () => loadYandexFiles();
+</script>
+
 </head>
 <body>
     <div class="background-overlay"></div>
