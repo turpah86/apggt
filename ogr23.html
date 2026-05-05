@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Группа ОГР</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем шрифты, если они нужны -->
+
     <link href="https://googleapis.com" rel="stylesheet">
     
     <script>
-        // Защита: пускает только если залогинился под этой группой
+
         if (localStorage.getItem('access_ogr23.html') !== 'true') {
             window.location.href = 'students.html';
         }
     </script>
 
     <style>
-        /* Дополнительные стили для улучшения кнопок */
+
         .btn-primary, .btn-secondary {
             transition: all 0.3s ease;
             display: flex;
@@ -68,16 +68,13 @@
         <section class="glass-card fadeInUp" style="max-width: 600px; width: 90%;">
             <h2 class="group-title">📦 Группа ОГР</h2>
             
-            <!-- Инфо-блок дисциплины -->
             <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 20px; border-radius: 15px; margin: 25px 0; text-align: center;">
                 <p style="opacity: 0.5; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Дисциплина:</p>
                 <p style="font-size: 1.1rem; font-weight: 700; color: var(--gold);">Технология открытых горных работ</p>
             </div>
-            
-            <!-- Кнопки действий -->
+
             <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 30px;">
-                
-                <!-- Ссылка на Яндекс.Диск -->
+
                 <div>
                     <a href="https://disk.yandex.ru/d/a3BaNEAyqeVHVw" class="btn-primary" target="_blank">
                         <span style="font-size: 1.2rem;">📂</span> 
@@ -86,7 +83,6 @@
                     <span class="hint-text" style="text-align: center;">Файлы откроются в новой вкладке Яндекс Диска</span>
                 </div>
                 
-                <!-- Ссылка на страницу с тестом -->
                 <a href="quiz.html" class="btn-secondary" style="margin-left: 0;">
                     <span style="font-size: 1.2rem;">📝</span>
                     <span>Пройти тестирование</span>
