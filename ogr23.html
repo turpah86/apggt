@@ -5,135 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Группа ОГР-23 | P.A.N.</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Подключаем шрифты, если они нужны -->
     <link href="https://googleapis.com" rel="stylesheet">
-    <style>
-        /* Стили для списка файлов */
-        .file-explorer {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            margin-top: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            text-align: left;
-        }
-        .file-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: background 0.3s;
-            text-decoration: none;
-            color: white;
-        }
-        .file-item:hover {
-            background: rgba(255, 255, 255, 0.07);
-        }
-        .file-item:last-child { border-bottom: none; }
-        .file-icon { margin-right: 15px; font-size: 1.2rem; }
-        .file-info { display: flex; flex-direction: column; }
-        .file-name { font-size: 0.9rem; font-weight: 500; }
-        .file-size { font-size: 0.7rem; opacity: 0.5; }
-        
-        /* Кастомный скроллбар */
-        .file-explorer::-webkit-scrollbar { width: 5px; }
-        .file-explorer::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
-    </style>
+    
     <script>
+        // Защита: пускает только если залогинился под этой группой
         if (localStorage.getItem('access_ogr23.html') !== 'true') {
             window.location.href = 'students.html';
         }
-    
-        const publicKey = 'https://disk.yandex.ru/d/a3BaNEAyqeVHVw';
-        let currentPath = ''; // Храним текущий путь внутри папки
-    
-        async function loadYandexFiles(path = '') {
-            const container = document.getElementById('file-list');
-            container.innerHTML = '<p style="padding: 20px; opacity: 0.5;">Загрузка...</p>';
-            
-            // Формируем URL с учетом вложенности
-            // Используем бесплатный прокси для обхода блокировки CORS
-            const proxyUrl = 'https://corsproxy.io?'; 
-            const targetUrl = `https://yandex.net{encodeURIComponent(publicKey)}${path ? '&path=' + encodeURIComponent(path) : ''}`;
-    
-            try {
-                const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
-                
-                if (!response.ok) throw new Error('Ошибка сервера');
-                
-                const data = await response.json();
-                // ... остальной код отрисовки (items и т.д.)
-    
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                const items = data._embedded.items;
-    
-                let html = '';
-    
-                // Добавляем кнопку "Назад", если мы внутри папки
-                if (path !== '') {
-                    html += `
-                        <div class="file-item" onclick="goBack()" style="cursor:pointer; border-bottom: 2px solid var(--gold);">
-                            <div class="file-icon">⬅️</div>
-                            <div class="file-info">
-                                <div class="file-name" style="color:var(--gold)">Назад к дисциплинам</div>
-                            </div>
-                        </div>
-                    `;
-                }
-    
-                html += items.map(item => {
-                    if (item.type === 'dir') {
-                        // Если это папка, вызываем загрузку этой папки по клику
-                        return `
-                            <div class="file-item" onclick="openFolder('${item.path}')" style="cursor:pointer;">
-                                <div class="file-icon">📁</div>
-                                <div class="file-info">
-                                    <div class="file-name">${item.name}</div>
-                                    <div class="file-size">Папка с материалами</div>
-                                </div>
-                            </div>
-                        `;
-                    } else {
-                        // Если это файл, оставляем обычную ссылку на скачивание
-                        return `
-                            <a href="${item.file}" class="file-item" target="_blank">
-                                <div class="file-icon">📄</div>
-                                <div class="file-info">
-                                    <div class="file-name">${item.name}</div>
-                                    <div class="file-size">${(item.size / 1024 / 1024).toFixed(2)} МБ</div>
-                                </div>
-                            </a>
-                        `;
-                    }
-                }).join('');
-    
-                container.innerHTML = html;
-                currentPath = path;
-    
-            } catch (error) {
-                container.innerHTML = '<p style="padding:20px; opacity:0.5;">Ошибка доступа. Проверьте интернет или ссылку.</p>';
-            }
-        }
-    
-        function openFolder(path) {
-            loadYandexFiles(path);
-        }
-    
-        function goBack() {
-            // Убираем последнюю папку из пути
-            const segments = currentPath.split('/');
-            segments.pop();
-            loadYandexFiles(segments.join('/'));
-        }
-    
-        window.onload = () => loadYandexFiles();
     </script>
 
+    <style>
+        /* Дополнительные стили для улучшения кнопок */
+        .btn-primary, .btn-secondary {
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .hint-text {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            opacity: 0.5;
+            font-weight: 400;
+        }
+    </style>
 </head>
 <body>
     <div class="background-overlay"></div>
+    
     <nav class="glass-nav">
         <div class="logo">
             <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
@@ -151,25 +68,44 @@
         <section class="glass-card fadeInUp" style="max-width: 600px; width: 90%;">
             <h2 class="group-title">📦 Группа ОГР-23</h2>
             
+            <!-- Инфо-блок дисциплины -->
             <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 20px; border-radius: 15px; margin: 25px 0; text-align: center;">
                 <p style="opacity: 0.5; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Дисциплина:</p>
                 <p style="font-size: 1.1rem; font-weight: 700; color: var(--gold);">Технология открытых горных работ</p>
             </div>
             
-            <!-- Проводник файлов -->
-            <h3 style="font-size: 0.9rem; color: var(--gold); margin-bottom: 10px; text-align: left;">📚 Учебные материалы:</h3>
-            <div class="file-explorer" id="file-list">
-                <p style="padding: 20px; opacity: 0.5;">Загрузка списка файлов...</p>
+            <!-- Кнопки действий -->
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 30px;">
+                
+                <!-- Ссылка на Яндекс.Диск -->
+                <div>
+                    <a href="https://yandex.ru" class="btn-primary" target="_blank">
+                        <span style="font-size: 1.2rem;">📂</span> 
+                        <span>Учебные материалы</span>
+                    </a>
+                    <span class="hint-text" style="text-align: center;">Файлы откроются в новой вкладке Яндекс Диска</span>
+                </div>
+                
+                <!-- Ссылка на страницу с тестом -->
+                <a href="quiz.html" class="btn-secondary" style="margin-left: 0;">
+                    <span style="font-size: 1.2rem;">📝</span>
+                    <span>Пройти тестирование</span>
+                </a>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 30px;">
-                <a href="quiz.html" class="btn-secondary" style="display: block; text-align: center; margin-left: 0;">📝 Пройти тестирование</a>
+            <!-- Теги (Подразделы) -->
+            <div class="skills-grid" style="margin-top: 35px; opacity: 0.7;">
+                <span>Лекции</span>
+                <span>МДК.01.01</span>
+                <span>Практика</span>
+                <span>Экзамен</span>
             </div>
         </section>
     </main>
 
     <footer style="text-align: center; padding: 20px; opacity: 0.3; font-size: 0.7rem;">
-        Личный кабинет студента ГГТ
+        Личный кабинет студента ГГТ © 2024
     </footer>
+
 </body>
 </html>
