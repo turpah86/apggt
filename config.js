@@ -2,7 +2,7 @@ const USERS = {
     "ОГР-23": {
         password: "123",
         redirect: "ogr23.html",
-        quiz: "ogr23"
+        quiz: "ogr_razdel1.js"
     },
     "РГО-24": {
         password: "456",
