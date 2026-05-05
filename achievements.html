@@ -6,7 +6,6 @@
     <title>Достижения | Пермяков А.Н.</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Стили для красивой галереи */
         .achievements-page {
             padding-top: 120px;
             max-width: 1400px;
@@ -21,89 +20,76 @@
 
         .page-header h1 {
             font-size: 3rem;
-            background: linear-gradient(to right, #fff, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffd700;
+            margin-bottom: 10px;
         }
 
-        /* Интерактивная сетка */
         .masonry-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 30px;
             padding: 0 20px;
         }
 
         .achievement-item {
-            position: relative;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 15px;
-            overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .achievement-item.visible {
-            opacity: 1;
-            transform: translateY(0);
+            text-align: center;
+            transition: 0.4s;
+            cursor: pointer;
         }
 
         .achievement-item:hover {
-            transform: scale(1.05) translateY(-10px);
+            transform: translateY(-10px);
             border-color: #ffd700;
             background: rgba(255, 255, 255, 0.08);
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            z-index: 10;
         }
 
-        .achievement-item img {
+        .img-frame {
             width: 100%;
-            height: 250px;
-            object-fit: contain;
+            height: 220px;
             background: rgba(0,0,0,0.2);
             border-radius: 12px;
-            transition: 0.5s;
-        }
-
-        .achievement-item:hover img {
-            filter: brightness(1.1);
-        }
-
-        .info-overlay {
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        .info-overlay h3 {
-            font-size: 1rem;
-            color: #fff;
-            margin: 0;
-            font-weight: 500;
-        }
-
-        /* Кнопка "Наверх" */
-        .scroll-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: #ffd700;
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            opacity: 0;
-            transition: 0.3s;
-            z-index: 1000;
+            overflow: hidden;
+            margin-bottom: 15px;
         }
 
-        .scroll-top.visible { opacity: 1; }
+        .img-frame img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .info-overlay h3 {
+            font-size: 0.9rem;
+            color: #fff;
+            margin: 0;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,215,0,0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,215,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -119,74 +105,68 @@
     </nav>
 
     <div class="achievements-page">
-        <header class="page-header fadeInUp">
-            <h1>Портфолио наград</h1>
-            <p style="opacity: 0.6;">Все профессиональные достижения в одном месте</p>
+        <header class="page-header">
+            <a href="index.html" class="back-btn">← На главную</a>
+            <h1>Все достижения</h1>
+            <p style="opacity: 0.6;">Архив профессиональных наград и сертификатов</p>
         </header>
 
         <div id="gallery" class="masonry-grid">
-            <!-- Сюда прилетят достижения -->
+            <div style="color: white; opacity: 0.5; grid-column: 1/-1; text-align: center; padding: 50px;">
+                Загрузка архива...
+            </div>
         </div>
     </div>
 
-    <div class="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️</div>
+    <footer style="text-align: center; padding: 60px; opacity: 0.4; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05);">
+        © 2024 ПЕРМЯКОВ А.Н. | ГБПОУ ГГТ
+    </footer>
 
     <script>
     async function loadGallery() {
-        // !!! Твоя ссылка /exec !!!
+        // !!! ТВОЯ ССЫЛКА /exec !!!
         const scriptURL = 'https://script.google.com/macros/s/AKfycbynQTuEFS8ED5hr7NaiqniWQUmBOYpSpV1uEVcBYipTU-yrcb5t9AfCqGB5aEqu7J3p/exec';
         const container = document.getElementById('gallery');
 
         try {
-            // Запрашиваем 100 штук, чтобы точно всё влезло
-            const response = await fetch(scriptURL + '?limit=100');
+            // Запрашиваем до 50 файлов
+            const response = await fetch(scriptURL + "?limit=50");
             const data = await response.json();
             
             if (data._embedded && data._embedded.items) {
-                const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
+                const items = data._embedded.items;
                 container.innerHTML = '';
 
                 items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'achievement-card';
+                    const el = document.createElement('div');
+                    el.className = 'achievement-item';
                     
-                    // 1. ПЕРВАЯ ЛИНИЯ ЗАЩИТЫ: Берем превью (оно вечное)
-                    // Если Яндекс не дал превью, используем спец-сервис для показа
-                    let imgUrl = item.preview ? item.preview.replace('size=S', 'size=800x800') : item.file;
+                    // Используем превью
+                    const thumb = item.preview;
                     
-                    // 2. ОТКРЫТИЕ: При клике открываем только публичную страницу (она не протухает)
-                    card.onclick = () => window.open(item.public_url, '_blank');
-                    
-                    card.innerHTML = `
-                        <div class="img-frame" style="background: rgba(0,0,0,0.2); min-height: 180px; display: flex; align-items:center; justify-content:center;">
-                            <img src="${imgUrl}" 
-                                 alt="${item.name}" 
-                                 style="max-width: 100%; max-height: 100%; object-fit: contain; opacity: 0; transition: 0.5s;"
-                                 onload="this.style.opacity=1"
-                                 onerror="this.src='https://placeholder.com'">
+                    el.innerHTML = `
+                        <div onclick="window.open('${item.public_url}', '_blank')">
+                            <div class="img-frame">
+                                <img src="${thumb}" 
+                                     alt="${item.name}" 
+                                     referrerpolicy="no-referrer" 
+                                     loading="lazy">
+                            </div>
+                            <div class="info-overlay">
+                                <h3>${item.name.replace(/\.[^/.]+$/, "")}</h3>
+                            </div>
                         </div>
-                        <p title="${item.name}" style="margin-top:10px; font-size:0.8rem;">${item.name.replace(/\.[^/.]+$/, "")}</p>
                     `;
-                    container.appendChild(card);
-                });
-                   
-                    // Активируем анимацию появления через мгновение
-                    setTimeout(() => el.classList.add('visible'), 50);
+                    container.appendChild(el);
                 });
             }
         } catch (e) {
-            container.innerHTML = '<p style="color:white; opacity:0.3; text-align:center; grid-column:1/-1;">Ошибка загрузки архива...</p>';
+            container.innerHTML = '<p style="color:white; opacity:0.3; text-align:center; grid-column:1/-1;">Не удалось загрузить архив достижений</p>';
         }
     }
-
-    // Показываем кнопку "Наверх" при скролле
-    window.onscroll = function() {
-        const btn = document.querySelector('.scroll-top');
-        if (window.scrollY > 500) btn.classList.add('visible');
-        else btn.classList.remove('visible');
-    };
 
     document.addEventListener('DOMContentLoaded', loadGallery);
     </script>
 </body>
 </html>
+
