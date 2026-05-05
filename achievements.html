@@ -150,24 +150,22 @@
                     const card = document.createElement('div');
                     card.className = 'achievement-card';
                     
-                    // Пытаемся взять превью 600x600, если нет - берем чистый файл
-                    let imgUrl = item.preview ? item.preview.replace('size=S', 'size=600x600') : item.file;
+                    // 1. ПЕРВАЯ ЛИНИЯ ЗАЩИТЫ: Берем превью (оно вечное)
+                    // Если Яндекс не дал превью, используем спец-сервис для показа
+                    let imgUrl = item.preview ? item.preview.replace('size=S', 'size=800x800') : item.file;
                     
-                    // Если это прямой файл с Диска, добавляем параметр, чтобы Яндекс его показал
-                    if (imgUrl.includes('downloader.disk.yandex.ru')) {
-                        imgUrl += '&inline=true';
-                    }
-                
-                    card.onclick = () => window.open(item.public_url || item.file, '_blank');
+                    // 2. ОТКРЫТИЕ: При клике открываем только публичную страницу (она не протухает)
+                    card.onclick = () => window.open(item.public_url, '_blank');
                     
                     card.innerHTML = `
-                        <div class="img-frame">
+                        <div class="img-frame" style="background: rgba(0,0,0,0.2); min-height: 180px; display: flex; align-items:center; justify-content:center;">
                             <img src="${imgUrl}" 
                                  alt="${item.name}" 
-                                 loading="lazy"
+                                 style="max-width: 100%; max-height: 100%; object-fit: contain; opacity: 0; transition: 0.5s;"
+                                 onload="this.style.opacity=1"
                                  onerror="this.src='https://placeholder.com'">
                         </div>
-                        <p title="${item.name}">${item.name.replace(/\.[^/.]+$/, "")}</p>
+                        <p title="${item.name}" style="margin-top:10px; font-size:0.8rem;">${item.name.replace(/\.[^/.]+$/, "")}</p>
                     `;
                     container.appendChild(card);
                 });
