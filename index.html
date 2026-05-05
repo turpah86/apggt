@@ -162,17 +162,19 @@
                     const card = document.createElement('div');
                     card.className = 'achievement-card';
                     
-                    // Используем превью, а при клике — страницу Яндекса
+                    // Используем спец-ссылку на превью
+                    const imgUrl = item.preview;
+                    
                     card.onclick = () => window.open(item.public_url, '_blank');
                     
                     card.innerHTML = `
                         <div class="img-frame" style="background: rgba(255,255,255,0.05); min-height: 180px; display: flex; align-items: center; justify-content: center;">
-                            <img src="${item.preview}" 
+                            <img src="${imgUrl}" 
                                  alt="${item.name}" 
                                  style="max-width: 100%; max-height: 100%; object-fit: contain;"
                                  onerror="this.src='https://icons8.com'">
                         </div>
-                        <p title="${item.name}" style="margin-top: 10px; font-size: 0.8rem;">${item.name.replace(/\.[^/.]+$/, "")}</p>
+                        <p style="color:white; font-size:0.8rem; margin-top:10px;">${item.name.replace(/\.[^/.]+$/, "")}</p>
                     `;
                     container.appendChild(card);
                 });
