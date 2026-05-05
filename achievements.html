@@ -167,6 +167,10 @@
 
     document.addEventListener('DOMContentLoaded', loadGallery);
     </script>
+    <div id="lightbox" onclick="this.style.display='none'" style="display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); cursor: zoom-out; align-items: center; justify-content: center;">
+        <img id="lightbox-img" src="" style="max-width: 90%; max-height: 90%; border-radius: 10px; box-shadow: 0 0 30px rgba(0,0,0,0.5);">
+        <div style="position: absolute; bottom: 20px; color: white; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 20px; font-size: 0.9rem;">Нажмите в любое место, чтобы закрыть</div>
+    </div>
 </body>
 </html>
 
