@@ -65,19 +65,20 @@
     // Берем группу из памяти, чтобы в таблицу улетало правильное название (огр, рго и т.д.)
     let userGroup = group; 
 
-    // 3. ФУНКЦИЯ ВЫБОРА РАЗДЕЛА
+    // 3. ФУНКЦИЯ ВЫБОРА РАЗДЕЛА (ОБНОВЛЕННАЯ)
     function selectSection(num) {
         const quizFileName = `ogr_razdel${num}`; 
         const script = document.createElement('script');
         script.src = `quizzes/${quizFileName}.js`;
         
         script.onload = () => {
-            // --- НОВЫЕ СТРОЧКИ ДЛЯ РАНДОМИЗАЦИИ ---
-            if (num === 3) {
-                questions.sort(() => Math.random() - 0.5); // Перемешиваем 110 вопросов
-                questions.length = 50;                     // Оставляем только случайные 50
-            }
-            // --------------------------------------
+            // 1. Перемешиваем всю загруженную базу вопросов
+            questions.sort(() => Math.random() - 0.5);
+    
+            // 2. Устанавливаем лимиты: сколько вопросов оставить для теста
+            if (num === 1) questions.length = 20; // Из 90 останется 20 случайных
+            if (num === 2) questions.length = 40; // Из базы останется 40 случайных
+            if (num === 3) questions.length = 50; // Из 110 останется 50 случайных
     
             document.getElementById('section-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'block';
