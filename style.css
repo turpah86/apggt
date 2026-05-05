@@ -49,6 +49,13 @@ body {
     z-index: 1000;
 }
 
+.loading-text {
+    grid-column: 1 / -1; /* Растягивает текст на всю ширину сетки */
+    text-align: center;
+    padding: 40px;
+    opacity: 0.5;
+    font-style: italic;
+}
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
@@ -76,7 +83,6 @@ body {
     transform: scale(1.1); /* Анимация при наведении */
 }
 
-/* На мобилках логотип чуть меньше */
 @media (max-width: 768px) {
     .nav-logo-img {
         height: 35px;
@@ -130,9 +136,6 @@ body {
     align-self: flex-start; /* Чтобы рамка не растягивалась по высоте текста */
 }
 
-
-
-
 .text-wrapper h1 {
     font-size: 3rem;
     line-height: 1.1;
@@ -154,12 +157,12 @@ body {
     margin-bottom: 15px;
 }
 
-/* Секция контента (О преподавателе и Достижения) */
+
 .main-centered {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px; /* Отступ между карточками */
+    gap: 40px;
     padding: 40px 20px 100px;
     max-width: 1000px;
     margin: 0 auto;
@@ -173,10 +176,9 @@ body {
     border: 1px solid var(--glass-border);
     border-radius: 24px;
     padding: 40px;
-    position: relative; /* Чтобы блоки не накладывались */
+    position: relative; 
 }
 
-/* Сетка навыков/дисциплин */
 .skills-grid {
     display: flex;
     flex-wrap: wrap;
@@ -192,7 +194,6 @@ body {
     border: 1px solid var(--glass-border);
 }
 
-/* Сетка достижений */
 .achievements-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -218,21 +219,20 @@ body {
 .achievement-card img {
     width: 100%;
     height: 160px;
-    object-fit: contain; /* Чтобы грамоты не обрезались */
+    object-fit: contain; 
     background: rgba(0,0,0,0.2);
     border-radius: 12px;
     margin-bottom: 12px;
 }
 
 .achievement-card p {
-    font-size: 0.85rem;
-    color: var(--text-dim);
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal; 
 }
 
-/* Кнопки */
 .btn-primary, .btn-secondary {
     display: inline-block;
     padding: 12px 28px;
@@ -265,7 +265,6 @@ body {
     color: var(--gold);
 }
 
-/* Анимации */
 .fadeInUp {
     animation: fadeInUp 0.8s ease-out forwards;
 }
@@ -281,39 +280,38 @@ body {
     }
 }
 
-/* Адаптивность для мобильных */
 @media (max-width: 768px) {
     .hero-content {
-        flex-direction: column; /* Выстраиваем фото и текст в колонку */
-        text-align: center;      /* Центрируем весь текст */
-        gap: 30px;               /* Отступ между фото и текстом */
+        flex-direction: column; 
+        text-align: center;    
+        gap: 30px;          
     }
 
     .photo-wrapper {
         display: flex;
-        justify-content: center; /* Центрируем контейнер с фото */
+        justify-content: center;
         width: 100%;
     }
 
     .photo-wrapper img {
-        width: 240px;            /* Чуть уменьшим на мобильных */
-        margin: 0 auto;          /* Финальное центрирование */
+        width: 240px;          
+        margin: 0 auto;      
     }
 
     .text-wrapper h1 {
-        font-size: 2.2rem;       /* Уменьшаем шрифт, чтобы не вылезал */
+        font-size: 2.2rem;   
     }
 
     .hero-btns {
         display: flex;
-        flex-direction: column;  /* Кнопки на мобильном лучше ставить друг под другом */
+        flex-direction: column;  
         align-items: center;
         gap: 15px;
     }
 
     .btn-primary, .btn-secondary {
-        margin: 0;               /* Убираем боковые отступы */
-        width: 100%;             /* Кнопки на всю ширину для удобства нажатия */
+        margin: 0;             
+        width: 100%;         
         max-width: 280px;
     }
 }
