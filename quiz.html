@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Тестирование | P.A.N.</title>
     <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
     <style>
         .option-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom: 10px; width: 100%; text-align: left; transition: 0.3s; }
         .selected { border-color: var(--gold) !important; background: rgba(255,255,255,0.1) !important; }
@@ -17,29 +18,29 @@
     <div class="background-overlay"></div>
     <main class="main-centered" style="padding-top: 100px;">
         
-        <!-- 1. ШАГ: ВЫБОР РАЗДЕЛА -->
+        <!-- ШАГ 1: ВЫБОР РАЗДЕЛА -->
         <div id="section-screen" class="glass-card">
             <h2 class="group-title">Выберите раздел</h2>
-            <button onclick="selectSection('ogr_razdel1')" class="btn-primary btn-section">Раздел 1: Введение (20 вопр.)</button>
-            <button onclick="selectSection('ogr_razdel2')" class="btn-primary btn-section">Раздел 2: Технология ОГР (40 вопр.)</button>
-            <button onclick="location.href='ogr23.html'" class="btn-secondary" style="width:100%; margin-top:10px;">🔙 Назад</button>
+            <button onclick="selectSection(1)" class="btn-primary btn-section">Раздел 1: Введение (20 вопр.)</button>
+            <button onclick="selectSection(2)" class="btn-primary btn-section">Раздел 2: Технология ОГР (40 вопр.)</button>
+            <button onclick="location.href='index.html'" class="btn-secondary" style="width:100%; margin-top:10px;">🔙 Назад</button>
         </div>
 
-        <!-- 2. ШАГ: ВВОД ФИО (появится после выбора раздела) -->
+        <!-- ШАГ 2: ВВОД ФИО -->
         <div id="start-screen" class="glass-card">
             <h2 class="group-title">Ваши данные</h2>
             <input type="text" id="student-name" class="pass-input" placeholder="Фамилия Имя">
             <button onclick="startQuiz()" class="btn-primary" style="margin-top: 15px; width: 100%;">Начать тест</button>
         </div>
 
-        <!-- 3. ШАГ: САМ ТЕСТ -->
+        <!-- ШАГ 3: ТЕСТ -->
         <div id="quiz-card" class="glass-card" style="max-width: 700px;">
             <div class="progress-bar"><div id="progress-fill"></div></div>
             <h2 id="question-text">...</h2>
             <div id="options-container"></div>
         </div>
 
-        <!-- 4. ШАГ: РЕЗУЛЬТАТ -->
+        <!-- ШАГ 4: РЕЗУЛЬТАТ -->
         <div id="result-screen" class="glass-card">
             <h2 class="group-title">Результат</h2>
             <p id="res-student-name" style="color: white; opacity: 0.8;"></p>
@@ -50,19 +51,21 @@
     </main>
 
     <script>
+        // Проверка авторизации
+        const group = localStorage.getItem('user_group');
+        if (group !== 'огр') { window.location.href = 'students.html'; }
+
         let currentQuestion = 0; let score = 0; let studentInfo = "";
 
-        // Функция подгрузки файла раздела
-        function selectSection(quizFileName) {
+        // Выбор раздела
+        function selectSection(num) {
             const script = document.createElement('script');
-            script.src = `quizzes/${quizFileName}.js`;
-            
+            script.src = `quizzes/ogr_razdel${num}.js`;
             script.onload = () => {
                 document.getElementById('section-screen').style.display = 'none';
                 document.getElementById('start-screen').style.display = 'block';
             };
-
-            script.onerror = () => alert("Ошибка: файл " + quizFileName + ".js не найден в папке quizzes");
+            script.onerror = () => alert("Файл ogr_razdel" + num + ".js не найден!");
             document.head.appendChild(script);
         }
 
@@ -81,6 +84,7 @@
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             
+            // Рандомизация ответов
             q.o.map((text, index) => ({text, index})).sort(() => Math.random() - 0.5).forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
@@ -99,18 +103,17 @@
         function showResults() {
             const percent = Math.round((score / questions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
-            const userGroup = localStorage.getItem('user_group') || "ОГР-23";
         
             document.getElementById('quiz-card').style.display = 'none';
             document.getElementById('result-screen').style.display = 'block';
             document.getElementById('score-val').innerText = mark;
             document.getElementById('res-student-name').innerText = studentInfo;
 
-            // Отправка данных
+            // ОТПРАВКА В ТАБЛИЦУ
             const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse';
             const fData = new URLSearchParams();
             fData.append('entry.1458374118', studentInfo); 
-            fData.append('entry.1320096689', userGroup);   
+            fData.append('entry.1320096689', 'огр');   
             fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
             fData.append('entry.1688940307', mark);
 
