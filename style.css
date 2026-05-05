@@ -56,6 +56,36 @@ body {
     letter-spacing: 2px;
 }
 
+.nav-logo-img {
+    height: 45px; /* Высота логотипа */
+    width: auto;
+    margin-right: 12px;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3)); /* Легкое золотистое свечение */
+    transition: 0.3s;
+}
+
+.logo-text {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.logo:hover .nav-logo-img {
+    transform: scale(1.1); /* Анимация при наведении */
+}
+
+/* На мобилках логотип чуть меньше */
+@media (max-width: 768px) {
+    .nav-logo-img {
+        height: 35px;
+    }
+    .logo-text {
+        font-size: 1rem;
+    }
+}
+
 .nav-links a {
     color: var(--text-main);
     text-decoration: none;
