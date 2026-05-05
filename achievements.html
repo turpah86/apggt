@@ -138,26 +138,30 @@
                 container.innerHTML = '';
 
                 items.forEach(item => {
-                    const el = document.createElement('div');
-                    el.className = 'achievement-item';
+                    const card = document.createElement('div');
+                    card.className = 'achievement-card';
                     
-                    // Используем превью
+                    // Твоя ссылка на картинку (превью)
                     const thumb = item.preview;
                     
-                    el.innerHTML = `
-                        <div onclick="window.open('${item.public_url}', '_blank')">
-                            <div class="img-frame">
-                                <img src="${thumb}" 
-                                     alt="${item.name}" 
-                                     referrerpolicy="no-referrer" 
-                                     loading="lazy">
-                            </div>
-                            <div class="info-overlay">
-                                <h3>${item.name.replace(/\.[^/.]+$/, "")}</h3>
-                            </div>
+                    // ПРИ КЛИКЕ - УВЕЛИЧИВАЕМ
+                    card.onclick = (e) => {
+                        e.preventDefault();
+                        const lb = document.getElementById('lightbox');
+                        const lbImg = document.getElementById('lightbox-img');
+                        
+                        // Подставляем ссылку на картинку в большое окно
+                        lbImg.src = thumb; 
+                        lb.style.display = 'flex';
+                    };
+                
+                    card.innerHTML = `
+                        <div class="img-frame">
+                            <img src="${thumb}" referrerpolicy="no-referrer" alt="">
                         </div>
+                        <p>${item.name.replace(/\.[^/.]+$/, "")}</p>
                     `;
-                    container.appendChild(el);
+                    container.appendChild(card);
                 });
             }
         } catch (e) {
