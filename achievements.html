@@ -1,94 +1,186 @@
-<div id="achievements-container" class="achievements-grid">
-    <div class="loading" style="color: white; text-align: center; width: 100%;">Загрузка твоих побед...</div>
-</div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Достижения | Пермяков А.Н.</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Стили для красивой галереи */
+        .achievements-page {
+            padding-top: 120px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+        }
 
-<style>
-    :root { --gold: #ffd700; --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1); }
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(to right, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Интерактивная сетка */
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .achievement-item {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 15px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .achievement-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .achievement-item:hover {
+            transform: scale(1.05) translateY(-10px);
+            border-color: #ffd700;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            z-index: 10;
+        }
+
+        .achievement-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            transition: 0.5s;
+        }
+
+        .achievement-item:hover img {
+            filter: brightness(1.1);
+        }
+
+        .info-overlay {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .info-overlay h3 {
+            font-size: 1rem;
+            color: #fff;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Кнопка "Наверх" */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #ffd700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .scroll-top.visible { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="background-overlay"></div>
     
-    .achievements-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 25px;
-        padding: 20px;
-    }
+    <nav class="glass-nav">
+        <div class="logo">P.A.N.</div>
+        <div class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="students.html">Обучение</a>
+            <a href="achievements.html">Достижения</a>
+        </div>
+    </nav>
 
-    .achievement-card {
-        background: var(--glass);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid var(--glass-border);
-        border-radius: 20px;
-        padding: 20px;
-        text-align: center;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        cursor: pointer;
-    }
+    <div class="achievements-page">
+        <header class="page-header fadeInUp">
+            <h1>Портфолио наград</h1>
+            <p style="opacity: 0.6;">Все профессиональные достижения в одном месте</p>
+        </header>
 
-    .achievement-card:hover {
-        transform: translateY(-10px);
-        border-color: var(--gold);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
+        <div id="gallery" class="masonry-grid">
+            <!-- Сюда прилетят достижения -->
+        </div>
+    </div>
 
-    .achievement-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover; /* Чтобы все картинки были ровными */
-        border-radius: 12px;
-        margin-bottom: 15px;
-    }
+    <div class="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️</div>
 
-    .achievement-card h3 {
-        color: white;
-        font-size: 1.1rem;
-        margin: 0;
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-</style>
+    <script>
+    async function loadGallery() {
+        // !!! Твоя ссылка /exec !!!
+        const scriptURL = 'ТВОЯ_ССЫЛКА_ОТ_GOOGLE_SCRIPT';
+        const container = document.getElementById('gallery');
 
-<script>
-async function loadAchievements() {
-    // Твоя проверенная ссылка
-    const pubLink = 'https://yandex.ru'; 
-    const apiURL = `https://yandex.net{encodeURIComponent(pubLink)}&limit=50`;
+        try {
+            // Запрашиваем 100 штук, чтобы точно всё влезло
+            const response = await fetch(scriptURL + '?limit=100');
+            const data = await response.json();
+            
+            if (data._embedded && data._embedded.items) {
+                const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
+                container.innerHTML = '';
 
-    const container = document.getElementById('achievements-container');
-
-    try {
-        const response = await fetch(apiURL);
-        const data = await response.json();
-        
-        if (!data._embedded) return;
-
-        const items = data._embedded.items;
-        container.innerHTML = ''; 
-
-        items.forEach(item => {
-            // Берем только картинки
-            if (item.mime_type && item.mime_type.includes('image')) {
-                const card = document.createElement('div');
-                card.className = 'achievement-card';
-                
-                // Делаем превью качественнее
-                const highResPreview = item.preview.replace('size=S', 'size=600x');
-
-                card.innerHTML = `
-                    <div onclick="window.open('${item.file}', '_blank')">
-                        <img src="${highResPreview}" alt="${item.name}">
-                        <h3>${item.name.replace(/\.[^/.]+$/, "")}</h3>
-                    </div>
-                `;
-                container.appendChild(card);
+                items.forEach((item, index) => {
+                    const el = document.createElement('div');
+                    el.className = 'achievement-item';
+                    // Задержка появления для эффекта "лесенки"
+                    el.style.transitionDelay = (index * 0.1) + 's';
+                    
+                    const thumb = (item.preview || item.file).replace('size=S', 'size=600x600');
+                    
+                    el.innerHTML = `
+                        <div onclick="window.open('${item.public_url || item.file}', '_blank')">
+                            <img src="${thumb}" alt="${item.name}" loading="lazy">
+                            <div class="info-overlay">
+                                <h3>${item.name.replace(/\.[^/.]+$/, "")}</h3>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(el);
+                    
+                    // Активируем анимацию появления через мгновение
+                    setTimeout(() => el.classList.add('visible'), 50);
+                });
             }
-        });
-    } catch (e) {
-        container.innerHTML = '<p style="color:red">Не удалось загрузить данные с Диска</p>';
-        console.error(e);
+        } catch (e) {
+            container.innerHTML = '<p style="color:white; opacity:0.3; text-align:center; grid-column:1/-1;">Ошибка загрузки архива...</p>';
+        }
     }
-}
 
-document.addEventListener('DOMContentLoaded', loadAchievements);
-</script>
+    // Показываем кнопку "Наверх" при скролле
+    window.onscroll = function() {
+        const btn = document.querySelector('.scroll-top');
+        if (window.scrollY > 500) btn.classList.add('visible');
+        else btn.classList.remove('visible');
+    };
+
+    document.addEventListener('DOMContentLoaded', loadGallery);
+    </script>
+</body>
+</html>
