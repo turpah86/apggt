@@ -146,24 +146,32 @@
                 const items = data._embedded.items.filter(i => i.mime_type && i.mime_type.includes('image'));
                 container.innerHTML = '';
 
-                items.forEach((item, index) => {
-                    const el = document.createElement('div');
-                    el.className = 'achievement-item';
-                    // Задержка появления для эффекта "лесенки"
-                    el.style.transitionDelay = (index * 0.1) + 's';
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'achievement-card';
                     
-                    const thumb = item.preview ? item.preview.replace('size=S', 'size=600x600') : item.file;
+                    // Пытаемся взять превью 600x600, если нет - берем чистый файл
+                    let imgUrl = item.preview ? item.preview.replace('size=S', 'size=600x600') : item.file;
                     
-                    el.innerHTML = `
-                        <div onclick="window.open('${item.public_url || item.file}', '_blank')">
-                            <img src="${thumb}" alt="${item.name}" loading="lazy">
-                            <div class="info-overlay">
-                                <h3>${item.name.replace(/\.[^/.]+$/, "")}</h3>
-                            </div>
+                    // Если это прямой файл с Диска, добавляем параметр, чтобы Яндекс его показал
+                    if (imgUrl.includes('downloader.disk.yandex.ru')) {
+                        imgUrl += '&inline=true';
+                    }
+                
+                    card.onclick = () => window.open(item.public_url || item.file, '_blank');
+                    
+                    card.innerHTML = `
+                        <div class="img-frame">
+                            <img src="${imgUrl}" 
+                                 alt="${item.name}" 
+                                 loading="lazy"
+                                 onerror="this.src='https://placeholder.com'">
                         </div>
+                        <p title="${item.name}">${item.name.replace(/\.[^/.]+$/, "")}</p>
                     `;
-                    container.appendChild(el);
-                    
+                    container.appendChild(card);
+                });
+                   
                     // Активируем анимацию появления через мгновение
                     setTimeout(() => el.classList.add('visible'), 50);
                 });
