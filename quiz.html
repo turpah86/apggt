@@ -21,9 +21,10 @@
         <!-- ШАГ 1: ВЫБОР РАЗДЕЛА -->
         <div id="section-screen" class="glass-card">
             <h2 class="group-title">Выберите раздел</h2>
-            <button onclick="selectSection(1)" class="btn-primary btn-section">Раздел 1: Введение (20 вопр.)</button>
-            <button onclick="selectSection(2)" class="btn-primary btn-section">Раздел 2: Технология ОГР (40 вопр.)</button>
-            <button onclick="selectSection(3)" class="btn-primary btn-section">Раздел 3: Подготовка пород (50 вопр.)</button>
+            <button onclick="selectSection(1)" class="btn-primary btn-section">Раздел 1: Введение</button>
+            <button onclick="selectSection(2)" class="btn-primary btn-section">Раздел 2: Технология ОГР</button>
+            <button onclick="selectSection(3)" class="btn-primary btn-section">Раздел 3: Подготовка пород</button>
+            <button onclick="selectSection(4)" class="btn-primary btn-section">Раздел 4: Подготовка пород</button>
             <button onclick="location.href='index.html'" class="btn-secondary" style="width:100%; margin-top:10px;">🔙 Назад</button>
         </div>
 
@@ -76,9 +77,10 @@
             questions.sort(() => Math.random() - 0.5);
     
             // 2. Устанавливаем лимиты: сколько вопросов оставить для теста
-            if (num === 1) questions.length = 21; // Из 90 останется 20 случайных
-            if (num === 2) questions.length = 22; // Из базы останется 40 случайных
-            if (num === 3) questions.length = 23; // Из 110 останется 50 случайных
+            if (num === 1) questions.length = 21;
+            if (num === 2) questions.length = 22;
+            if (num === 3) questions.length = 23;
+            if (num === 4) questions.length = 24;
     
             document.getElementById('section-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'block';
