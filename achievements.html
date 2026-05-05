@@ -152,7 +152,7 @@
                     // Задержка появления для эффекта "лесенки"
                     el.style.transitionDelay = (index * 0.1) + 's';
                     
-                    const thumb = (item.preview || item.file).replace('size=S', 'size=600x600');
+                    const thumb = item.preview ? item.preview.replace('size=S', 'size=600x600') : item.file;
                     
                     el.innerHTML = `
                         <div onclick="window.open('${item.public_url || item.file}', '_blank')">
