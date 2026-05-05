@@ -67,16 +67,23 @@
 
     // 3. ФУНКЦИЯ ВЫБОРА РАЗДЕЛА
     function selectSection(num) {
-        const quizFileName = `ogr_razdel${num}`; // Имя файла: ogr_razdel1.js и т.д.
+        const quizFileName = `ogr_razdel${num}`; 
         const script = document.createElement('script');
         script.src = `quizzes/${quizFileName}.js`;
         
         script.onload = () => {
+            // --- НОВЫЕ СТРОЧКИ ДЛЯ РАНДОМИЗАЦИИ ---
+            if (num === 3) {
+                questions.sort(() => Math.random() - 0.5); // Перемешиваем 110 вопросов
+                questions.length = 50;                     // Оставляем только случайные 50
+            }
+            // --------------------------------------
+    
             document.getElementById('section-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'block';
         };
-
-        script.onerror = () => alert("Ошибка: Файл " + quizFileName + ".js не найден в папке quizzes!");
+    
+        script.onerror = () => alert("Ошибка: Файл " + quizFileName + ".js не найден!");
         document.head.appendChild(script);
     }
 
