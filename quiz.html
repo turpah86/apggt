@@ -18,7 +18,14 @@
 <body>
     <div class="background-overlay"></div>
     <main class="main-centered" style="padding-top: 100px;">
-        
+        <!-- ШАГ 0: ВЫБОР ПРЕДМЕТА -->
+        <div id="subject-screen" class="glass-card">
+            <h2 class="group-title">Выберите предмет</h2>
+            <button onclick="chooseSubject('ogr')" class="btn-primary btn-section">⛏️ Технология ОГР</button>
+            <button onclick="chooseSubject('electro')" class="btn-primary btn-section">⚡ Электроснабжение ГП</button>
+            <button onclick="location.href='index.html'" class="btn-secondary" style="width:100%; margin-top:10px;">🔙 Назад</button>
+        </div>
+
         <!-- ШАГ 1: ВЫБОР РАЗДЕЛА -->
         <div id="section-screen" class="glass-card">
             <h2 class="group-title">Выберите раздел</h2>
@@ -70,30 +77,71 @@
     let userGroup = group; 
 
     // 3. ФУНКЦИЯ ВЫБОРА РАЗДЕЛА (ОБНОВЛЕННАЯ)
+    let currentSubject = ""; // Переменная для хранения выбранного предмета
+    let currentSectionName = "";
+    
+    const subjectsData = {
+        'ogr': {
+            name: 'Технология ОГР',
+            sections: ['Введение', 'Технология ОГР', 'Подготовка пород', 'Выемочно-погрузочные работы', 'Перемещение грузов', 'Отвалообразование']
+        },
+        'electro': {
+            name: 'Электроснабжение ГП',
+            sections: ['Понятие об энергосистеме и электросетями', 'Схемы внешних распределительных сетей', 'Определение электрических нагрузок', 'Линии электроснабжения горного предприятия']
+        }
+    };
+    
+    function chooseSubject(subj) {
+        currentSubject = subj;
+        
+        // Меняем названия на кнопках разделов
+        const buttons = document.querySelectorAll('.btn-section-choice'); 
+        const data = subjectsData[subj];
+        
+        buttons.forEach((btn, index) => {
+            if (data.sections[index]) {
+                btn.innerText = `Раздел ${index + 1}: ${data.sections[index]}`;
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none'; // Скрываем лишние кнопки, если разделов меньше
+            }
+        });
+    
+        document.getElementById('subject-screen').style.display = 'none';
+        document.getElementById('section-screen').style.display = 'block';
+    }
+    
+    // 2. Настройки лимитов вопросов (чтобы не плодить if-else)
+    const quizLimits = {
+        'ogr': { 1: 21, 2: 22, 3: 33, 4: 34, 5: 45, 6: 46 },
+        'geology': { 1: 15, 2: 15, 3: 15, 4: 24 } // Пример для второго предмета
+    };
+    
+    // 3. Обновленная функция загрузки раздела
     function selectSection(num) {
-        const quizFileName = `ogr_razdel${num}`; 
+        // Сохраняем название раздела из текста кнопки
+        // Мы берем текст кнопки, на которую нажали, чтобы отправить его в таблицу
+        currentSectionName = event.target.innerText; 
+    
+        const quizFileName = `${currentSubject}_razdel${num}`; 
         const script = document.createElement('script');
         script.src = `quizzes/${quizFileName}.js`;
         
         script.onload = () => {
-            // 1. Перемешиваем всю загруженную базу вопросов
             questions.sort(() => Math.random() - 0.5);
-    
-            // 2. Устанавливаем лимиты: сколько вопросов оставить для теста
-            if (num === 1) questions.length = 21;
-            if (num === 2) questions.length = 22;
-            if (num === 3) questions.length = 33;
-            if (num === 4) questions.length = 34;
-            if (num === 5) questions.length = 45;
-            if (num === 6) questions.length = 46;
-    
+            
+            // Берем лимит из конфига выше
+            const limit = quizLimits[currentSubject][num] || 20; 
+            questions.length = Math.min(questions.length, limit);
+            
             document.getElementById('section-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'block';
         };
     
-        script.onerror = () => alert("Ошибка: Файл " + quizFileName + ".js не найден!");
+        script.onerror = () => alert(`Ошибка: Файл ${quizFileName}.js не найден!`);
         document.head.appendChild(script);
     }
+
 
     // 4. ЗАПУСК ТЕСТА
     function startQuiz() {
@@ -170,7 +218,9 @@
             
             const fData = new URLSearchParams();
             fData.append('entry.1458374118', studentInfo); 
-            fData.append('entry.1320096689', userGroup);   
+            // Склеиваем Группу + Предмет + Раздел в одну ячейку для наглядности
+            const fullInfo = `${userGroup} | ${currentSectionName}`;
+            fData.append('entry.1320096689', fullInfo); 
             fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
             fData.append('entry.1688940307', mark);
 
