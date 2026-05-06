@@ -186,100 +186,128 @@ body {
 }
 
 .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
-/* ЧАСТЬ 3: СТРАНИЦА ДОСТИЖЕНИЙ И МОБИЛЬНАЯ ВЕРСИЯ */
+/* 1. Общий контейнер страницы */
 .achievements-page {
-    padding-top: 150px;
+    padding-top: 140px;
     max-width: 1400px;
     margin: 0 auto;
-    padding-bottom: 100px;
+    padding-bottom: 120px;
+    overflow-x: hidden; /* Чтобы повернутые фото не создавали скролл */
 }
 
-.page-header { 
-    text-align: center; 
-    margin-bottom: 60px; 
+/* 2. Заголовок */
+.page-header {
+    text-align: center;
+    margin-bottom: 70px;
 }
 
-.page-header h1 { 
-    font-size: 3.5rem; 
-    color: var(--gold); 
-    margin-bottom: 10px; 
+.page-header h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+    margin-bottom: 10px;
 }
 
-/* КОНТЕЙНЕР ДЛЯ РАЗБРОСА */
+/* 3. КОНТЕЙНЕР-СТОЛ (Хаотичная сетка) */
 .masonry-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 50px; /* Большой зазор для свободного разброса */
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 30px !important; /* Уменьшаем зазор, чтобы фото могли "налезать" друг на друга */
     padding: 40px 20px;
     perspective: 2000px; /* Глубина для реализма */
 }
 
-/* КАРТОЧКА-ФОТОГРАФИЯ */
+/* 4. КАРТОЧКА-ФОТОГРАФИЯ (Полароид-стайл) */
 .achievement-item {
     width: 300px;
-    background: #ffffff; /* Белая основа фото */
-    padding: 12px 12px 45px 12px; /* Поля снизу под "подпись" */
+    background: #fdfdfd; /* Цвет качественной фотобумаги */
+    padding: 12px 12px 45px 12px;
     border-radius: 2px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 
+        0 10px 25px rgba(0,0,0,0.4), 
+        0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1.2); /* Пружинистая анимация */
     cursor: pointer;
     border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    display: inline-block;
+    /* Текстура легкой зернистости бумаги */
+    background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
+    background-size: 4px 4px;
 }
 
-/* ЭФФЕКТ ВСПЛЫТИЯ */
+/* 5. ЭФФЕКТ ПРИ НАВЕДЕНИИ */
 .achievement-item:hover {
-    transform: rotate(0deg) scale(1.15) translateY(-20px) !important;
+    /* Выпрямляется, всплывает и увеличивается */
+    transform: rotate(0deg) scale(1.15) translateY(-25px) !important;
     z-index: 100;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+    background: #ffffff;
 }
 
+/* 6. РАМКА ДЛЯ КАРТИНКИ */
 .img-frame {
     width: 100%;
     height: 220px;
     overflow: hidden;
-    background: #222;
+    background: #111;
+    border: 1px solid rgba(0,0,0,0.08);
 }
 
 .img-frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: sepia(15%) contrast(1.1); /* Ретро-фильтр */
+    filter: sepia(10%) contrast(1.05); /* Легкий винтажный налет */
     transition: 0.5s;
 }
 
-.achievement-item:hover img { 
-    filter: sepia(0%) contrast(1); 
+.achievement-item:hover img {
+    filter: sepia(0%) contrast(1);
+    transform: scale(1.05);
 }
 
-/* ТЕКСТ ПОД ФОТО */
+/* 7. ПОДПИСЬ ПОД ФОТО (Рукописная) */
 .info-overlay h3 {
-    padding: 15px 5px 0;
+    padding: 18px 0 0;
     font-size: 1.2rem;
-    color: #1a1a1a; /* Темный текст на белом */
+    color: #222;
+    /* Используем рукописный шрифт или Comic Sans как запасной */
     font-family: 'Brush Script MT', 'Comic Sans MS', cursive;
     text-align: center;
-    transform: rotate(-1.5deg);
+    opacity: 0.8;
+    transform: rotate(-1.5deg); /* Текст чуть под наклоном для естественности */
 }
 
+/* 8. КНОПКА НАЗАД */
 .back-btn {
     display: inline-block;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     color: var(--gold);
     text-decoration: none;
     border: 1px solid var(--glass-border);
     padding: 10px 25px;
     border-radius: 50px;
     background: var(--glass);
+    backdrop-filter: blur(10px);
     transition: 0.3s;
 }
 
-.back-btn:hover { 
-    background: var(--gold); 
-    color: #000; 
+.back-btn:hover {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
 }
 
+/* 9. АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ */
+@media (max-width: 600px) {
+
+    .page-header h1 {
+        font-size: 2.2rem;
+    }
+}
 /* АДАПТИВНОСТЬ */
 @media (max-width: 768px) {
     .hero-content { 
@@ -290,7 +318,7 @@ body {
     .photo-wrapper img { width: 240px; }
     .text-wrapper h1 { font-size: 2.2rem; }
     .page-header h1 { font-size: 2.5rem; }
-    .achievement-item { width: 260px; }
+    .achievement-item { width: 260px; margin: 5px !important; }
 }
 
 /* ОБЩИЕ АНИМАЦИИ */
