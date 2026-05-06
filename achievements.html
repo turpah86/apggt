@@ -152,13 +152,13 @@
                         const isImage = file.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|svg)$/);
                         
                         if (isImage) {
-                            const displayName = file.name.split('.')[0];
-                            
-                            // МАГИЯ ТУТ: Создаем случайный угол от -10 до +10 градусов
+                            const displayName = file.name.split('.')[0];                           
                             const randomRotate = Math.floor(Math.random() * 21) - 10;
-                            
+                            // МАГИЯ ХАОСА: Добавляем случайное смещение вверх/вниз
+                            const randomOffset = Math.floor(Math.random() * 51) - 25;                         
                             const imgCard = `
-                                <div class="achievement-item fadeInUp" style="transform: rotate(${randomRotate}deg);">
+                                <div class="achievement-item fadeInUp" 
+                                     style="transform: rotate(${randomRotate}deg); margin-top: ${randomOffset}px;">
                                     <a href="img/${file.name}" data-fancybox="gallery" data-caption="${displayName}">
                                         <div class="img-frame">
                                             <img src="img/${file.name}" alt="${displayName}" loading="lazy">
