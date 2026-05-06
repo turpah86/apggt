@@ -28,10 +28,12 @@
         }
 
         .masonry-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-            padding: 0 20px;
+            display: flex !important; /* !important заставит браузер выбрать этот стиль */
+            flex-wrap: wrap !important;
+            justify-content: center;
+            gap: 50px;
+            padding: 40px 20px;
+            perspective: 2000px;
         }
 
         .achievement-item {
