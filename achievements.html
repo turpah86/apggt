@@ -131,7 +131,6 @@
     </footer>
     <script>
         const folderUrl = 'https://api.github.com/repos/turpah86/apggt/contents/img';
-
         function loadAchievements() {
             const container = document.getElementById('gallery');
             if (!container) return;
@@ -145,14 +144,14 @@
                     container.innerHTML = ''; 
     
                     data.forEach(file => {
-                        // Исправлено: правильная проверка расширений
                         const isImage = file.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|svg)$/);
                         
                         if (isImage) {
                             const displayName = file.name.split('.')[0];
-                            const randomRotate = Math.floor(Math.random() * 21) - 10; // Угол от -10 до +10
-
-                            // В самой карточке добавь этот стиль в div
+                            
+                            // МАГИЯ ТУТ: Создаем случайный угол от -10 до +10 градусов
+                            const randomRotate = Math.floor(Math.random() * 21) - 10;
+                            
                             const imgCard = `
                                 <div class="achievement-item fadeInUp" style="transform: rotate(${randomRotate}deg);">
                                     <a href="img/${file.name}" data-fancybox="gallery" data-caption="${displayName}">
@@ -169,17 +168,17 @@
                         }
                     });
     
-                    if (container.innerHTML === '') {
-                        container.innerHTML = '<p style="color: white; grid-column: 1/-1;">Изображения не найдены.</p>';
-                    }
+                    // Включаем Fancybox после загрузки всех фото
+                    Fancybox.bind("[data-fancybox]", { infinite: true });
+    
                 })
                 .catch(error => {
                     console.error('Ошибка:', error);
                     container.innerHTML = `<p style="color: #ff4d4d; grid-column: 1/-1;">⚠️ Ошибка загрузки архива.</p>`;
                 });
-        }    
+        }
+    
         document.addEventListener('DOMContentLoaded', loadAchievements);
-        Fancybox.bind("[data-fancybox]", {});
     </script>
 </body>
 </html>
