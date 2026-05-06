@@ -60,15 +60,12 @@
                         const isImage = file.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|svg)$/);
                         
                         if (isImage) {
-                            const displayName = file.name.split('.')[0];
+                            let displayName = file.name.split('.')[0].replace(/top[_-]?/i, '');
                             
-                            // 1. Углы и сдвиги (наш хаос)
                             const randomRotate = Math.floor(Math.random() * 21) - 10;
                             const randomY = Math.floor(Math.random() * 51) - 25;
                             const randomX = Math.floor(Math.random() * 41) - 20;
                     
-                            // 2. РАНДОМНОСТЬ 3-4-5 в ряду:
-                            // Рандомим ширину от 220px (влезет 5) до 400px (влезет 3)
                             const randomWidth = Math.floor(Math.random() * 181) + 220;
                             const imgCard = `
                                 <div class="achievement-item fadeInUp" 
@@ -90,7 +87,7 @@
                             container.insertAdjacentHTML('beforeend', imgCard);
                         }
                     });
-                    // Включаем Fancybox после загрузки всех фото
+
                     Fancybox.bind("[data-fancybox]", { infinite: true });
                 })
                 .catch(error => {
