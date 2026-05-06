@@ -232,7 +232,8 @@ body {
     cursor: pointer;
     border: 1px solid rgba(0,0,0,0.05);
     position: relative;
-    display: inline-block;
+    display: inline-block !important;
+    will-change: transform;
     /* Текстура легкой зернистости бумаги */
     background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
     background-size: 4px 4px;
