@@ -272,14 +272,18 @@ body {
 
 /* 7. ПОДПИСЬ ПОД ФОТО (Рукописная) */
 .info-overlay h3 {
-    padding: 18px 0 0;
-    font-size: 1.2rem;
-    color: #222;
-    /* Используем рукописный шрифт или Comic Sans как запасной */
-    font-family: 'Brush Script MT', 'Comic Sans MS', cursive;
+    padding: 15px 5px 0;
+    /* Цвет синей шариковой ручки */
+    color: #0033cc !important; 
+    /* Используем системные рукописные шрифты */
+    font-family: "Segoe Script", "Comic Sans MS", cursive !important;
+    font-size: 1.3rem;
     text-align: center;
-    opacity: 0.8;
-    transform: rotate(-1.5deg); /* Текст чуть под наклоном для естественности */
+    /* Эффект чернил */
+    opacity: 0.85;
+    letter-spacing: 0.5px;
+    /* Небольшой наклон всей надписи */
+    transform: rotate(-1deg);
 }
 
 /* 8. КНОПКА НАЗАД */
