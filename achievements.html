@@ -60,8 +60,8 @@
                         const isImage = file.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|svg)$/);
                         
                         if (isImage) {
-                            let displayName = file.name.split('.')[0].replace(/top[_-]?/i, '');
-                            
+                            let rawName = file.name.split('.')[0].replace(/top[_-]?/i, '');
+                            const displayName = rawName.replace(/_/g, ' ');                            
                             const randomRotate = Math.floor(Math.random() * 21) - 10;
                             const randomY = Math.floor(Math.random() * 51) - 25;
                             const randomX = Math.floor(Math.random() * 41) - 20;
