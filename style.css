@@ -281,19 +281,26 @@ body {
 
 /* 7. ПОДПИСЬ ПОД ФОТО (Рукописная) */
 .info-overlay h3 {
-    padding: 15px 5px 0;
-    /* Цвет синей шариковой ручки */
-    color: #0033cc !important; 
-    /* Используем системные рукописные шрифты */
+    padding: 10px 5px 0;
+    color: #0033cc !important;
     font-family: "Segoe Script", "Comic Sans MS", cursive !important;
-    font-size: 1.3rem;
+    font-size: 1.1rem; /* Чуть уменьшил, чтобы влезало больше */
     text-align: center;
-    /* Эффект чернил */
-    opacity: 0.85;
-    letter-spacing: 0.5px;
-    /* Небольшой наклон всей надписи */
-    transform: rotate(-1deg);
+    line-height: 1.2; /* Плотность строк */
+    
+    /* ГЛАВНОЕ: Разрешаем перенос текста */
+    white-space: normal !important; 
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    
+    /* Ограничим высоту, чтобы подпись не ушла за край бумаги */
+    max-height: 2.6em; 
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Не больше 2 строк */
+    -webkit-box-orient: vertical;
 }
+
 
 /* 8. КНОПКА НАЗАД */
 .back-btn {
