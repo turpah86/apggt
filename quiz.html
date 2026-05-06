@@ -27,6 +27,7 @@
             <button onclick="selectSection(3)" class="btn-primary btn-section">Раздел 3: Подготовка пород</button>
             <button onclick="selectSection(4)" class="btn-primary btn-section">Раздел 4: Выемочно-погрузочные работы</button>
             <button onclick="selectSection(5)" class="btn-primary btn-section">Раздел 5: Перемещение карьерных грузов</button>
+            <button onclick="selectSection(6)" class="btn-primary btn-section">Раздел 6: Отвалообразование вскрышных пород</button>
             <button onclick="location.href='index.html'" class="btn-secondary" style="width:100%; margin-top:10px;">🔙 Назад</button>
         </div>
 
@@ -84,6 +85,7 @@
             if (num === 3) questions.length = 33;
             if (num === 4) questions.length = 34;
             if (num === 5) questions.length = 45;
+            if (num === 6) questions.length = 45;
     
             document.getElementById('section-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'block';
