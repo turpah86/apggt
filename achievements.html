@@ -153,12 +153,15 @@
                         
                         if (isImage) {
                             const displayName = file.name.split('.')[0];                           
-                            const randomRotate = Math.floor(Math.random() * 21) - 10;
-                            // МАГИЯ ХАОСА: Добавляем случайное смещение вверх/вниз
-                            const randomOffset = Math.floor(Math.random() * 51) - 25;                         
+                            // 1. Случайный поворот (от -10 до +10 градусов)
+                            const randomRotate = Math.floor(Math.random() * 21) - 10;    
+                            // 2. Случайное смещение по вертикали (от -30 до +30 пикселей)
+                            const randomY = Math.floor(Math.random() * 61) - 30;    
+                            // 3. Случайное смещение по горизонтали (от -20 до +20 пикселей)
+                            const randomX = Math.floor(Math.random() * 41) - 20;
                             const imgCard = `
                                 <div class="achievement-item fadeInUp" 
-                                     style="transform: rotate(${randomRotate}deg); margin-top: ${randomOffset}px;">
+                                     style="transform: rotate(${randomRotate}deg) translate(${randomX}px, ${randomY}px); margin: 15px;">
                                     <a href="img/${file.name}" data-fancybox="gallery" data-caption="${displayName}">
                                         <div class="img-frame">
                                             <img src="img/${file.name}" alt="${displayName}" loading="lazy">
@@ -169,6 +172,7 @@
                                     </div>
                                 </div>
                             `;
+
                             container.insertAdjacentHTML('beforeend', imgCard);
                         }
                     });
