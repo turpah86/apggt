@@ -147,63 +147,40 @@
     <!-- Скрипт загрузки данных -->
     <script>
         const folderUrl = 'https://api.github.com/repos/turpah86/apggt/contents/img';
-    
-        function loadTopAchievements() {
-            const container = document.querySelector('.achievements-grid');
+        function loadTop() {
+            const container = document.getElementById('top-achievements-container');
             if (!container) return;
     
             fetch(folderUrl)
-                .then(res => {
-                    if (!res.ok) throw new Error('Ошибка API');
-                    return res.json();
-                })
+                .then(res => res.json())
                 .then(data => {
                     container.innerHTML = ''; 
     
-                    // 1. Фильтруем: только картинки, где в названии есть "top"
                     const topFiles = data.filter(file => 
                         file.name.toLowerCase().includes('top') && 
                         file.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|svg)$/)
-                    ).slice(0, 4); // Берем максимум 4 штуки
+                    ).slice(0, 4);
     
                     topFiles.forEach(file => {
-                        const displayName = file.name.replace(/top[_-]?/i, '').split('.')[0];
-                    
+                        const name = file.name.replace(/top[_-]?/i, '').split('.')[0];
                         const card = `
-                            <div class="achievement-card fadeInUp" 
-                                 style="background: var(--glass); 
-                                        border: 1px solid var(--glass-border); 
-                                        border-radius: 16px; 
-                                        padding: 15px; 
-                                        transition: 0.3s;
-                                        width: 240px; 
-                                        text-align: center;">
-                                <div style="width: 100%; height: 180px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.2); margin-bottom: 15px;">
-                                    <img src="img/${file.name}" 
-                                         style="width: 100%; height: 100%; object-fit: contain; display: block;">
+                            <div class="achievement-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 18px; padding: 15px; text-align: center; transition: 0.3s;">
+                                <div style="width: 100%; height: 160px; overflow: hidden; border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 12px;">
+                                    <img src="img/${file.name}" style="width: 100%; height: 100%; object-fit: contain;">
                                 </div>
-                                <p style="color: var(--gold); 
-                                          font-size: 0.9rem; 
-                                          font-weight: 600; 
-                                          text-transform: uppercase; 
-                                          letter-spacing: 0.5px;">
-                                    ${displayName}
-                                </p>
+                                <p style="color: var(--gold); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">${name}</p>
                             </div>
                         `;
                         container.insertAdjacentHTML('beforeend', card);
                     });
+    
                     if (container.innerHTML === '') {
-                        container.innerHTML = '<p style="color: white; opacity: 0.5; grid-column: 1/-1; text-align: center;">Добавьте "top" в название файлов в папке img на GitHub</p>';
+                        container.innerHTML = '<p style="color: white; opacity: 0.5;">Добавьте "top" в названия файлов на GitHub</p>';
                     }
                 })
-                .catch(err => {
-                    console.error('Ошибка топ-наград:', err);
-                });
+                .catch(err => console.error('Ошибка:', err));
         }
-    
-        // Запускаем при загрузке
-        document.addEventListener('DOMContentLoaded', loadTopAchievements);
+        document.addEventListener('DOMContentLoaded', loadTop);
     </script>
 </body>
 </html>
