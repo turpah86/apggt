@@ -164,39 +164,32 @@
                     ).slice(0, 4); // Берем максимум 4 штуки
     
                     topFiles.forEach(file => {
-                        // Убираем "top" из названия для красивой подписи
                         const displayName = file.name.replace(/top[_-]?/i, '').split('.')[0];
-                        // Легкий рандомный наклон для живости
-                        const rotate = Math.floor(Math.random() * 7) - 3; 
-    
+                    
                         const card = `
                             <div class="achievement-card fadeInUp" 
-                                 style="transform: rotate(${rotate}deg); 
-                                        background: #ffffff; 
-                                        padding: 10px; 
-                                        border-radius: 2px; 
-                                        box-shadow: 0 10px 20px rgba(0,0,0,0.4); 
-                                        width: 220px; /* Фиксированная ширина */
-                                        margin: 15px; /* Отступы между ними */
-                                        display: inline-block;
-                                        vertical-align: top;">
-                                <div style="width: 100%; height: 160px; overflow: hidden; background: #eee;">
+                                 style="background: var(--glass); 
+                                        border: 1px solid var(--glass-border); 
+                                        border-radius: 16px; 
+                                        padding: 15px; 
+                                        transition: 0.3s;
+                                        width: 240px; 
+                                        text-align: center;">
+                                <div style="width: 100%; height: 180px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.2); margin-bottom: 15px;">
                                     <img src="img/${file.name}" 
                                          style="width: 100%; height: 100%; object-fit: contain; display: block;">
                                 </div>
-                                <p style="color: #0033cc; 
-                                          font-family: 'Segoe Script', 'Comic Sans MS', cursive; 
-                                          font-size: 0.8rem; 
-                                          margin-top: 10px; 
-                                          text-align: center;
-                                          word-wrap: break-word;">
+                                <p style="color: var(--gold); 
+                                          font-size: 0.9rem; 
+                                          font-weight: 600; 
+                                          text-transform: uppercase; 
+                                          letter-spacing: 0.5px;">
                                     ${displayName}
                                 </p>
                             </div>
                         `;
                         container.insertAdjacentHTML('beforeend', card);
                     });
-    
                     if (container.innerHTML === '') {
                         container.innerHTML = '<p style="color: white; opacity: 0.5; grid-column: 1/-1; text-align: center;">Добавьте "top" в название файлов в папке img на GitHub</p>';
                     }
