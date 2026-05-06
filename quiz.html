@@ -9,7 +9,7 @@
     <style>
         .option-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom: 10px; width: 100%; text-align: left; transition: 0.3s; }
         .selected { border-color: var(--gold) !important; background: rgba(255,255,255,0.1) !important; }
-        #start-screen, #quiz-card, #result-screen { display: none; }
+        #section-screen, #start-screen, #quiz-card, #result-screen { display: none; }
         .progress-bar { height: 4px; background: var(--glass); margin-bottom: 20px; border-radius: 2px; overflow: hidden; }
         #progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 0.5s; }
         .btn-section { margin-bottom: 10px; width: 100%; display: block; text-align: center; }
@@ -29,13 +29,15 @@
         <!-- ШАГ 1: ВЫБОР РАЗДЕЛА -->
         <div id="section-screen" class="glass-card">
             <h2 class="group-title">Выберите раздел</h2>
-            <button onclick="selectSection(1)" class="btn-primary btn-section">Раздел 1: Введение</button>
-            <button onclick="selectSection(2)" class="btn-primary btn-section">Раздел 2: Технология ОГР</button>
-            <button onclick="selectSection(3)" class="btn-primary btn-section">Раздел 3: Подготовка пород</button>
-            <button onclick="selectSection(4)" class="btn-primary btn-section">Раздел 4: Выемочно-погрузочные работы</button>
-            <button onclick="selectSection(5)" class="btn-primary btn-section">Раздел 5: Перемещение карьерных грузов</button>
-            <button onclick="selectSection(6)" class="btn-primary btn-section">Раздел 6: Отвалообразование вскрышных пород</button>
-            <button onclick="location.href='index.html'" class="btn-secondary" style="width:100%; margin-top:10px;">🔙 Назад</button>
+            <!-- Добавляем event в скобки и класс btn-section-choice -->
+            <button onclick="selectSection(1, event)" class="btn-primary btn-section btn-section-choice">Раздел 1</button>
+            <button onclick="selectSection(2, event)" class="btn-primary btn-section btn-section-choice">Раздел 2</button>
+            <button onclick="selectSection(3, event)" class="btn-primary btn-section btn-section-choice">Раздел 3</button>
+            <button onclick="selectSection(4, event)" class="btn-primary btn-section btn-section-choice">Раздел 4</button>
+            <button onclick="selectSection(5, event)" class="btn-primary btn-section btn-section-choice">Раздел 5</button>
+            <button onclick="selectSection(6, event)" class="btn-primary btn-section btn-section-choice">Раздел 6</button>
+            
+            <button onclick="location.reload()" class="btn-secondary" style="width:100%; margin-top:10px;">🔙 Назад</button>
         </div>
 
         <!-- ШАГ 2: ВВОД ФИО -->
@@ -114,7 +116,7 @@
     // 2. Настройки лимитов вопросов (чтобы не плодить if-else)
     const quizLimits = {
         'ogr': { 1: 21, 2: 22, 3: 33, 4: 34, 5: 45, 6: 46 },
-        'geology': { 1: 15, 2: 15, 3: 15, 4: 24 } // Пример для второго предмета
+        'electro': { 1: 15, 2: 15, 3: 15, 4: 24 } // Пример для второго предмета
     };
     
     // 3. Обновленная функция загрузки раздела
