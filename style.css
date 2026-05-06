@@ -213,10 +213,10 @@ body {
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
-    align-items: center !important;
-    gap: 30px !important; /* Уменьшаем зазор, чтобы фото могли "налезать" друг на друга */
-    padding: 40px 20px;
-    perspective: 2000px; /* Глубина для реализма */
+    align-items: center !important; /* Критично для хаотичного смещения */
+    gap: 15px !important; /* Уменьшаем зазор, чтобы они начали налезать друг на друга */
+    padding: 60px 20px;
+    perspective: 2000px;
 }
 
 /* 4. КАРТОЧКА-ФОТОГРАФИЯ (Полароид-стайл) */
