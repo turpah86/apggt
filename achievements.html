@@ -35,50 +35,52 @@
             padding: 40px 20px;
             perspective: 2000px;
         }
-
         .achievement-item {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 15px;
-            text-align: center;
-            transition: 0.4s;
+            background: #ffffff; /* Белая бумага фото */
+            padding: 10px 10px 40px 10px; /* Поля как у реального фото */
+            border-radius: 2px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+            width: 280px; /* Фиксируем размер, чтобы они "рассыпались" */
+            margin: -5px; /* Легкое наслоение для эффекта кучи */
+            position: relative;
         }
 
         .achievement-item:hover {
-            transform: translateY(-10px);
-            border-color: #ffd700;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            /* !important здесь критичен, чтобы перебить transform из JS */
+            transform: scale(1.15) rotate(0deg) translateY(-20px) !important;
+            z-index: 100;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+            border-color: transparent;
+            background: #ffffff;
         }
 
         .img-frame {
             width: 100%;
-            height: 220px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            height: 200px;
+            background: #222;
+            border-radius: 0; /* У фото прямые углы */
             overflow: hidden;
-            margin-bottom: 15px;
+            display: block;
+            margin-bottom: 10px;
         }
 
         .img-frame img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Чтобы все фото были одинаковыми в рамках */
         }
 
         .info-overlay h3 {
-            font-size: 0.9rem;
-            color: #fff;
+            font-size: 1.1rem;
+            color: #1a1a1a; /* Темный текст на белом фоне */
+            font-family: 'Brush Script MT', cursive, sans-serif;
             margin: 0;
-            font-weight: 400;
-            line-height: 1.4;
+            font-weight: 500;
+            text-align: center;
         }
+
 
         .back-btn {
             display: inline-block;
