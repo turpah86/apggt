@@ -150,10 +150,11 @@
                         
                         if (isImage) {
                             const displayName = file.name.split('.')[0];
-                            
+                            const randomRotate = Math.floor(Math.random() * 21) - 10; // Угол от -10 до +10
+
+                            // В самой карточке добавь этот стиль в div
                             const imgCard = `
-                                <div class="achievement-item">
-                                    <!-- Ссылка для Fancybox: href указывает на саму картинку -->
+                                <div class="achievement-item fadeInUp" style="transform: rotate(${randomRotate}deg);">
                                     <a href="img/${file.name}" data-fancybox="gallery" data-caption="${displayName}">
                                         <div class="img-frame">
                                             <img src="img/${file.name}" alt="${displayName}" loading="lazy">
