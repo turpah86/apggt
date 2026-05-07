@@ -128,46 +128,64 @@
     </main>
 
     <!-- Подвал сайта -->
-    <footer class="glass-footer">
-        <div class="footer-grid">
-            <!-- Блок Лого и Описание -->
-            <div class="footer-section">
-                <img src="logo-ggt.png" alt="ГГТ" style="height: 50px; margin-bottom: 15px; filter: brightness(1.2);">
-                <p style="font-size: 0.85rem; opacity: 0.7; line-height: 1.6;">
-                    ГБПОУ РС(Я) «Горно-геологический техникум»<br>
-                    Подготовка профессионалов для будущего Якутии.
+    <footer class="glass-footer" style="margin-top: 100px; padding: 80px 20px 40px; background: rgba(15,23,42,0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.1); color: #fff; font-family: 'Inter', sans-serif;">
+        
+        <div style="max-width: 1200px; margin: 0 auto;">
+            
+            <!-- Личный бренд и Девиз -->
+            <div style="text-align: center; margin-bottom: 70px;">
+                <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -1px;">
+                    <span style="color: var(--gold, #ffd700);">Пермяков А.Н.</span>
+                </h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; font-style: italic; max-width: 700px; margin: 0 auto; line-height: 1.5;">
+                    «Твой старт в большую жизнь начинается здесь»
                 </p>
+                <div style="width: 40px; height: 3px; background: var(--gold, #ffd700); margin: 25px auto;"></div>
+                <p style="font-size: 0.9rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px;">Преподаватель специальных дисциплин</p>
             </div>
     
-            <!-- Блок Навигация -->
-            <div class="footer-section">
-                <h4>Разделы</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html">Главная страница</a></li>
-                    <li><a href="students.html">Для студентов</a></li>
-                    <li><a href="achievements.html">Достижения</a></li>
-                    <li><a href="javascript:void(0)" onclick="openFeedback()">Обратная связь</a></li>
-                </ul>
-            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 50px;">
+                
+                <!-- Инфо о месте работы -->
+                <div>
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--gold, #ffd700); opacity: 0.8;">Место работы</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <img src="logo-ggt.png" alt="ГГТ" style="height: 60px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));">
+                        <p style="font-size: 0.85rem; line-height: 1.4; opacity: 0.7;">
+                            ГБПОУ РС(Я) «Горно-геологический техникум»
+                        </p>
+                    </div>
+                    <p style="font-size: 0.8rem; opacity: 0.5;">п. Хандыга, Республика Саха (Якутия)</p>
+                </div>
     
-            <!-- Блок Контакты -->
-            <div class="footer-section">
-                <h4>Контакты</h4>
-                <div style="font-size: 0.85rem; opacity: 0.8; line-height: 1.8;">
-                    <p>📍 п. Хандыга, ул. Кычкина, 4</p>
-                    <p>📞 <a href="tel:+74115342822" style="color: inherit; text-decoration: none;">+7 (411) 534-28-22</a></p>
-                    <p>🌐 <a href="https://sakha.gov.ru" target="_blank" style="color: var(--gold); text-decoration: none;">Официальный сайт</a></p>
+                <!-- Полезное для студентов -->
+                <div>
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--gold, #ffd700); opacity: 0.8;">Студентам</h4>
+                    <ul style="list-style: none; padding: 0; line-height: 2.2; font-size: 0.95rem;">
+                        <li><a href="students.html" style="color: #fff; text-decoration: none; opacity: 0.7; transition: 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">Учебные материалы</a></li>
+                        <li><a href="achievements.html" style="color: #fff; text-decoration: none; opacity: 0.7; transition: 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">Достижения и награды</a></li>
+                        <li><a href="javascript:void(0)" onclick="openFeedback()" style="color: var(--gold, #ffd700); text-decoration: none; font-weight: 500;">Задать вопрос преподавателю</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Обратная связь -->
+                <div>
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--gold, #ffd700); opacity: 0.8;">Контакты</h4>
+                    <div style="font-size: 0.95rem; line-height: 1.8; opacity: 0.8;">
+                        <p>✉️ <a href="mailto:apzbm@mail.ru" style="color: inherit; text-decoration: none;">apzbm@mail.ru</a></p>
+                    </div>
                 </div>
             </div>
-        </div>
     
-        <!-- Копирайт -->
-        <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);">
-            <p style="font-size: 0.75rem; opacity: 0.3; letter-spacing: 1px;">
-                © 2026 ПЕРМЯКОВ А.Н. | ГБПОУ РС(Я) «ГГТ»
-            </p>
+            <!-- Копирайт -->
+            <div style="margin-top: 70px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
+                <p style="font-size: 0.75rem; opacity: 0.3; letter-spacing: 1px;">
+                    © 2026 ПЕРМЯКОВ А.Н. | ГБПОУ РС(Я) «ГГТ»
+                </p>
+            </div>
         </div>
     </footer>
+
 
     <!-- Скрипт загрузки данных -->
     <script>
