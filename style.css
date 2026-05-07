@@ -483,10 +483,11 @@ body {
     
     /* 1. ГЛАВНЫЙ БЛОК (HERO) - Фото сверху, текст под ним */
     .hero-content {
-        flex-direction: column !important;
-        text-align: center !important;
-        gap: 30px !important;
-        padding-top: 50px;
+        flex-direction: column !important; /* Фото будет НАД текстом */
+        align-items: center !important;    /* Центрируем всё содержимое по горизонтали */
+        text-align: center !important;     /* Центрируем само имя и текст */
+        padding: 20px !important;
+        gap: 20px !important;              /* Зазор между фото и именем */
     }
 
     .photo-wrapper img {
@@ -601,13 +602,6 @@ body {
         width: 100% !important; /* Кнопки на всю ширину для удобства нажатия */
         margin: 10px 0 !important;
     }
-    .hero-content {
-        flex-direction: column !important; /* Фото будет НАД текстом */
-        align-items: center !important;    /* Центрируем всё содержимое по горизонтали */
-        text-align: center !important;     /* Центрируем само имя и текст */
-        padding: 20px !important;
-        gap: 20px !important;              /* Зазор между фото и именем */
-    }
     
     .photo-wrapper {
         align-self: center !important;     /* Принудительная центровка самого контейнера фото */
@@ -621,6 +615,46 @@ body {
         border-radius: 24px !important;    /* Закругляем края для мягкости */
         display: block !important;
     }
+
+    .glass-nav {
+        height: auto !important; /* Даем меню расширяться вниз */
+        padding: 20px 10px !important;
+    }
+    
+    .nav-container {
+        flex-direction: column !important; /* Лого над ссылками */
+        align-items: center !important;
+        gap: 20px !important;
+    }
+    
+    .logo {
+        margin-right: 0 !important; /* Убираем десктопные отступы */
+    }
+    
+    .nav-links {
+        display: grid !important; /* Включаем сетку для ссылок */
+        grid-template-columns: 1fr 1fr !important; /* СТРОГО 2 КОЛОНКИ */
+        gap: 15px !important;
+        width: 100% !important;
+        max-width: 320px; /* Чтобы ссылки не разъезжались слишком широко */
+        text-align: center;
+    }
+    
+    .nav-links a {
+        font-size: 0.9rem !important;
+        padding: 10px 5px !important;
+        background: rgba(255, 255, 255, 0.05); /* Легкая подложка, чтобы кнопки читались */
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Кнопка связи тоже встанет в общую сетку */
+    .nav-contact {
+        grid-column: span 1 !important; /* Она займет одну из двух ячеек */
+        border: 1px solid var(--gold, #ffd700) !important;
+        color: var(--gold, #ffd700) !important;
+    }
+
 }
     
 
