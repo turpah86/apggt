@@ -499,18 +499,47 @@ body {
         line-height: 1.2;
     }
 
-    /* 2. ДОСТИЖЕНИЯ - Из 4 колонок делаем ОДНУ */
+    /* ИСПРАВЛЕНИЕ ДОСТИЖЕНИЙ НА МОБИЛКЕ */
     .achievements-grid {
-        grid-template-columns: 1fr !important; /* Убирает "почтовые марки" */
-        gap: 25px !important;
-        width: 100% !important;
+        /* Отменяем 4 колонки, ставим одну */
+        grid-template-columns: 1fr !important; 
+        gap: 30px !important;
+        display: grid !important;
+        padding: 0 !important;
     }
-
+        
+    .achievement-item {
+        /* Карточка на всю ширину, но с ограничением */
+        width: 100% !important;
+        max-width: 340px; 
+        margin: 0 auto !important; /* Центрируем саму карточку */
+        transform: rotate(0deg) !important; /* Убираем наклон, чтобы не вылезало за края */
+    }
+    
     .glass-card {
         padding: 20px !important;
         margin-bottom: 20px;
     }
-
+    
+    /* Заголовок достижений и ссылка "Смотреть все" */
+    .section-header {
+        flex-direction: column !important; /* Заголовок и ссылка друг под другом */
+        gap: 10px;
+        align-items: center !important;
+        text-align: center;
+    }
+    
+    .img-frame {
+        height: auto !important; /* Чтобы картинка не сплющивалась */
+        min-height: 200px;
+    }
+    
+    .img-frame img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+    }
+    
     /* 3. ФУТЕР (Твой новый стиль) */
     .glass-footer {
         padding: 60px 20px 40px !important;
@@ -562,4 +591,6 @@ body {
         margin: 10px 0 !important;
     }
 }
+    
+
 
