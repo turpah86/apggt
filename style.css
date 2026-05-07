@@ -601,6 +601,26 @@ body {
         width: 100% !important; /* Кнопки на всю ширину для удобства нажатия */
         margin: 10px 0 !important;
     }
+    .hero-content {
+        flex-direction: column !important; /* Фото будет НАД текстом */
+        align-items: center !important;    /* Центрируем всё содержимое по горизонтали */
+        text-align: center !important;     /* Центрируем само имя и текст */
+        padding: 20px !important;
+        gap: 20px !important;              /* Зазор между фото и именем */
+    }
+    
+    .photo-wrapper {
+        align-self: center !important;     /* Принудительная центровка самого контейнера фото */
+        margin: 0 auto !important;
+    }
+    
+    .photo-wrapper img {
+        width: 100% !important;            /* Фото подстроится под ширину */
+        max-width: 300px !important;       /* Но не станет слишком огромным */
+        height: auto !important;
+        border-radius: 24px !important;    /* Закругляем края для мягкости */
+        display: block !important;
+    }
 }
     
 
