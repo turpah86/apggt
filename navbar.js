@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     </nav>
 
-    <!-- МОДАЛЬНОЕ ОКНО С ПОЛЯМИ -->
     <div id="feedback-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; backdrop-filter: blur(12px); align-items: center; justify-content: center;">
         <div class="glass-card" style="max-width: 400px; width: 90%; padding: 30px; border: 1px solid rgba(0, 191, 255, 0.3); border-radius: 15px; background: rgba(255,255,255,0.05);">
             <h2 style="color: var(--gold); text-align: center; margin-bottom: 20px; font-size: 1.2rem;">✉️ Обратная связь</h2>
@@ -29,21 +28,25 @@ document.addEventListener("DOMContentLoaded", function() {
                 <input type="text" id="fb-group" placeholder="Группа" required 
                     style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; padding: 10px; font-family: inherit; outline: none;">
                 
-                <input type="tel" id="fb-phone" placeholder="Телефон" required 
+                <input type="tel" id="fb-phone" placeholder="+7 (___) ___-__-__" required 
+                    oninput="maskPhone(this)" maxlength="18"
                     style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; padding: 10px; font-family: inherit; outline: none;">
                 
                 <textarea id="fb-message" placeholder="Ваше сообщение..." required 
                     style="width: 100%; height: 100px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; padding: 10px; font-family: inherit; resize: none; outline: none;"></textarea>
                 
-                <!-- ГАЛОЧКА СОГЛАСИЯ -->
+                <!-- ОБЯЗАТЕЛЬНАЯ ГАЛОЧКА -->
                 <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 5px;">
                     <input type="checkbox" id="privacy-check" onchange="toggleSubmitBtn()" style="margin-top: 3px; cursor: pointer; accent-color: #00bfff;">
                     <label for="privacy-check" style="color: rgba(255,255,255,0.6); font-size: 0.7rem; line-height: 1.2; cursor: pointer; user-select: none;">
-                        Я согласен на обработку моих персональных данных (ФИО и телефон) согласно <a href="privacy.html" target="_blank" style="color: #00bfff; text-decoration: underline;">политике конфиденциальности</a>
+                        Я согласен на обработку данных согласно <a href="privacy.html" target="_blank" style="color: #00bfff; text-decoration: underline;">политике конфиденциальности</a>
                     </label>
                 </div>
 
-                <button type="submit" id="submit-btn" disabled class="btn-primary" style="width: 100%; background: #00bfff; color: #000; font-weight: bold; margin-top: 10px; opacity: 0.5; cursor: not-allowed; border: none; padding: 12px; border-radius: 8px; transition: 0.3s;">Отправить</button>
+                <button type="submit" id="submit-btn" disabled 
+                    style="width: 100%; background: #00bfff; color: #000; font-weight: bold; margin-top: 10px; padding: 12px; border-radius: 8px; border: none; cursor: not-allowed; opacity: 0.5; transition: 0.3s;">
+                    Отправить
+                </button>
                 <button type="button" onclick="closeFeedback()" style="background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 0.8rem;">Отмена</button>
             </form>
         </div>
@@ -56,9 +59,15 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('feedback-form').onsubmit = async function(e) {
         e.preventDefault();
         
+        const phone = document.getElementById('fb-phone').value;
+        // Доп. проверка: длина телефона должна быть полной
+        if (phone.length < 18) {
+            alert('Пожалуйста, введите номер телефона полностью');
+            return;
+        }
+
         const name = document.getElementById('fb-name').value;
         const group = document.getElementById('fb-group').value;
-        const phone = document.getElementById('fb-phone').value;
         const msg = document.getElementById('fb-message').value;
 
         const fData = new URLSearchParams();
@@ -68,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
         fData.append('entry.1688940307', 'СВЯЗЬ'); 
 
         try {
-            await fetch('https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse', {
+            await fetch('https://google.com', {
                 method: 'POST', mode: 'no-cors', body: fData
             });
             alert('Спасибо! Мы свяжемся с вами.');
@@ -79,7 +88,19 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 });
 
-// Функция активации/деактивации кнопки
+// ФУНКЦИЯ МАСКИ ТЕЛЕФОНА
+function maskPhone(input) {
+    let matrix = "+7 (___) ___-__-__",
+        i = 0,
+        def = matrix.replace(/\D/g, ""),
+        val = input.value.replace(/\D/g, "");
+    if (def.length >= val.length) val = def;
+    input.value = matrix.replace(/./g, function(a) {
+        return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? "" : a;
+    });
+}
+
+// АКТИВАЦИЯ КНОПКИ ПО ГАЛОЧКЕ
 function toggleSubmitBtn() {
     const isChecked = document.getElementById('privacy-check').checked;
     const btn = document.getElementById('submit-btn');
@@ -89,9 +110,8 @@ function toggleSubmitBtn() {
 }
 
 function openFeedback() { document.getElementById('feedback-modal').style.display = 'flex'; }
-
 function closeFeedback() { 
     document.getElementById('feedback-modal').style.display = 'none'; 
     document.getElementById('feedback-form').reset();
-    toggleSubmitBtn(); // Сбрасываем состояние кнопки
+    toggleSubmitBtn();
 }
