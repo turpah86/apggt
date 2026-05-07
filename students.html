@@ -18,7 +18,60 @@
         <button onclick="login()" class="btn-primary" style="width: 100%; margin-top: 20px;">Войти</button>
         <p id="error" style="color: #ff6b6b; display: none; margin-top: 15px;">Ошибка доступа</p>
     </div>
+<!-- Подвал сайта -->
+    <footer class="glass-footer">
+        <div class="footer-container">
+            <!-- Блок с именем и цитатой -->
+            <div class="footer-quote-block">
+                <h2 class="footer-name">Пермяков А.Н.</h2>
+                <div class="quote-wrapper">
+                    <p class="quote-text">
+                        «<span style="color: var(--gold); font-weight: 700;">Возможно всё!</span> На невозможное просто требуется больше времени»
+                    </p>
+                    <p class="quote-author">© Дэн Браун</p>
+                </div>
+            </div>
+    
+            <!-- Сетка 3 колонки -->
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Организация</h4>
+                    <div class="org-info">
+                        <img src="logo-ggt.png" class="footer-logo" style="height: 60px;">
+                        <div class="org-text">
+                            <p>ГБПОУ РС(Я) «Горно-Геологический техникум»</p>
+                            <a href="https://sakha.gov.ru" class="gold-link">Официальный сайт ГГТ →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Навигация</h4>
+                    <ul style="list-style: none; padding: 0; line-height: 2;">
+                        <li><a href="index.html" style="color: #fff; opacity: 0.7;">Главная</a></li>
+                        <li><a href="students.html" style="color: #fff; opacity: 0.7;">Студентам</a></li>
+                        <li><a href="achievements.html" style="color: #fff; opacity: 0.7;">Достижения</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">📍 п. Хандыга, ул. Кычкина, 4</p>
+                    <p style="color: var(--gold); margin-top: 10px;">ggt_khandyga@gov14.ru</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
+    
+        <!-- Подпись -->
+            <p style="text-align: center; margin-top: 60px; font-size: 0.7rem; opacity: 0.2; letter-spacing: 2px;">
+                © 2026 PERMYAKOV DESIGN | 
+                <a href="privacy.html" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); transition: 0.3s;" 
+                   onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'">
+                   ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ
+                </a>
+            </p>
+        </div>
+    </footer>
     <script>
         function login() {
             const user = document.getElementById('login').value.trim();
