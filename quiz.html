@@ -221,7 +221,9 @@
             const fData = new URLSearchParams();
             fData.append('entry.1458374118', studentInfo); 
             // Склеиваем Группу + Предмет + Раздел в одну ячейку для наглядности
-            const fullInfo = `${userGroup} | ${currentSectionName}`;
+            const sName = subjectsData[currentSubject]?.name || currentSubject;
+            const uGroup = localStorage.getItem('user_group') || "Группа не указана";
+            const fullInfo = `${uGroup.toUpperCase()} | ${sName} | ${currentSectionName}`;
             fData.append('entry.1320096689', fullInfo); 
             fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
             fData.append('entry.1688940307', mark);
