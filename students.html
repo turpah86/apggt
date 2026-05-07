@@ -9,18 +9,26 @@
     <link rel="stylesheet" href="style.css">
     <script src="config.js"></script>
     <style>
-        /* Центрирование контента */
+        /* Обнуляем отступы и задаем высоту во весь экран */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        /* Центрируем всё содержимое */
         .main-centered {
             display: flex;
-            flex-direction: column; /* Чтобы футер был под карточкой */
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            flex-direction: column; /* Карточка сверху, футер снизу */
+            justify-content: center; /* Центр по вертикали */
+            align-items: center;    /* Центр по горизонтали */
+            min-height: 100vh;      /* Высота во весь экран */
+            background: #0a0a0a;    /* Запасной фон */
             padding: 20px;
             box-sizing: border-box;
         }
 
+        /* Чтобы элементы внутри карточки тоже были по центру */
         .glass-card {
             display: flex;
             flex-direction: column;
@@ -38,7 +46,7 @@
             width: 100%;
         }
 
-        /* Стиль для ссылки политики внутри карточки или футера */
+        /* Стиль для ссылки в футере */
         .privacy-link {
             color: inherit;
             text-decoration: none;
@@ -47,16 +55,16 @@
         }
         .privacy-link:hover {
             opacity: 1 !important;
-            border-bottom-color: var(--gold, #ffd700);
+            border-bottom-color: #ffd700;
         }
     </style>
 </head>
 <body class="main-centered">
     <div class="background-overlay"></div>
     
-    <!-- КАРТОЧКА АВТОРИЗАЦИИ -->
+    <!-- ЦЕНТРАЛЬНЫЙ БЛОК -->
     <div class="glass-card fadeInUp">
-        <h2 style="margin-bottom: 30px; width: 100%;">🔐 Авторизация</h2>
+        <h2 style="margin-bottom: 30px; color: #ffd700;">🔐 Авторизация</h2>
         
         <div class="auth-container">
             <input type="text" id="login" class="pass-input" placeholder="Логин (Группа)" style="width: 100%; box-sizing: border-box;">
@@ -68,8 +76,8 @@
         <p id="error" style="color: #ff6b6b; display: none; margin-top: 15px;">Ошибка доступа</p>
     </div>
 
-    <!-- ТВОЙ ФУТЕР -->
-    <footer style="width: 100%; z-index: 10;">
+    <!-- ФУТЕР (будет под карточкой) -->
+    <footer style="z-index: 10;">
         <p style="text-align: center; margin-top: 60px; font-size: 0.7rem; opacity: 0.2; letter-spacing: 2px; color: white;">
             © 2026 PERMYAKOV DESIGN | 
             <a href="privacy.html" class="privacy-link">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
