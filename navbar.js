@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
         fData.append('entry.1688940307', 'СВЯЗЬ'); 
 
         try {
-            await fetch('ТВОЯ_ССЫЛКА_НА_ФОРМУ/formResponse', {
+            await fetch('https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse', {
                 method: 'POST', mode: 'no-cors', body: fData
             });
             alert('Спасибо! Мы свяжемся с вами.');
