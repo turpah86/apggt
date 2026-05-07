@@ -477,78 +477,89 @@ body {
 }
 
 /* =========================================
-   АДАПТИВ ДЛЯ ТЕЛЕФОНОВ (max-width: 768px)
+   ПОЛНЫЙ МОБИЛЬНЫЙ ФИКС (ФУТЕР + КОНТЕНТ)
    ========================================= */
-
 @media (max-width: 768px) {
-    .glass-footer {
-        padding: 60px 20px 40px;
-        margin-top: 60px;
-    }
-        
-    .achievements-grid {
-        /* Переключаем с 4 колонок на 1 или 2 */
-        grid-template-columns: 1fr !important; 
-        gap: 20px !important;
-        padding: 0 10px;
-    }
     
-    .achievement-item {
-        width: 100% !important; /* Чтобы карточка занимала всю ширину телефона */
-        max-width: 350px;       /* Но не была слишком гигантской */
-        margin: 0 auto;        /* Центрируем карточку */
-    }
-    
-    /* Если у тебя там сетка Masonry (хаотичная), ее тоже надо причесать */
-    .masonry-grid {
+    /* 1. ГЛАВНЫЙ БЛОК (HERO) - Фото сверху, текст под ним */
+    .hero-content {
         flex-direction: column !important;
-        align-items: center !important;
+        text-align: center !important;
         gap: 30px !important;
+        padding-top: 50px;
     }
-    
-    .achievement-item:hover {
-        /* На мобилках лучше убрать сильное увеличение при наведении, 
-           чтобы не перекрывать соседние элементы пальцем */
-        transform: scale(1.02) !important; 
+
+    .photo-wrapper img {
+        width: 260px !important;
+        margin: 0 auto;
     }
+
+    .text-wrapper h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.2;
+    }
+
+    /* 2. ДОСТИЖЕНИЯ - Из 4 колонок делаем ОДНУ */
+    .achievements-grid {
+        grid-template-columns: 1fr !important; /* Убирает "почтовые марки" */
+        gap: 25px !important;
+        width: 100% !important;
+    }
+
+    .glass-card {
+        padding: 20px !important;
+        margin-bottom: 20px;
+    }
+
+    /* 3. ФУТЕР (Твой новый стиль) */
+    .glass-footer {
+        padding: 60px 20px 40px !important;
+        margin-top: 50px;
+        text-align: center;
+    }
+
     .footer-name {
-        font-size: 2.1rem;
+        font-size: 2rem !important;
+        margin-bottom: 15px !important;
     }
-    
+
     .quote-text {
-        font-size: 1.25rem;
+        font-size: 1.2rem !important;
+        line-height: 1.4 !important;
         padding: 0 10px;
     }
-    
+
     .quote-author {
-        text-align: center;
-        padding-right: 0;
-        margin-top: 15px;
+        text-align: center !important; /* Центрируем автора на мобилке */
+        padding-right: 0 !important;
+        margin-top: 15px !important;
     }
-    
+
     .footer-grid {
-        grid-template-columns: 1fr !important; /* На мобилке строго в один столбец */
-        gap: 50px;
-        text-align: center;
+        grid-template-columns: 1fr !important; /* Колонки ГГТ встают в столбик */
+        gap: 40px !important;
     }
-    
-    .org-info {
-        flex-direction: column; /* Лого над текстом */
-        text-align: center;
-    }
-    
+
     .footer-section {
         display: flex;
         flex-direction: column;
-        align-items: center; /* Центрируем контент каждой секции */
+        align-items: center !important;
+        text-align: center !important;
     }
 
-    .footer-nav a:hover {
-        padding-left: 0; /* Убираем смещение при наведении на мобилке */
+    .org-info {
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .address-text {
-        max-width: 300px;
+    /* 4. ОБЩИЕ ПРАВИЛА */
+    body, html {
+        overflow-x: hidden; /* Убирает горизонтальную тряску сайта */
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100% !important; /* Кнопки на всю ширину для удобства нажатия */
+        margin: 10px 0 !important;
     }
 }
 
