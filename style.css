@@ -489,6 +489,27 @@ body {
         padding: 20px !important;
         gap: 20px !important;              /* Зазор между фото и именем */
     }
+    .glass-nav {
+        height: auto !important; /* Убираем фиксированную высоту (например, 80px), которая всё режет */
+        min-height: 80px;        /* Но оставляем минимальную для порядка */
+        padding: 20px 0 !important; /* Добавляем отступы сверху и снизу, чтобы фон "обнял" лого и кнопки */
+        position: fixed !important; /* Чтобы шапка всё равно была сверху при скролле */
+        width: 100% !important;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        /* Убедимся, что эффект стекла на всю высоту */
+        background: rgba(15, 23, 42, 0.8) !important; 
+        backdrop-filter: blur(15px) !important;
+        -webkit-backdrop-filter: blur(15px);
+    }
+    
+    .nav-container {
+        height: auto !important; /* Контейнер тоже должен подстраиваться под контент */
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
 
     .photo-wrapper img {
         width: 260px !important;
@@ -619,12 +640,6 @@ body {
     .glass-nav {
         height: auto !important; /* Даем меню расширяться вниз */
         padding: 20px 10px !important;
-    }
-    
-    .nav-container {
-        flex-direction: column !important; /* Лого над ссылками */
-        align-items: center !important;
-        gap: 20px !important;
     }
     
     .logo {
