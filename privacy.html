@@ -1,40 +1,129 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <script src="navbar.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Политика конфиденциальности | pan-ggt.ru</title>
+    <title>Политика конфиденциальности | PAN-GGT</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #333; }
-        h1 { color: #2c3e50; }
-        .back-link { display: inline-block; margin-top: 20px; text-decoration: none; color: #007bff; }
+        /* Основные стили в духе вашего сайта */
+        :root {
+            --gold: #ffd700;
+            --blue: #00bfff;
+            --bg-dark: #0a0a0a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Эффект стекла для карточки */
+        .glass-container {
+            max-width: 700px;
+            width: 90%;
+            margin: 40px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 191, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            color: var(--gold);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        h3 {
+            color: var(--blue);
+            margin-top: 25px;
+            font-size: 1.1rem;
+        }
+
+        p, li {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 40px;
+            text-align: center;
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        /* Плавное появление */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-container {
+            animation: fadeIn 0.8s ease-out;
+        }
     </style>
 </head>
 <body>
-    <h1>Политика конфиденциальности</h1>
-    <p>Настоящая политика объясняет, как я, владелец сайта <strong>pan-ggt.ru</strong>, использую информацию, которую вы оставляете в формах связи.</p>
-    
-    <h3>1. Что я собираю</h3>
-    <p>Я получаю только те данные, которые вы вводите добровольно:</p>
-    <ul>
-        <li>Ваше Имя (ФИО);</li>
-        <li>Ваш контактный номер телефона.</li>
-    </ul>
 
-    <h3>2. Зачем это нужно</h3>
-    <p>Эти данные необходимы мне исключительно для обратной связи с вами (ответ на ваш вопрос или личное общение).</p>
+    <div class="glass-container">
+        <h1>Политика конфиденциальности</h1>
+        
+        <p>Настоящая политика объясняет, как я, владелец сайта <strong>pan-ggt.ru</strong>, использую информацию, которую вы оставляете в формах связи.</p>
 
-    <h3>3. Безопасность</h3>
-    <ul>
-        <li>Данные не передаются третьим лицам.</li>
-        <li>Я не использую ваш номер для рекламных рассылок или спама.</li>
-        <li>В любой момент вы можете попросить меня удалить вашу информацию.</li>
-    </ul>
+        <h3>1. Что я собираю</h3>
+        <p>Я получаю только те данные, которые вы вводите добровольно:</p>
+        <ul>
+            <li>Ваше Имя (ФИО);</li>
+            <li>Ваша учебная группа;</li>
+            <li>Ваш контактный номер телефона.</li>
+        </ul>
 
-    <h3>4. Согласие</h3>
-    <p>Используя формы на сайте, вы соглашаетесь с тем, что я получу эти данные для связи с вами.</p>
+        <h3>2. Зачем это нужно</h3>
+        <p>Эти данные необходимы мне исключительно для обратной связи с вами (ответ на ваш вопрос, уточнение по учебному процессу или личное общение).</p>
 
-    <p><a href="index.html">Вернуться на главную</a></p>
+        <h3>3. Безопасность</h3>
+        <ul>
+            <li>Данные хранятся конфиденциально и не передаются третьим лицам.</li>
+            <li>Я не использую ваш номер для рекламных рассылок или спама.</li>
+            <li>В любой момент вы можете попросить меня удалить вашу информацию.</li>
+        </ul>
+
+        <h3>4. Согласие</h3>
+        <p>Используя формы на сайте, вы подтверждаете свое согласие на то, что я получу указанные данные для связи с вами.</p>
+
+        <a href="index.html" class="back-link">← ВЕРНУТЬСЯ НА ГЛАВНУЮ</a>
+    </div>
+
 </body>
 </html>
