@@ -6,6 +6,7 @@
     <title>Панель управления</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://googleapis.com" rel="stylesheet">
+    <script src="navbar.js"></script>
     <script>
         // Защита страницы: пускает только если залогинился как Admin
         if (localStorage.getItem('access_admin.html') !== 'true') {
@@ -77,15 +78,6 @@
 </head>
 <body>
     <div class="background-overlay"></div>
-    
-    <nav class="glass-nav">
-        <div class="logo">P.A.N. ADMIN</div>
-        <div class="nav-links">
-            <a href="index.html">На сайт</a>
-            <a href="index.html" onclick="localStorage.removeItem('access_admin.html')" style="color: var(--gold);">Выход</a>
-        </div>
-    </nav>
-
     <main class="main-centered" style="padding-top: 100px; flex-direction: column;">
         
         <!-- Переключатели вкладок -->
