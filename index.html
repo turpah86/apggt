@@ -128,54 +128,47 @@
     </main>
 
     <!-- Подвал сайта -->
-    <footer style="margin-top: 100px; padding: 60px 20px; background: rgba(15, 23, 42, 0.4); border-top: 1px solid rgba(255,255,255,0.05);">
-        <div style="max-width: 900px; margin: 0 auto;">
-            
-            <!-- Центральный блок: Имя и Цитата -->
-            <div style="text-align: center; margin-bottom: 60px;">
-                <h2 style="font-size: 2.8rem; color: #ffd700; margin-bottom: 15px; letter-spacing: -1px;">Пермяков А.Н.</h2>                
-                <div style="max-width: 700px; margin: 0 auto; padding: 0 20px;">
-                    <p style="font-size: 1.5rem; line-height: 1.4; color: #fff; font-style: italic;">
-                        <span style="color: #ffd700; font-weight: 700;">«Возможно всё!</span> <br>
-                        На невозможное просто требуется больше времени»
-                    </p>                    
-                    <!-- Автор со знаком копирайта -->
-                    <p style="text-align: right; font-size: 0.85rem; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-top: 10px; letter-spacing: 1px;">
-                        © Дэн Браун
+    <footer class="glass-footer">
+        <div class="footer-container">
+            <!-- Блок с именем и цитатой -->
+            <div class="footer-quote-block">
+                <h2 class="footer-name">Пермяков А.Н.</h2>
+                <div class="quote-wrapper">
+                    <p class="quote-text">
+                        «<span style="color: var(--gold); font-weight: 700;">Возможно всё!</span> На невозможное просто требуется больше времени»
                     </p>
+                    <p class="quote-author">© Дэн Браун</p>
                 </div>
             </div>
     
-            <!-- Сетка с контентом -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px;">                
-                <!-- Организация -->
-                <div>
-                    <h4 style="color: #ffd700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 20px;">Организация</h4>
-                    <div style="display: flex; gap: 15px; align-items: center;">
-                        <img src="logo-ggt.png" style="height: 50px; filter: brightness(1.2);">
-                        <p style="font-size: 0.9rem; line-height: 1.4;">ГБПОУ РС(Я) «Горно-Геологический техникум»<br>
-                        <a href="https://tomp-ggt.obr.sakha.gov.ru/" style="color: #ffd700; text-decoration: none; font-size: 0.8rem;">Официальный сайт →</a></p>
+            <!-- Сетка 3 колонки -->
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Организация</h4>
+                    <div class="org-info">
+                        <img src="logo-ggt.png" class="footer-logo" style="height: 60px;">
+                        <div class="org-text">
+                            <p>ГБПОУ РС(Я) «ГГТ»</p>
+                            <a href="https://sakha.gov.ru" class="gold-link">Сайт техникума →</a>
+                        </div>
                     </div>
                 </div>
-    
-                <!-- Навигация -->
-                <div style="text-align: center;">
-                    <h4 style="color: #ffd700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 20px;">Навигация</h4>
-                    <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem;">
-                        <a href="index.html" style="color: #fff; text-decoration: none; opacity: 0.7;">Главная</a>
-                        <a href="students.html" style="color: #fff; text-decoration: none; opacity: 0.7;">Студентам</a>
-                        <a href="achievements.html" style="color: #fff; text-decoration: none; opacity: 0.7;">Достижения</a>
-                    </div>
+                <div class="footer-section">
+                    <h4>Навигация</h4>
+                    <ul style="list-style: none; padding: 0; line-height: 2;">
+                        <li><a href="index.html" style="color: #fff; opacity: 0.7;">Главная</a></li>
+                        <li><a href="students.html" style="color: #fff; opacity: 0.7;">Студентам</a></li>
+                    </ul>
                 </div>
-    
-                <!-- Контакты -->
-                <div style="text-align: right;">
-                    <h4 style="color: #ffd700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 20px;">Контакты</h4>
-                    <p style="font-size: 0.9rem; opacity: 0.7;">678196, п. Хандыга, ул. Кычкина, 4</p>
-                    <p style="font-size: 1.1rem; margin-top: 10px;"><a href="tel:+74115342822" style="color: #fff; text-decoration: none;">+7 (411) 534-28-22</a></p>
-                    <p style="font-size: 0.9rem; color: #ffd700;">ggt_khandyga@gov14.ru</p>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">📍 п. Хандыга, ул. Кычкина, 4</p>
+                    <p style="color: var(--gold); margin-top: 10px;">ggt_khandyga@gov14.ru</p>
                 </div>
             </div>
+        </div>
+    </footer>
+
     
             <!-- Подпись -->
             <p style="text-align: center; margin-top: 60px; font-size: 0.7rem; opacity: 0.2; letter-spacing: 2px;">
