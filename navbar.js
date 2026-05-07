@@ -1,14 +1,18 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const uiHTML = `
+    const navHTML = `
     <nav class="glass-nav">
-        <div class="logo">
-            <a href="index.html"><img src="logo-ggt.png" alt="Лого" style="height: 40px;"></a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">Главная</a>
-            <a href="students.html">Для студентов</a>
-            <a href="achievements.html">Достижения</a>
-            <a href="javascript:void(0)" onclick="openFeedback()" style="color: #00bfff;">💬 Связь</a>
+        <div class="nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="logo-ggt.png" alt="Лого" style="height: 40px;">
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Главная</a>
+                <a href="students.html">Для студентов</a>
+                <a href="achievements.html">Достижения</a>
+                <a href="javascript:void(0)" onclick="openFeedback()" style="color: #00bfff;">💬 Связь</a>
+            </div>
         </div>
     </nav>
 
