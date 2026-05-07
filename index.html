@@ -128,64 +128,81 @@
     </main>
 
     <!-- Подвал сайта -->
-    <footer class="glass-footer" style="margin-top: 100px; padding: 80px 20px 40px; background: rgba(15,23,42,0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.1); color: #fff; font-family: 'Inter', sans-serif;">
+    <footer class="glass-footer" style="margin-top: 100px; padding: 80px 20px 40px; background: rgba(15,23,42,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.1); color: #fff; font-family: 'Inter', sans-serif;">
         
         <div style="max-width: 1200px; margin: 0 auto;">
             
-            <!-- Личный бренд и Девиз -->
+            <!-- Имя и Цитата -->
             <div style="text-align: center; margin-bottom: 70px;">
-                <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -1px;">
+                <h2 style="font-size: 2.6rem; font-weight: 800; margin-bottom: 25px; letter-spacing: -1px;">
                     <span style="color: var(--gold, #ffd700);">Пермяков А.Н.</span>
                 </h2>
-                <p style="font-size: 1.2rem; opacity: 0.9; font-style: italic; max-width: 700px; margin: 0 auto; line-height: 1.5;">
-                    «Твой старт в большую жизнь начинается здесь»
-                </p>
-                <div style="width: 40px; height: 3px; background: var(--gold, #ffd700); margin: 25px auto;"></div>
-                <p style="font-size: 0.9rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px;">Преподаватель специальных дисциплин</p>
+                
+                <div style="max-width: 850px; margin: 0 auto; position: relative;">
+                    <p style="font-size: 1.5rem; line-height: 1.5; font-weight: 300; color: rgba(255,255,255,0.95); font-style: italic; margin-bottom: 10px;">
+                        «Нет ничего невозможного, на невозможное требуется <span style="color: var(--gold, #ffd700); font-weight: 600;">чуть больше времени</span>»
+                    </p>
+                    <p style="font-size: 0.85rem; opacity: 0.4; text-align: right; padding-right: 5%; letter-spacing: 2px; text-transform: uppercase;">
+                        — Дэн Браун
+                    </p>
+                </div>
             </div>
     
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 50px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 60px;">
                 
-                <!-- Инфо о месте работы -->
+                <!-- Блок 1: ГГТ -->
                 <div>
-                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--gold, #ffd700); opacity: 0.8;">Место работы</h4>
-                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-                        <img src="logo-ggt.png" alt="ГГТ" style="height: 60px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));">
-                        <p style="font-size: 0.85rem; line-height: 1.4; opacity: 0.7;">
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--gold, #ffd700); opacity: 0.7;">Организация</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <img src="logo-ggt.png" alt="ГГТ" style="height: 65px; width: auto; filter: drop-shadow(0 0 10px rgba(255,255,255,0.15));">
+                        <p style="font-size: 0.85rem; line-height: 1.4; opacity: 0.8; font-weight: 500;">
                             ГБПОУ РС(Я) «Горно-геологический техникум»
                         </p>
                     </div>
-                    <p style="font-size: 0.8rem; opacity: 0.5;">п. Хандыга, Республика Саха (Якутия)</p>
+                    <p style="font-size: 0.85rem; opacity: 0.6; line-height: 1.6;">
+                        📍 678196, Республика Саха (Якутия), Томпонский район, п. Хандыга, ул. Кычкина, д. 4
+                    </p>
                 </div>
     
-                <!-- Полезное для студентов -->
+                <!-- Блок 2: Ссылки -->
                 <div>
-                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--gold, #ffd700); opacity: 0.8;">Студентам</h4>
-                    <ul style="list-style: none; padding: 0; line-height: 2.2; font-size: 0.95rem;">
-                        <li><a href="students.html" style="color: #fff; text-decoration: none; opacity: 0.7; transition: 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">Учебные материалы</a></li>
-                        <li><a href="achievements.html" style="color: #fff; text-decoration: none; opacity: 0.7; transition: 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">Достижения и награды</a></li>
-                        <li><a href="javascript:void(0)" onclick="openFeedback()" style="color: var(--gold, #ffd700); text-decoration: none; font-weight: 500;">Задать вопрос преподавателю</a></li>
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--gold, #ffd700); opacity: 0.7;">Навигация</h4>
+                    <ul style="list-style: none; padding: 0; line-height: 2.4; font-size: 0.95rem;">
+                        <li><a href="index.html" style="color: #fff; text-decoration: none; opacity: 0.6; transition: 0.3s;">Главная</a></li>
+                        <li><a href="students.html" style="color: #fff; text-decoration: none; opacity: 0.6; transition: 0.3s;">Студентам</a></li>
+                        <li><a href="achievements.html" style="color: #fff; text-decoration: none; opacity: 0.6; transition: 0.3s;">Достижения</a></li>
+                        <li style="margin-top: 15px;">
+                            <a href="javascript:void(0)" onclick="openFeedback()" style="color: var(--gold, #ffd700); text-decoration: none; font-weight: 500; border-bottom: 1px dashed var(--gold, #ffd700);">
+                                💬 Обратная связь
+                            </a>
+                        </li>
                     </ul>
                 </div>
     
-                <!-- Обратная связь -->
+                <!-- Блок 3: Контакты -->
                 <div>
-                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--gold, #ffd700); opacity: 0.8;">Контакты</h4>
-                    <div style="font-size: 0.95rem; line-height: 1.8; opacity: 0.8;">
-                        <p>✉️ <a href="mailto:apzbm@mail.ru" style="color: inherit; text-decoration: none;">apzbm@mail.ru</a></p>
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--gold, #ffd700); opacity: 0.7;">Контакты</h4>
+                    <div style="font-size: 0.9rem; line-height: 1.8; opacity: 0.9;">
+                        <p style="margin-bottom: 15px;">
+                            <span style="opacity: 0.4; font-size: 0.75rem; text-transform: uppercase;">Факс:</span> <br>
+                            <a href="tel:+74115342822" style="color: inherit; text-decoration: none;">+7 (411) 534-28-22</a>
+                        </p>
+                        <p>
+                            <span style="opacity: 0.4; font-size: 0.75rem; text-transform: uppercase;">E-mail:</span> <br>
+                            <a href="mailto:ggt_khandyga@gov14.ru" style="color: var(--gold, #ffd700); text-decoration: none;">ggt_khandyga@gov14.ru</a>
+                        </p>
                     </div>
                 </div>
             </div>
     
             <!-- Копирайт -->
-            <div style="margin-top: 70px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
+            <div style="margin-top: 80px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
                 <p style="font-size: 0.75rem; opacity: 0.3; letter-spacing: 1px;">
-                    © 2026 ПЕРМЯКОВ А.Н. | ГБПОУ РС(Я) «ГГТ»
+                    © 2026 ПЕРМЯКОВ А.Н. | Разработано в ГГТ
                 </p>
             </div>
         </div>
     </footer>
-
 
     <!-- Скрипт загрузки данных -->
     <script>
