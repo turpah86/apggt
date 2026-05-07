@@ -499,21 +499,32 @@ body {
         line-height: 1.2;
     }
 
-    /* ИСПРАВЛЕНИЕ ДОСТИЖЕНИЙ НА МОБИЛКЕ */
+    /* 1. Находим контейнер, который уезжает вправо */
     .achievements-grid {
-        /* Отменяем 4 колонки, ставим одну */
-        grid-template-columns: 1fr !important; 
-        gap: 15px !important;
         display: grid !important;
-        padding: 0 !important;
-    }
-        
-    .achievement-item {
-        /* Карточка на всю ширину, но с ограничением */
+        grid-template-columns: 1fr !important; /* ЗАСТАВЛЯЕМ быть в одну колонку */
         width: 100% !important;
-        max-width: 340px; 
-        margin: 0 auto !important; /* Центрируем саму карточку */
-        transform: rotate(0deg) !important; /* Убираем наклон, чтобы не вылезало за края */
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        padding: 0 20px !important;
+        overflow: hidden !important; /* Чтобы ничего не вылетало */
+        gap: 30px !important; /* Тот самый отступ между дипломами */
+    }
+
+    /* 2. Настраиваем сами карточки внутри */
+    .achievement-item {
+        width: 100% !important;
+        max-width: 320px !important; /* Чтобы не были на весь экран гигантскими */
+        margin: 0 auto !important;   /* Центрируем карточку по горизонтали */
+        transform: none !important;  /* Убираем все наклоны (rotate), они ломают край экрана */
+        left: 0 !important;          /* Сбрасываем возможные смещения */
+    }
+
+    /* 3. Убираем общую тряску сайта вправо-влево */
+    body, html {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        position: relative;
     }
     
     .glass-card {
