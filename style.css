@@ -489,6 +489,7 @@ body {
         padding: 20px !important;
         gap: 20px !important;              /* Зазор между фото и именем */
     }
+    
     .glass-nav {
         height: auto !important; /* Убираем фиксированную высоту (например, 80px), которая всё режет */
         min-height: 80px;        /* Но оставляем минимальную для порядка */
@@ -615,8 +616,9 @@ body {
     }
 
     /* 4. ОБЩИЕ ПРАВИЛА */
-    body, html {
-        overflow-x: hidden; /* Убирает горизонтальную тряску сайта */
+    body {
+        /* Увеличиваем отступ сверху, чтобы контент не нырял под высокую шапку */
+        padding-top: 180px !important; 
     }
     
     .btn-primary, .btn-secondary {
