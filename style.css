@@ -384,3 +384,48 @@ body {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* --- КОРРЕКТНАЯ НАВИГАЦИЯ --- */
+.glass-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(13, 17, 23, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 9999;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between; /* Лого слева, ссылки справа */
+    align-items: center;
+    padding: 10px 20px;
+    height: 70px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: 0.3s;
+}
+
+.nav-links a:hover { color: var(--gold); }
+
+.nav-contact {
+    color: #00bfff !important;
+    border: 1px solid rgba(0, 191, 255, 0.3);
+    padding: 5px 12px;
+    border-radius: 8px;
+}
+
