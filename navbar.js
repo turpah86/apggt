@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const navHTML = `
+    const uiHTML = `
     <nav class="glass-nav">
         <div class="nav-container">
             <div class="logo">
