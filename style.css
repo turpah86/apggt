@@ -322,26 +322,58 @@ body {
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
 }
 
-/* 9. АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ */
-@media (max-width: 600px) {
-    .page-header h1 {
-        font-size: 2.2rem;
-    }
-    .achievements-grid {
-        grid-template-columns: 1fr !important;
-    }
-}
-/* АДАПТИВНОСТЬ */
+/* --- АДАПТИВНОСТЬ ДЛЯ МОБИЛОК --- */
 @media (max-width: 768px) {
-    .hero-content { flex-direction: column; text-align: center; gap: 30px; }
-    .photo-wrapper img { width: 240px; }
-    .text-wrapper h1 { font-size: 2.2rem; }
-    .page-header h1 { font-size: 2.5rem; }
-    .achievement-item { width: 260px; margin: 5px !important; }
-    .achievements-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+    /* 1. Навигация */
+    .nav-container {
+        padding: 0 15px;
+        height: auto;
+        flex-direction: column; /* Логотип и меню друг под другом */
+        padding-top: 10px;
+    }
+
+    .nav-links {
+        gap: 10px;
+        flex-wrap: wrap; /* Кнопки переносятся на новую строку */
+        justify-content: center;
+        padding-bottom: 10px;
+    }
+
+    .nav-links a {
+        font-size: 0.8rem; /* Уменьшаем текст в меню */
+        padding: 5px;
+    }
+
+    /* 2. Отступ сверху, чтобы меню не закрывало контент */
+    body {
+        padding-top: 100px; 
+    }
+
+    /* 3. Карточки (тесты, кабинет) */
+    .glass-card {
+        width: 95% !important; /* На весь экран */
+        margin: 10px auto;
+        padding: 15px !important;
+    }
+
+    .group-title {
+        font-size: 1.2rem !important;
+    }
+
+    /* 4. Кнопки */
+    .btn-primary, .btn-secondary, .btn-section {
+        width: 100% !important; /* Кнопки на всю ширину */
+        font-size: 0.9rem !important;
+        padding: 12px !important;
+    }
+
+    /* 5. Модалка обратной связи */
+    #feedback-modal .glass-card {
+        width: 90% !important;
+        padding: 20px !important;
     }
 }
+
 
 /* ОБЩИЕ АНИМАЦИИ */
 .fadeInUp { 
