@@ -485,7 +485,32 @@ body {
         padding: 60px 20px 40px;
         margin-top: 60px;
     }
+        
+    .achievements-grid {
+        /* Переключаем с 4 колонок на 1 или 2 */
+        grid-template-columns: 1fr !important; 
+        gap: 20px !important;
+        padding: 0 10px;
+    }
     
+    .achievement-item {
+        width: 100% !important; /* Чтобы карточка занимала всю ширину телефона */
+        max-width: 350px;       /* Но не была слишком гигантской */
+        margin: 0 auto;        /* Центрируем карточку */
+    }
+    
+    /* Если у тебя там сетка Masonry (хаотичная), ее тоже надо причесать */
+    .masonry-grid {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 30px !important;
+    }
+    
+    .achievement-item:hover {
+        /* На мобилках лучше убрать сильное увеличение при наведении, 
+           чтобы не перекрывать соседние элементы пальцем */
+        transform: scale(1.02) !important; 
+    }
     .footer-name {
         font-size: 2.1rem;
     }
