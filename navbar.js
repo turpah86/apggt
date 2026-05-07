@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     <!-- МОДАЛЬНОЕ ОКНО С ПОЛЯМИ -->
     <div id="feedback-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; backdrop-filter: blur(12px); align-items: center; justify-content: center;">
-        <div class="glass-card" style="max-width: 400px; width: 90%; padding: 30px; border: 1px solid rgba(0, 191, 255, 0.3);">
+        <div class="glass-card" style="max-width: 400px; width: 90%; padding: 30px; border: 1px solid rgba(0, 191, 255, 0.3); border-radius: 15px; background: rgba(255,255,255,0.05);">
             <h2 style="color: var(--gold); text-align: center; margin-bottom: 20px; font-size: 1.2rem;">✉️ Обратная связь</h2>
             <form id="feedback-form" style="display: flex; flex-direction: column; gap: 12px;">
                 
@@ -35,7 +35,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 <textarea id="fb-message" placeholder="Ваше сообщение..." required 
                     style="width: 100%; height: 100px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; padding: 10px; font-family: inherit; resize: none; outline: none;"></textarea>
                 
-                <button type="submit" class="btn-primary" style="width: 100%; background: #00bfff; color: #000; font-weight: bold; margin-top: 10px;">Отправить</button>
+                <!-- ГАЛОЧКА СОГЛАСИЯ -->
+                <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 5px;">
+                    <input type="checkbox" id="privacy-check" onchange="toggleSubmitBtn()" style="margin-top: 3px; cursor: pointer; accent-color: #00bfff;">
+                    <label for="privacy-check" style="color: rgba(255,255,255,0.6); font-size: 0.7rem; line-height: 1.2; cursor: pointer; user-select: none;">
+                        Я согласен на обработку моих персональных данных (ФИО и телефон) согласно <a href="privacy.html" target="_blank" style="color: #00bfff; text-decoration: underline;">политике конфиденциальности</a>
+                    </label>
+                </div>
+
+                <button type="submit" id="submit-btn" disabled class="btn-primary" style="width: 100%; background: #00bfff; color: #000; font-weight: bold; margin-top: 10px; opacity: 0.5; cursor: not-allowed; border: none; padding: 12px; border-radius: 8px; transition: 0.3s;">Отправить</button>
                 <button type="button" onclick="closeFeedback()" style="background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 0.8rem;">Отмена</button>
             </form>
         </div>
@@ -54,7 +62,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const msg = document.getElementById('fb-message').value;
 
         const fData = new URLSearchParams();
-        // Склеиваем ФИО и Телефон, чтобы в таблице не терять инфу
         fData.append('entry.1458374118', `${name} (тел: ${phone})`); 
         fData.append('entry.1320096689', group);
         fData.append('entry.1906150515', msg);
@@ -66,12 +73,25 @@ document.addEventListener("DOMContentLoaded", function() {
             });
             alert('Спасибо! Мы свяжемся с вами.');
             closeFeedback();
-            document.getElementById('feedback-form').reset();
         } catch (err) {
             alert('Ошибка при отправке');
         }
     };
 });
 
+// Функция активации/деактивации кнопки
+function toggleSubmitBtn() {
+    const isChecked = document.getElementById('privacy-check').checked;
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = !isChecked;
+    btn.style.opacity = isChecked ? "1" : "0.5";
+    btn.style.cursor = isChecked ? "pointer" : "not-allowed";
+}
+
 function openFeedback() { document.getElementById('feedback-modal').style.display = 'flex'; }
-function closeFeedback() { document.getElementById('feedback-modal').style.display = 'none'; }
+
+function closeFeedback() { 
+    document.getElementById('feedback-modal').style.display = 'none'; 
+    document.getElementById('feedback-form').reset();
+    toggleSubmitBtn(); // Сбрасываем состояние кнопки
+}
