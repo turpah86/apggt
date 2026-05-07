@@ -503,7 +503,7 @@ body {
     .achievements-grid {
         /* Отменяем 4 колонки, ставим одну */
         grid-template-columns: 1fr !important; 
-        gap: 30px !important;
+        gap: 15px !important;
         display: grid !important;
         padding: 0 !important;
     }
