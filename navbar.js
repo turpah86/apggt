@@ -57,7 +57,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 <a href="index.html">Главная</a>
                 <a href="students.html">Для студентов</a>
                 <a href="achievements.html">Достижения</a>
-                <a href="privacy.html">Приватность</a>
             </div>
         </div>
     </nav>
