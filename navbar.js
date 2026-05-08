@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Добавляем стили анимации и навигации
     const style = document.createElement('style');
     style.innerHTML = `
         @keyframes fadeInDown {
@@ -44,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function() {
     `;
     document.head.appendChild(style);
 
-    // Сама структура (уже без формы связи)
     const uiHTML = `
     <nav class="glass-nav">
         <div class="nav-container">
