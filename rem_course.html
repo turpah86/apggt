@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Курс Слесаря | ПАН</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        .locked { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
+        .lesson-card { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 20px; }
+        .status-icon { font-size: 1.2rem; }
+    </style>
+</head>
+<body class="main-centered">
+    <div class="background-overlay"></div>
+    
+    <div class="glass-card fadeInUp" style="max-width: 600px;">
+        <h2 style="color: var(--gold);">⚒️ Программа: Слесарь-ремонтник</h2>
+        <p id="student-info" style="opacity: 0.6; margin-bottom: 20px;">Загрузка данных...</p>
+
+        <div id="course-plan">
+            <!-- УРОК 1 -->
+            <div class="glass-card lesson-card" id="lesson-1">
+                <div>
+                    <h3>1. Введение и ТБ</h3>
+                    <a href="https://yandex.ru..." target="_blank" class="gold-link">Открыть лекцию</a>
+                </div>
+                <button onclick="completeLesson(1)" class="btn-primary" style="margin:0; padding: 8px 15px;">Прошел ✅</button>
+            </div>
+
+            <!-- УРОК 2 -->
+            <div class="glass-card lesson-card" id="lesson-2">
+                <div>
+                    <h3>2. Устройство оборудования</h3>
+                    <a href="https://yandex.ru..." target="_blank" class="gold-link">Открыть лекцию</a>
+                </div>
+                <button onclick="completeLesson(2)" class="btn-primary" style="margin:0; padding: 8px 15px;">Прошел ✅</button>
+            </div>
+
+            <!-- УРОК 3 -->
+            <div class="glass-card lesson-card" id="lesson-3">
+                <div>
+                    <h3>3. Технология ремонта</h3>
+                    <a href="https://yandex.ru..." target="_blank" class="gold-link">Открыть лекцию</a>
+                </div>
+                <button onclick="completeLesson(3)" class="btn-primary" style="margin:0; padding: 8px 15px;">Прошел ✅</button>
+            </div>
+        </div>
+        
+        <button onclick="location.href='index.html'" class="btn-secondary" style="width:100%">🏠 На главную</button>
+    </div>
+
+    <script>
+        // 1. НАСТРОЙКИ (Вставь свои ключи)
+        const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
+        const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r'; 
+        const _supabase = supabase.createClient(S_URL, S_KEY);
+
+        // 2. ЗАГРУЗКА ПРОГРЕССА
+        async function loadProgress() {
+            const login = localStorage.getItem('student_login');
+            if (!login) { location.href = 'students.html'; return; }
+
+            const { data } = await _supabase.from('students').select('*').eq('login', login).single();
+            
+            if (data) {
+                document.getElementById('student-info').innerText = `Студент: ${data.login} | Доступно тем: ${data.current_step}`;
+                renderLessons(data.current_step);
+            }
+        }
+
+        // 3. ОТРИСОВКА ЗАМКОВ
+        function renderLessons(step) {
+            for (let i = 1; i <= 3; i++) {
+                const card = document.getElementById(`lesson-${i}`);
+                const btn = card.querySelector('button');
+                
+                if (i > step) {
+                    card.classList.add('locked');
+                    btn.style.display = 'none';
+                } else if (i < step) {
+                    btn.innerText = 'Пройдено 🗸';
+                    btn.disabled = true;
+                    btn.style.background = '#28a745';
+                }
+            }
+        }
+
+        // 4. ОБНОВЛЕНИЕ БАЗЫ ПРИ НАЖАТИИ "ПРОШЕЛ"
+        async function completeLesson(lessonNum) {
+            const login = localStorage.getItem('student_login');
+            const nextStep = lessonNum + 1;
+
+            const { error } = await _supabase
+                .from('students')
+                .update({ current_step: nextStep })
+                .eq('login', login);
+
+            if (!error) {
+                alert("Раздел пройден! Следующая тема открыта.");
+                location.reload();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProgress);
+    </script>
+</body>
+</html>
