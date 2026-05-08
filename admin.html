@@ -9,7 +9,6 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <script src="navbar.js"></script>
     <script>
-        // Защита страницы: пускает только если залогинился как Admin
         if (localStorage.getItem('access_admin.html') !== 'true') {
             window.location.href = 'students.html';
         }
@@ -17,8 +16,6 @@
     <style>
         .admin-section { display: none; animation: fadeInUp 0.5s ease; }
         .active { display: block; }
-        
-        /* Стилизация вкладок */
         .tab-btns { 
             margin-bottom: 30px; 
             display: flex; 
@@ -46,7 +43,6 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Стиль для активной вкладки */
         .tab-btn.active-tab {
             background: var(--gold);
             color: var(--dark);
