@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // 1. HTML структура (Меню + Модалка)
     const uiHTML = `
     <nav class="glass-nav">
         <div class="nav-container">
@@ -15,3 +14,6 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
         </div>
     </nav>
+    `;
+    document.body.insertAdjacentHTML('afterbegin', uiHTML);
+});
