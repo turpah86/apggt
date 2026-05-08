@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
         <div class="nav-container">
             <div class="logo">
                 <a href="index.html">
-                    <img src="logo-ggt.png" alt="Лого" style="height: 40px; width: auto;">
+                    <img src="logo-ggt.png" alt="Лого" style="height: 25px; width: auto;">
                 </a>
             </div>
             <div class="nav-links">
