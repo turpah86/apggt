@@ -20,7 +20,6 @@
 <body>
     <div class="background-overlay"></div>
     <main class="main-centered" style="padding-top: 100px;">
-        <!-- ШАГ 0: ВЫБОР ПРЕДМЕТА -->
         <div id="subject-screen" class="glass-card">
             <h2 class="group-title">Выберите предмет</h2>
             <button onclick="chooseSubject('ogr')" class="btn-primary btn-section">⛏️ Технология ОГР</button>
@@ -28,35 +27,27 @@
             <button onclick="location.href='index.html'" class="btn-secondary" style="width:100%; margin-top:10px;">🔙 Назад</button>
         </div>
 
-        <!-- ШАГ 1: ВЫБОР РАЗДЕЛА -->
         <div id="section-screen" class="glass-card">
             <h2 class="group-title">Выберите раздел</h2>
-            <!-- Добавляем event в скобки и класс btn-section-choice -->
             <button onclick="selectSection(1, event)" class="btn-primary btn-section btn-section-choice">Раздел 1</button>
             <button onclick="selectSection(2, event)" class="btn-primary btn-section btn-section-choice">Раздел 2</button>
             <button onclick="selectSection(3, event)" class="btn-primary btn-section btn-section-choice">Раздел 3</button>
             <button onclick="selectSection(4, event)" class="btn-primary btn-section btn-section-choice">Раздел 4</button>
             <button onclick="selectSection(5, event)" class="btn-primary btn-section btn-section-choice">Раздел 5</button>
             <button onclick="selectSection(6, event)" class="btn-primary btn-section btn-section-choice">Раздел 6</button>
-            
             <button onclick="location.reload()" class="btn-secondary" style="width:100%; margin-top:10px;">🔙 Назад</button>
         </div>
 
-        <!-- ШАГ 2: ВВОД ФИО -->
         <div id="start-screen" class="glass-card">
             <h2 class="group-title">Ваши данные</h2>
             <input type="text" id="student-name" class="pass-input" placeholder="Фамилия Имя">
             <button onclick="startQuiz()" class="btn-primary" style="margin-top: 15px; width: 100%;">Начать тест</button>
         </div>
-
-        <!-- ШАГ 3: ТЕСТ -->
         <div id="quiz-card" class="glass-card" style="max-width: 700px;">
             <div class="progress-bar"><div id="progress-fill"></div></div>
             <h2 id="question-text">...</h2>
             <div id="options-container"></div>
         </div>
-
-        <!-- ШАГ 4: РЕЗУЛЬТАТ -->
         <div id="result-screen" class="glass-card">
             <h2 class="group-title">Результат</h2>
             <p id="res-student-name" style="color: white; opacity: 0.8;"></p>
@@ -65,25 +56,17 @@
             <button onclick="location.href='index.html'" class="btn-secondary">На главную</button>
         </div>
     </main>
-
 <script>
-    // 1. ПРОВЕРКА ДОСТУПА
     const group = localStorage.getItem('user_group');
     if (!group) { 
         window.location.href = 'students.html'; 
     }
-
-    // 2. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ (доступны всем функциям)
     let currentQuestion = 0; 
     let score = 0; 
     let studentInfo = "";
-    // Берем группу из памяти, чтобы в таблицу улетало правильное название (огр, рго и т.д.)
     let userGroup = group; 
-
-    // 3. ФУНКЦИЯ ВЫБОРА РАЗДЕЛА (ОБНОВЛЕННАЯ)
-    let currentSubject = ""; // Переменная для хранения выбранного предмета
+    let currentSubject = ""; 
     let currentSectionName = "";
-    
     const subjectsData = {
         'ogr': {
             name: 'Технология ОГР',
@@ -97,8 +80,6 @@
     
     function chooseSubject(subj) {
         currentSubject = subj;
-        
-        // Меняем названия на кнопках разделов
         const buttons = document.querySelectorAll('.btn-section-choice'); 
         const data = subjectsData[subj];
         
@@ -107,47 +88,32 @@
                 btn.innerText = `Раздел ${index + 1}: ${data.sections[index]}`;
                 btn.style.display = 'block';
             } else {
-                btn.style.display = 'none'; // Скрываем лишние кнопки, если разделов меньше
+                btn.style.display = 'none'; 
             }
         });
     
         document.getElementById('subject-screen').style.display = 'none';
         document.getElementById('section-screen').style.display = 'block';
     }
-    
-    // 2. Настройки лимитов вопросов (чтобы не плодить if-else)
     const quizLimits = {
         'ogr': { 1: 21, 2: 22, 3: 33, 4: 34, 5: 45, 6: 46 },
-        'electro': { 1: 15, 2: 15, 3: 15, 4: 24 } // Пример для второго предмета
+        'electro': { 1: 15, 2: 15, 3: 15, 4: 24 } 
     };
-    
-    // 3. Обновленная функция загрузки раздела
     function selectSection(num) {
-        // Сохраняем название раздела из текста кнопки
-        // Мы берем текст кнопки, на которую нажали, чтобы отправить его в таблицу
         currentSectionName = event.target.innerText; 
-    
         const quizFileName = `${currentSubject}_razdel${num}`; 
         const script = document.createElement('script');
         script.src = `quizzes/${quizFileName}.js`;
-        
         script.onload = () => {
             questions.sort(() => Math.random() - 0.5);
-            
-            // Берем лимит из конфига выше
             const limit = quizLimits[currentSubject][num] || 20; 
             questions.length = Math.min(questions.length, limit);
-            
             document.getElementById('section-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'block';
         };
-    
         script.onerror = () => alert(`Ошибка: Файл ${quizFileName}.js не найден!`);
         document.head.appendChild(script);
     }
-
-
-    // 4. ЗАПУСК ТЕСТА
     function startQuiz() {
         studentInfo = document.getElementById('student-name').value.trim();
         if (studentInfo.length < 3) return alert("Введите Фамилию и Имя");
@@ -156,20 +122,13 @@
         document.getElementById('quiz-card').style.display = 'block';
         loadQuestion();
     }
-
-    // 5. ЗАГРУЗКА ВОПРОСА
     function loadQuestion() {
         const q = questions[currentQuestion];
         document.getElementById('question-text').innerText = q.q;
-        
-        // Обновляем прогресс-бар
         const progress = ((currentQuestion + 1) / questions.length) * 100;
         document.getElementById('progress-fill').style.width = progress + "%";
-
         const container = document.getElementById('options-container');
         container.innerHTML = '';
-        
-        // Рандомизация вариантов ответов внутри вопроса
         q.o.map((text, index) => ({text, index}))
            .sort(() => Math.random() - 0.5)
            .forEach(opt => {
@@ -177,12 +136,8 @@
                 btn.className = 'option-btn';
                 btn.innerText = opt.text;
                 btn.onclick = () => {
-                    // Блокируем кнопки, чтобы не кликали дважды
                     document.querySelectorAll('.option-btn').forEach(b => b.style.pointerEvents = 'none');
-                    
-                    // Если индекс ответа совпал с правильным (q.a) — плюс балл
                     if(opt.index === q.a) score++;
-                    
                     currentQuestion++;
                     if(currentQuestion < questions.length) {
                         loadQuestion();
@@ -193,7 +148,6 @@
                 container.appendChild(btn);
            });
     }
-
         function showResults() {
             const percent = Math.round((score / questions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
@@ -211,25 +165,20 @@
         
             document.getElementById('quiz-card').style.display = 'none';
             document.getElementById('result-screen').style.display = 'block';
-            
-            // Заполнение экрана результатов
             document.getElementById('score-val').innerText = mark;
             document.getElementById('res-student-name').innerText = studentInfo;
             document.getElementById('score-text').innerText = comment;
         
             // --- ОТПРАВКА В GOOGLE ТАБЛИЦУ ---
             const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse';
-            
             const fData = new URLSearchParams();
             fData.append('entry.1458374118', studentInfo); 
-            // Склеиваем Группу + Предмет + Раздел в одну ячейку для наглядности
             const sName = subjectsData[currentSubject]?.name || currentSubject;
             const uGroup = localStorage.getItem('user_group') || "Группа не указана";
             const fullInfo = `${uGroup.toUpperCase()} | ${sName} | ${currentSectionName}`;
             fData.append('entry.1320096689', fullInfo); 
             fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
             fData.append('entry.1688940307', mark);
-
             fetch(fURL, {
                 method: 'POST',
                 mode: 'no-cors',
