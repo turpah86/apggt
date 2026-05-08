@@ -1,19 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конфиденциальность | PAN-GGT</title>
+    <style>
+        :root {
+            --gold: #ffd700;
+            --blue: #00bfff;
+            --bg-dark: #0a0a0a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .glass-container {
+            max-width: 700px;
+            width: 90%;
+            margin: 40px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 191, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        h1 {
+            color: var(--gold);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            color: var(--blue);
+            margin-top: 25px;
+            font-size: 1.1rem;
+            border-left: 3px solid var(--gold);
+            padding-left: 15px;
+        }
+
+        p, li {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 40px;
+            text-align: center;
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
     <div class="glass-container">
-        <h1>Конфиденциальность доступа</h1>
+        <h1>Конфиденциальность</h1>
         
-        <p>Доступ к ресурсу <strong>PAN-GGT</strong> ограничен и осуществляется по индивидуальным ключам.</p>
+        <p>Доступ к ресурсу <strong>PAN-GGT</strong> является закрытым. Мы не собираем ваши данные — мы обеспечиваем доступ к информации.</p>
 
-        <h3>1. Персональные данные</h3>
-        <p>Мы не используем формы открытой регистрации. Все учетные записи создаются администратором вручную. На сайте нет инструментов для автоматического сбора, хранения или обработки ваших личных данных (ФИО, телефонов, почт).</p>
+        <h3>1. Персональная информация</h3>
+        <p>На сайте отсутствует открытая регистрация. Все учетные записи (логин/пароль) создаются администратором вручную и выдаются пользователям лично. Мы не храним ваши ФИО, номера телефонов или адреса почты в автоматизированных базах данных.</p>
 
-        <h3>2. Авторизация</h3>
-        <p>Логин и пароль выдаются пользователю лично. Эти данные используются исключительно для технического входа в закрытый раздел и не связываются с вашей реальной личностью, если это не было оговорено заранее.</p>
+        <h3>2. Технические Cookies</h3>
+        <p>Мы используем только функциональные файлы cookie, необходимые для работы системы авторизации. Они позволяют серверу «узнавать» вас после ввода пароля, чтобы вам не приходилось входить заново при каждом клике.</p>
 
-        <h3>3. Отсутствие трекинга</h3>
-        <p>Мы не используем сторонние скрипты аналитики или рекламные пиксели. Ваша активность внутри закрытого раздела не передается третьим лицам и не используется для маркетинга.</p>
+        <h3>3. Логи сервера</h3>
+        <p>Для обеспечения безопасности и защиты от взлома сервер может фиксировать IP-адреса входящих пользователей. Эти данные не используются для слежки и автоматически удаляются через определенный период.</p>
 
-        <h3>4. Безопасность</h3>
-        <p>Вся ответственность за сохранность выданных данных для входа лежит на пользователе. Если вы считаете, что ваш доступ был скомпрометирован — немедленно свяжитесь с администратором для замены пароля.</p>
+        <h3>4. Безопасность доступа</h3>
+        <p>Вы несете личную ответственность за сохранность выданного вам логина и пароля. Мы рекомендуем не передавать эти данные третьим лицам.</p>
 
-        <a href="index.html" class="back-link">← ВЕРНУТЬСЯ К АВТОРИЗАЦИИ</a>
+        <a href="index.html" class="back-link">← ВЕРНУТЬСЯ К ВХОДУ</a>
     </div>
+
+</body>
+</html>
