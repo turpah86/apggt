@@ -57,16 +57,20 @@
         </div>
     </main>
 <script>
+    const params = new URLSearchParams(window.location.search);
     const group = localStorage.getItem('user_group');
     if (!group) { 
         window.location.href = 'students.html'; 
     }
+
+    // --- ИНИЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ ---
     let currentQuestion = 0; 
     let score = 0; 
     let studentInfo = "";
-    let userGroup = group; 
     let currentSubject = ""; 
     let currentSectionName = "";
+    let questions = []; // Массив вопросов из внешних файлов
+
     const subjectsData = {
         'ogr': {
             name: 'Технология ОГР',
@@ -77,7 +81,28 @@
             sections: ['Понятие об энергосистеме и электросетями', 'Схемы внешних распределительных сетей', 'Определение электрических нагрузок', 'Линии электроснабжения горного предприятия']
         }
     };
-    
+
+    const quizLimits = {
+        'ogr': { 1: 21, 2: 22, 3: 33, 4: 34, 5: 45, 6: 46 },
+        'electro': { 1: 15, 2: 15, 3: 15, 4: 24 } 
+    };
+
+    // --- АНТИ-ЧИТ (СТРОГИЙ РЕЖИМ) ---
+    const isStrict = params.get('strict') === 'true';
+    if (isStrict) {
+        document.addEventListener("visibilitychange", async () => {
+            if (document.hidden) {
+                const login = localStorage.getItem('student_login');
+                if(login) {
+                    await _supabase.from('students').update({ final_grade: 2 }).eq('login', login);
+                }
+                alert("ПОПЫТКА АННУЛИРОВАНА! Вы свернули окно или переключили вкладку. Выставлена оценка 2.");
+                location.href = 'rem_course.html';
+            }
+        });
+    }
+
+    // --- ЛОГИКА ВЫБОРА И ЗАГРУЗКИ ---
     function chooseSubject(subj) {
         currentSubject = subj;
         const buttons = document.querySelectorAll('.btn-section-choice'); 
@@ -91,29 +116,31 @@
                 btn.style.display = 'none'; 
             }
         });
-    
+
         document.getElementById('subject-screen').style.display = 'none';
         document.getElementById('section-screen').style.display = 'block';
     }
-    const quizLimits = {
-        'ogr': { 1: 21, 2: 22, 3: 33, 4: 34, 5: 45, 6: 46 },
-        'electro': { 1: 15, 2: 15, 3: 15, 4: 24 } 
-    };
-    function selectSection(num) {
+
+    function selectSection(num, event) {
         currentSectionName = event.target.innerText; 
         const quizFileName = `${currentSubject}_razdel${num}`; 
         const script = document.createElement('script');
-        script.src = `quizzes/${quizFileName}.js`;
+        script.src = `quizzes/${quizFileName}.js`; // Файлы должны быть в этой папке
+        
         script.onload = () => {
+            // Перемешиваем вопросы
             questions.sort(() => Math.random() - 0.5);
             const limit = quizLimits[currentSubject][num] || 20; 
             questions.length = Math.min(questions.length, limit);
+            
             document.getElementById('section-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'block';
         };
-        script.onerror = () => alert(`Ошибка: Файл ${quizFileName}.js не найден!`);
+        
+        script.onerror = () => alert(`Ошибка: Файл ${quizFileName}.js не найден в папке quizzes!`);
         document.head.appendChild(script);
     }
+
     function startQuiz() {
         studentInfo = document.getElementById('student-name').value.trim();
         if (studentInfo.length < 3) return alert("Введите Фамилию и Имя");
@@ -122,13 +149,19 @@
         document.getElementById('quiz-card').style.display = 'block';
         loadQuestion();
     }
+
+    // --- ПРОЦЕСС ТЕСТА ---
     function loadQuestion() {
         const q = questions[currentQuestion];
         document.getElementById('question-text').innerText = q.q;
+        
         const progress = ((currentQuestion + 1) / questions.length) * 100;
         document.getElementById('progress-fill').style.width = progress + "%";
+        
         const container = document.getElementById('options-container');
         container.innerHTML = '';
+
+        // Перемешиваем варианты ответов
         q.o.map((text, index) => ({text, index}))
            .sort(() => Math.random() - 0.5)
            .forEach(opt => {
@@ -136,11 +169,14 @@
                 btn.className = 'option-btn';
                 btn.innerText = opt.text;
                 btn.onclick = () => {
+                    // Блокируем кнопки после клика
                     document.querySelectorAll('.option-btn').forEach(b => b.style.pointerEvents = 'none');
+                    
                     if(opt.index === q.a) score++;
+                    
                     currentQuestion++;
                     if(currentQuestion < questions.length) {
-                        loadQuestion();
+                        setTimeout(loadQuestion, 300); // Небольшая пауза для плавности
                     } else {
                         showResults();
                     }
@@ -148,90 +184,55 @@
                 container.appendChild(btn);
            });
     }
-        function showResults() {
-            const percent = Math.round((score / questions.length) * 100);
-            let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
-            let comment = "";
-            if (mark === 5) {
-                comment = "Красавчик! Настоящий горный инженер. 🏆";
-            } else if (mark === 4) {
-                comment = "Хорошо, но можно и лучше. Почти профи! 😉";
-            } else if (mark === 3) {
-                comment = "Слабовато... Тройка — не предел, иди полистай лекции. 📚";
-            } else {
-                comment = "Мда... С таким багажом знаний в карьер лучше не соваться. Иди учись! ⛔";
-            }
-            const userGroup = localStorage.getItem('user_group') || "Не указана";
+
+    // --- ФИНАЛ: РАСЧЕТ И ОТПРАВКА ---
+    async function showResults() {
+        const percent = Math.round((score / questions.length) * 100);
         
-            document.getElementById('quiz-card').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'block';
-            document.getElementById('score-val').innerText = mark;
-            document.getElementById('res-student-name').innerText = studentInfo;
-            document.getElementById('score-text').innerText = comment;
+        // ШКАЛА: 50% - 3, 70% - 4, 85% - 5
+        let mark = 2;
+        if (percent >= 85) mark = 5;
+        else if (percent >= 70) mark = 4;
+        else if (percent >= 50) mark = 3;
+
+        let comment = "";
+        if (mark === 5) comment = "Красавчик! Настоящий горный инженер. 🏆";
+        else if (mark === 4) comment = "Хорошо, но можно и лучше. Почти профи! 😉";
+        else if (mark === 3) comment = "Слабовато... Тройка — не предел, иди полистай лекции. 📚";
+        else comment = "Мда... С таким багажом знаний в карьер лучше не соваться. Иди учись! ⛔";
+
+        document.getElementById('quiz-card').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('score-val').innerText = mark;
+        document.getElementById('res-student-name').innerText = studentInfo;
+        document.getElementById('score-text').innerText = comment;
+        if(mark === 2) document.getElementById('score-val').style.color = '#dc3545';
+
+        // 1. ОТПРАВКА В GOOGLE ТАБЛИЦУ
+        const fURL = 'https://google.com';
+        const fData = new URLSearchParams();
+        const sName = subjectsData[currentSubject]?.name || currentSubject;
+        const uGroup = localStorage.getItem('user_group') || "Группа не указана";
+        const fullInfo = `${uGroup.toUpperCase()} | ${sName} | ${currentSectionName}`;
         
-            // --- ОТПРАВКА В GOOGLE ТАБЛИЦУ ---
-            const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse';
-            const fData = new URLSearchParams();
-            fData.append('entry.1458374118', studentInfo); 
-            const sName = subjectsData[currentSubject]?.name || currentSubject;
-            const uGroup = localStorage.getItem('user_group') || "Группа не указана";
-            const fullInfo = `${uGroup.toUpperCase()} | ${sName} | ${currentSectionName}`;
-            fData.append('entry.1320096689', fullInfo); 
-            fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
-            fData.append('entry.1688940307', mark);
-            fetch(fURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: fData.toString()
-            }).then(() => {
-                console.log("Данные успешно отправлены!");
-            }).catch(e => console.error("Ошибка при отправке:", e));
-        }
-        const isStrict = params.get('strict') === 'true';
-        
-        if (isStrict) {
-            document.addEventListener("visibilitychange", () => {
-                if (document.hidden) {
-                    alert("ПОПЫТКА АННУЛИРОВАНА! Нельзя сворачивать окно или переключать вкладки во время экзамена.");
-                    location.href = 'rem_course.html';
-                }
-            });
-        }
-        async function finishQuiz() {
-            const login = localStorage.getItem('student_login');
-            const percent = Math.round((correctAnswersCount / questions.length) * 100);
-            
-            // Логика расчета оценки
-            let grade = 2;
-            if (percent >= 90) grade = 5;
-            else if (percent >= 75) grade = 4;
-            else if (percent >= 60) grade = 3;
-        
-            const statusText = grade > 2 ? `Пройдено на ${grade}` : "Не сдано";
-        
-            // Сохраняем результат в Supabase
-            // final_grade - нужно добавить такую колонку в таблицу students (тип int4)
+        fData.append('entry.1458374118', studentInfo); 
+        fData.append('entry.1320096689', fullInfo); 
+        fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
+        fData.append('entry.1688940307', mark);
+
+        fetch(fURL, { method: 'POST', mode: 'no-cors', body: fData.toString() });
+
+        // 2. ОТПРАВКА В SUPABASE
+        const login = localStorage.getItem('student_login');
+        if (login) {
             await _supabase.from('students')
                 .update({ 
-                    final_grade: grade,
-                    current_step: 9, // Ставим 9, чтобы в меню отображалось "Завершено"
+                    final_grade: mark,
                     last_attempt_time: new Date().toISOString()
                 })
                 .eq('login', login);
-        
-            // Красивый финал
-            document.getElementById('quiz-box').innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <h1 style="font-size: 4rem;">${grade === 2 ? '❌' : '🏆'}</h1>
-                    <h2>Ваш результат: ${percent}%</h2>
-                    <h1 style="color: var(--gold); font-size: 3rem;">Оценка: ${grade}</h1>
-                    <p style="margin: 20px 0; opacity: 0.7;">${statusText}</p>
-                    <button onclick="location.href='rem_course.html'" class="btn-primary">Вернуться в учебный план</button>
-                </div>
-            `;
         }
-
+    }
     </script>
 </body>
 </html>
