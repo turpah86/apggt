@@ -188,6 +188,16 @@
                 console.log("Данные успешно отправлены!");
             }).catch(e => console.error("Ошибка при отправке:", e));
         }
+    const isStrict = params.get('strict') === 'true';
+    
+    if (isStrict) {
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                alert("ПОПЫТКА АННУЛИРОВАНА! Нельзя сворачивать окно или переключать вкладки во время экзамена.");
+                location.href = 'rem_course.html';
+            }
+        });
+    }
 </script>
 </body>
 </html>
