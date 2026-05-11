@@ -143,7 +143,7 @@
 
     function startQuiz() {
         studentInfo = document.getElementById('student-name').value.trim();
-        if (studentInfo.length < 3) return alert("Введите Фамилию и Имя");
+        if (studentInfo.length < 3) return alert("Логин");
         
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('quiz-card').style.display = 'block';
@@ -187,29 +187,52 @@
 
     // --- ФИНАЛ: РАСЧЕТ И ОТПРАВКА ---
     async function showResults() {
+        // 1. Сначала считаем процент и оценку
         const percent = Math.round((score / questions.length) * 100);
-        
-        // ШКАЛА: 50% - 3, 70% - 4, 85% - 5
-        let mark = 2;
-        if (percent >= 85) mark = 5;
-        else if (percent >= 70) mark = 4;
-        else if (percent >= 50) mark = 3;
-
-        let comment = "";
-        if (mark === 5) comment = "Красавчик! Настоящий горный инженер. 🏆";
-        else if (mark === 4) comment = "Хорошо, но можно и лучше. Почти профи! 😉";
-        else if (mark === 3) comment = "Слабовато... Тройка — не предел, иди полистай лекции. 📚";
-        else comment = "Мда... С таким багажом знаний в карьер лучше не соваться. Иди учись! ⛔";
-
+        let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
+    
+        // 2. ВОТ СЮДА ПИХАЕМ КОММЕНТАРИИ
+        const comments = {
+            5: [
+                "Отличная работа! Теория освоена в совершенстве. 🏆",
+                "Блестящий результат! Настоящий мастер своего дела. 🛠️",
+                "Профессионально! С такими знаниями любая задача по плечу. 💪",
+                "Идеально! Виден серьезный подход к обучению. 🔥"
+            ],
+            4: [
+                "Хороший результат! Базовые принципы поняты верно. 👍",
+                "Достойно! Почти профессиональный уровень. 😉",
+                "Уверенные знания. Немного практики — и будет идеально. 🔧",
+                "Хорошо! Видно, что материал изучен внимательно. 📖"
+            ],
+            3: [
+                "Удовлетворительно. Но в технике мелочей не бывает. 🧐",
+                "На грани. Стоит еще раз заглянуть в учебные материалы. 📚",
+                "Знания есть, но нужно больше внимательности к деталям. 🧗",
+                "Проходной балл набран, но есть над чем поработать. 🔩",
+                "Тройка тоже госоценка!"
+            ],
+            2: [
+                "Результат слабый. Техника не прощает пробелов в знаниях. ⛔",
+                "Материал не освоен. Нужно вернуться к изучению лекций. 🛑",
+                "Неудовлетворительно. Попробуйте еще раз после подготовки. 🔄",
+                "С таким уровнем допускать к работам нельзя. Учите матчасть! ⚠️"
+            ]
+        };
+    
+        // Выбираем случайную фразу
+        const randomComment = comments[mark][Math.floor(Math.random() * comments[mark].length)];
+    
+        // 3. Выводим всё на экран
         document.getElementById('quiz-card').style.display = 'none';
         document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('score-val').innerText = mark;
-        document.getElementById('res-student-name').innerText = studentInfo;
-        document.getElementById('score-text').innerText = comment;
+        document.getElementById('score-val').innerText = mark; 
+        document.getElementById('res-student-name').innerText = studentInfo; 
+        document.getElementById('score-text').innerText = randomComment;
         if(mark === 2) document.getElementById('score-val').style.color = '#dc3545';
 
         // 1. ОТПРАВКА В GOOGLE ТАБЛИЦУ
-        const fURL = 'https://google.com';
+        const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse';
         const fData = new URLSearchParams();
         const sName = subjectsData[currentSubject]?.name || currentSubject;
         const uGroup = localStorage.getItem('user_group') || "Группа не указана";
