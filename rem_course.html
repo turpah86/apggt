@@ -2,210 +2,172 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Курс Слесаря | ПАН</title>
+    <title>Учебный план | ПАН</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://jsdelivr.net"></script>
     <style>
-        .locked { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
-        .lesson-card { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 20px; }
-        .status-icon { font-size: 1.2rem; }
+        .locked { opacity: 0.4; pointer-events: none; filter: grayscale(1); }
+        .lesson-card { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 20px; transition: 0.3s; }
+        .discipline-tab { padding: 10px 20px; border-radius: 50px; cursor: pointer; border: 1px solid var(--glass-border); transition: 0.3s; }
+        .discipline-tab.active { border-color: var(--gold); background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
+        .status-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; display: block; }
+        #quiz-timer { position: fixed; top: 80px; right: 20px; background: var(--gold); color: #000; padding: 10px; border-radius: 8px; font-weight: bold; z-index: 100; display: none; }
     </style>
 </head>
 <body class="main-centered">
     <div class="background-overlay"></div>
-    
-    <div class="glass-card fadeInUp" style="max-width: 600px;">
-        <h2 style="color: var(--gold);">⚒️ Программа: Слесарь-ремонтник</h2>
-        <p id="student-info" style="opacity: 0.6; margin-bottom: 20px;">Загрузка данных...</p>
+    <div id="quiz-timer">Осталось: 20:00</div>
 
-        <div id="course-plan">
-            <!-- УРОК 1 -->
-            <div class="glass-card lesson-card" id="lesson-1">
-                <div>
-                    <h3>Тема 1. Основные понятия и закон Ома</h3>
-                    <a href="https://disk.yandex.ru/i/LHkTfjvHvLUweQ" target="_blank" class="gold-link" onclick="startLessonTimer(1)">
-                        Открыть лекцию 📖
-                    </a>
-                </div>
-                <button id="test-btn-1" onclick="location.href='quiz.html?subject=rem_1'" class="btn-primary" disabled style="opacity: 0.5; filter: grayscale(1);">
-                    Сдать тест ✍️
-                </button>
-            </div>
+    <div class="glass-card fadeInUp" style="max-width: 900px; width: 95%;">
+        <!-- Навигация -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <button onclick="location.href='index.html'" class="btn-secondary" style="margin: 0; padding: 8px 15px;">🔙 В меню</button>
+            <h2 id="student-info" style="font-size: 1rem; opacity: 0.6;">Загрузка...</h2>
+        </div>
 
-            <!-- УРОК 2 -->
-            <div class="glass-card lesson-card" id="lesson-2">
-                <div>
-                    <h3>Тема 2. Законы Кирхгофа</h3>
-                    <a href="https://disk.yandex.ru/i/vt-2nWk6_ExHqw" target="_blank" class="gold-link" onclick="startLessonTimer(2)">
-                        Открыть лекцию 📖
-                    </a>
-                </div>
-                <button id="test-btn-2" onclick="location.href='quiz.html?subject=rem_2'" class="btn-primary" disabled style="opacity: 0.5; filter: grayscale(1);">
-                    Сдать тест ✍️
-                </button>
-            </div>
+        <!-- Список всех дисциплин -->
+        <div id="disciplines-nav" class="skills-grid" style="margin-bottom: 40px; justify-content: center;">
+            <!-- Генерируется через JS -->
+        </div>
 
-            <!-- УРОК 3 -->
-            <div class="glass-card lesson-card" id="lesson-3">
-                <div>
-                    <h3>Тема 3. Цепи постоянного тока. Соединение элементов</h3>
-                    <a href="https://disk.yandex.ru/i/vt-2nWk6_ExHqw" target="_blank" class="gold-link" onclick="startLessonTimer(3)">
-                        Открыть лекцию 📖
-                    </a>
-                </div>
-                <button id="test-btn-3" onclick="location.href='quiz.html?subject=rem_3'" class="btn-primary" disabled style="opacity: 0.5; filter: grayscale(1);">
-                    Сдать тест ✍️
-                </button>
-            </div>
+        <hr style="border: 0; border-top: 1px solid var(--glass-border); margin-bottom: 30px;">
 
-                        <!-- УРОК 4 -->
-            <div class="glass-card lesson-card" id="lesson-4">
-                <div>
-                    <h3>Тема 4. Элементы электрических схем и их обозначения</h3>
-                    <a href="https://disk.yandex.ru/i/NadjwgwSnKwR2Q" target="_blank" class="gold-link" onclick="startLessonTimer(3)">
-                        Открыть лекцию 📖
-                    </a>
-                </div>
-                <button id="test-btn-4" onclick="location.href='quiz.html?subject=rem_4'" class="btn-primary" disabled style="opacity: 0.5; filter: grayscale(1);">
-                    Сдать тест ✍️
-                </button>
-            </div>
-
-                        <!-- УРОК 5 -->
-            <div class="glass-card lesson-card" id="lesson-5">
-                <div>
-                    <h3>Тема 5. Элементы электрических схем и их обозначения</h3>
-                    <a href="https://disk.yandex.ru/i/wwN9wC2uPKO24w" target="_blank" class="gold-link" onclick="startLessonTimer(3)">
-                        Открыть лекцию 📖
-                    </a>
-                </div>
-                <button id="test-btn-5" onclick="location.href='quiz.html?subject=rem_5'" class="btn-primary" disabled style="opacity: 0.5; filter: grayscale(1);">
-                    Сдать тест ✍️
-                </button>
-            </div>
-
-                        <!-- УРОК 6 -->
-            <div class="glass-card lesson-card" id="lesson-6">
-                <div>
-                    <h3>Тема 6. Цепи переменного тока. Часть 2 (Реактивное сопротивление)</h3>
-                    <a href="https://disk.yandex.ru/i/ffdyhvkEfTJClQ" target="_blank" class="gold-link" onclick="startLessonTimer(3)">
-                        Открыть лекцию 📖
-                    </a>
-                </div>
-                <button id="test-btn-6" onclick="location.href='quiz.html?subject=rem_6'" class="btn-primary" disabled style="opacity: 0.5; filter: grayscale(1);">
-                    Сдать тест ✍️
-                </button>
-            </div>
-
-                        <!-- УРОК 7 -->
-            <div class="glass-card lesson-card" id="lesson-7">
-                <div>
-                    <h3>Тема 7. Основы безопасности при работе с электрооборудованием</h3>
-                    <a href="https://disk.yandex.ru/i/kgoLUJ0NNgvaDw" target="_blank" class="gold-link" onclick="startLessonTimer(3)">
-                        Открыть лекцию 📖
-                    </a>
-                </div>
-                <button id="test-btn-7" onclick="location.href='quiz.html?subject=rem_7'" class="btn-primary" disabled style="opacity: 0.5; filter: grayscale(1);">
-                    Сдать тест ✍️
-                </button>
-            </div>
-            
-                        <!-- УРОК 8 -->
-            <div class="glass-card lesson-card" id="lesson-8">
-                <div>
-                    <h3>Тема 8. Практическая работа, средства защиты и первая помощь</h3>
-                    <a href="https://disk.yandex.ru/i/kaZi-jfuK25cqw" target="_blank" class="gold-link" onclick="startLessonTimer(3)">
-                        Открыть лекцию 📖
-                    </a>
-                </div>
-                <button id="test-btn-8" onclick="location.href='quiz.html?subject=rem_8'" class="btn-primary" disabled style="opacity: 0.5; filter: grayscale(1);">
-                    Сдать тест ✍️
-                </button>
+        <!-- Контент текущей дисциплины -->
+        <div id="course-content">
+            <h1 id="disc-title" style="color: var(--gold); text-align: center; margin-bottom: 30px;">Выберите дисциплину</h1>
+            <div id="course-plan">
+                <!-- Темы или Итоговый тест -->
             </div>
         </div>
-        
-        <button onclick="location.href='index.html'" class="btn-secondary" style="width:100%">🏠 На главную</button>
     </div>
 
     <script>
-        // 1. НАСТРОЙКИ (Вставь свои ключи)
+        // 1. КОНФИГУРАЦИЯ УЧЕБНОГО ПЛАНА
+        const COURSE_MAP = [
+            {
+                id: "electro",
+                title: "Электротехника",
+                themes: [
+                    { name: "Закон Ома", link: "https://yandex.ru..." },
+                    { name: "Законы Кирхгофа", link: "https://yandex.ru..." },
+                    { name: "Цепи пост. тока", link: "https://yandex.ru..." },
+                    { name: "Элементы схем", link: "https://yandex.ru..." },
+                    { name: "Переменный ток", link: "https://yandex.ru..." },
+                    { name: "Реактивное сопр.", link: "https://yandex.ru..." },
+                    { name: "Техника без-ти", link: "https://yandex.ru..." },
+                    { name: "Первая помощь", link: "https://yandex.ru..." }
+                ]
+            },
+            {
+                id: "remont",
+                title: "Технология ремонта",
+                themes: [ /* Аналогично 8 тем */ ]
+            }
+        ];
+
         const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
-        const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r'; 
+        const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r';
         const _supabase = supabase.createClient(S_URL, S_KEY);
 
-        // 2. ЗАГРУЗКА ПРОГРЕССА
-        async function loadProgress() {
+        async function init() {
             const login = localStorage.getItem('student_login');
             if (!login) { location.href = 'students.html'; return; }
 
-            const { data } = await _supabase.from('students').select('*').eq('login', login).single();
+            const { data: student } = await _supabase.from('students').select('*').eq('login', login).single();
+            if (!student) return;
+
+            document.getElementById('student-info').innerText = `Студент: ${student.login}`;
             
-            if (data) {
-                document.getElementById('student-info').innerText = `Студент: ${data.login} | Доступно тем: ${data.current_step}`;
-                renderLessons(data.current_step);
+            renderNav(student.current_disc || 0);
+            renderCurrentPlan(student);
+        }
+
+        function renderNav(currentDiscIdx) {
+            const nav = document.getElementById('disciplines-nav');
+            nav.innerHTML = COURSE_MAP.map((disc, idx) => {
+                const isLocked = idx > currentDiscIdx;
+                const isDone = idx < currentDiscIdx;
+                return `
+                    <div class="discipline-tab ${isLocked ? 'locked' : ''} ${idx === currentDiscIdx ? 'active' : ''}">
+                        ${isDone ? '🗸' : (isLocked ? '🔒' : '✍️')} ${disc.title}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCurrentPlan(student) {
+            const dIdx = student.current_disc || 0;
+            const tIdx = student.current_step || 1;
+            const disc = COURSE_MAP[dIdx];
+            const container = document.getElementById('course-plan');
+            
+            document.getElementById('disc-title').innerText = disc.title;
+            container.innerHTML = '';
+
+            if (tIdx <= 8) {
+                // Рендерим 8 тем
+                disc.themes.forEach((theme, i) => {
+                    const stepNum = i + 1;
+                    const isLocked = stepNum > tIdx;
+                    const isDone = stepNum < tIdx;
+
+                    container.innerHTML += `
+                        <div class="glass-card lesson-card ${isLocked ? 'locked' : ''}">
+                            <div>
+                                <span class="status-tag" style="color: ${isDone ? '#28a745' : 'var(--gold)'}">
+                                    ${isDone ? 'Освоено' : (isLocked ? 'Доступ закрыт' : 'Текущая тема')}
+                                </span>
+                                <h3>Тема ${stepNum}. ${theme.name}</h3>
+                                <a href="${theme.link}" target="_blank" class="gold-link" onclick="startTimer(${stepNum})">Изучить лекцию 📖</a>
+                            </div>
+                            <button id="test-btn-${stepNum}" class="btn-primary" 
+                                onclick="location.href='quiz.html?id=${disc.id}_${stepNum}'"
+                                ${isDone ? 'style="background:#28a745" disabled' : 'disabled'}>
+                                ${isDone ? 'Пройдено' : 'Сдать тест'}
+                            </button>
+                        </div>
+                    `;
+                });
+            } else {
+                // Рендерим блок ИТОГОВОГО ТЕСТА
+                container.innerHTML = `
+                    <div class="glass-card" style="text-align: center; border: 2px solid var(--gold); padding: 40px;">
+                        <h2 style="color: var(--gold);">🏆 Дисциплина изучена!</h2>
+                        <p style="margin: 20px 0;">Оценка за этот тест пойдет в <b>ДИПЛОМ</b>. У вас есть 3 быстрых попытки (раз в 30 мин), далее — 1 попытка в сутки.</p>
+                        <button onclick="startFinalQuiz('${disc.id}')" class="btn-primary" style="width: 100%;">
+                            НАЧАТЬ ИТОГОВУЙ ТЕСТ 🏁
+                        </button>
+                    </div>
+                `;
             }
         }
 
-        // 3. ОТРИСОВКА ЗАМКОВ
-        function renderLessons(step) {
-            for (let i = 1; i <= 8; i++) {
-                const card = document.getElementById(`lesson-${i}`);
-                const btn = card.querySelector('button');
-                
-                if (i > step) {
-                    card.classList.add('locked');
-                    btn.style.display = 'none';
-                } else if (i < step) {
-                    btn.innerText = 'Пройдено 🗸';
-                    btn.disabled = true;
-                    btn.style.background = '#28a745';
-                }
-            }
-        }
-        
-        function startLessonTimer(lessonNum) {
-            const btn = document.getElementById(`test-btn-${lessonNum}`);
-            let timeLeft = 60; // 30 секунд ожидания
-        
-            // Если таймер уже запущен, второй раз не нажимаем
-            if (btn.innerText.includes('...')) return;
-        
-            // Студент видит, что процесс пошел
-            btn.style.cursor = 'not-allowed';
-            
-            const countdown = setInterval(() => {
-                btn.innerText = `Изучение... ${timeLeft} сек`;
-                timeLeft--;
-        
-                if (timeLeft < 0) {
-                    clearInterval(countdown);
+        // Таймер на 60 секунд для тем
+        function startTimer(num) {
+            const btn = document.getElementById(`test-btn-${num}`);
+            let time = 60;
+            btn.style.opacity = "0.5";
+            const itv = setInterval(() => {
+                btn.innerText = `Изучение... ${time}с`;
+                time--;
+                if(time < 0) {
+                    clearInterval(itv);
                     btn.disabled = false;
-                    btn.innerText = 'Сдать тест ✍️';
-                    btn.style.opacity = '1';
-                    btn.style.filter = 'none';
-                    btn.style.cursor = 'pointer';
-                    btn.style.boxShadow = '0 0 15px #ffd700'; // Подсветка золотом, когда готово
+                    btn.innerText = "Сдать тест ✍️";
+                    btn.style.opacity = "1";
+                    btn.style.boxShadow = "0 0 15px var(--gold)";
                 }
             }, 1000);
         }
 
-        // 4. ОБНОВЛЕНИЕ БАЗЫ ПРИ НАЖАТИИ "ПРОШЕЛ"
-        async function completeLesson(lessonNum) {
-            const login = localStorage.getItem('student_login');
-            const nextStep = lessonNum + 1;
-
-            const { error } = await _supabase
-                .from('students')
-                .update({ current_step: nextStep })
-                .eq('login', login);
-
-            if (!error) {
-                alert("Раздел пройден! Следующая тема открыта.");
-                location.reload();
-            }
+        async function startFinalQuiz(discId) {
+            // Здесь должна быть твоя логика проверки времени (30 мин / 1 день)
+            // Если проверка прошла:
+            const ok = confirm("ВНИМАНИЕ! Эта оценка пойдет в диплом. Будет включен контроль сворачивания окна. Начать?");
+            if(ok) location.href = `quiz.html?subject=${discId}_final&strict=true`;
         }
 
-        document.addEventListener('DOMContentLoaded', loadProgress);
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
