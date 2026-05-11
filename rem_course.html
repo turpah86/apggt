@@ -263,36 +263,49 @@
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
         
             if (mark >= 3) {
-                alert(`Отлично! Оценка: ${mark}. Доступ к следующей теме открыт!`);
-                
+                // Берем логин из памяти. ВАЖНО: убедись, что при входе ты сохраняешь именно его!
                 const login = localStorage.getItem('student_login');
                 
-                // 1. Сначала узнаем текущий прогресс из базы
-                const { data: st } = await _supabase.from('students').select('current_step, current_disc').eq('login', login).single();
-                
-                // 2. Рассчитываем следующий шаг
-                // Если сдан текущий доступный шаг, то прибавляем +1
-                const nextStep = st.current_step + 1;
+                console.log("Пытаюсь обновить прогресс для:", login);
         
-                // 3. Сохраняем в базу
-                const { error } = await _supabase.from('students')
-                    .update({ 
-                        current_step: nextStep,
-                        last_attempt_time: new Date().toISOString() 
-                    })
+                // 1. Сначала проверяем, какой шаг сейчас в базе
+                const { data: st, error: fetchError } = await _supabase
+                    .from('students')
+                    .select('current_step')
+                    .eq('login', login)
+                    .single();
+        
+                if (fetchError) {
+                    console.error("Ошибка поиска студента:", fetchError);
+                    alert("Ошибка: Студент не найден в базе!");
+                    return;
+                }
+        
+                const nextStep = st.current_step + 1;
+                console.log("Текущий шаг:", st.current_step, "Следующий:", nextStep);
+        
+                // 2. Обновляем базу
+                const { error: updateError } = await _supabase
+                    .from('students')
+                    .update({ current_step: nextStep })
                     .eq('login', login);
         
-                if(!error) {
-                    // 4. Очищаем экран и ПЕРЕЗАГРУЖАЕМ страницу, чтобы сработал init()
+                if (updateError) {
+                    console.error("Ошибка при обновлении:", updateError);
+                    alert("Не удалось сохранить результат в базу!");
+                } else {
+                    alert(`Тест сдан! Оценка: ${mark}. Открыта следующая тема.`);
+                    // Скрываем тест и перезагружаем страницу
                     document.getElementById('quiz-overlay').style.display = 'none';
                     document.getElementById('bg-blur').style.display = 'none';
                     location.reload(); 
                 }
             } else {
-                alert(`Оценка: ${mark}. Этого недостаточно. Повторите материал и попробуйте снова.`);
+                alert(`Оценка: ${mark}. Тест не сдан. Изучите лекцию еще раз.`);
                 location.reload();
             }
         }
+
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
