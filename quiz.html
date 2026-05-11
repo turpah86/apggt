@@ -188,16 +188,50 @@
                 console.log("Данные успешно отправлены!");
             }).catch(e => console.error("Ошибка при отправке:", e));
         }
-    const isStrict = params.get('strict') === 'true';
-    
-    if (isStrict) {
-        document.addEventListener("visibilitychange", () => {
-            if (document.hidden) {
-                alert("ПОПЫТКА АННУЛИРОВАНА! Нельзя сворачивать окно или переключать вкладки во время экзамена.");
-                location.href = 'rem_course.html';
-            }
-        });
-    }
-</script>
+        const isStrict = params.get('strict') === 'true';
+        
+        if (isStrict) {
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    alert("ПОПЫТКА АННУЛИРОВАНА! Нельзя сворачивать окно или переключать вкладки во время экзамена.");
+                    location.href = 'rem_course.html';
+                }
+            });
+        }
+        async function finishQuiz() {
+            const login = localStorage.getItem('student_login');
+            const percent = Math.round((correctAnswersCount / questions.length) * 100);
+            
+            // Логика расчета оценки
+            let grade = 2;
+            if (percent >= 90) grade = 5;
+            else if (percent >= 75) grade = 4;
+            else if (percent >= 60) grade = 3;
+        
+            const statusText = grade > 2 ? `Пройдено на ${grade}` : "Не сдано";
+        
+            // Сохраняем результат в Supabase
+            // final_grade - нужно добавить такую колонку в таблицу students (тип int4)
+            await _supabase.from('students')
+                .update({ 
+                    final_grade: grade,
+                    current_step: 9, // Ставим 9, чтобы в меню отображалось "Завершено"
+                    last_attempt_time: new Date().toISOString()
+                })
+                .eq('login', login);
+        
+            // Красивый финал
+            document.getElementById('quiz-box').innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h1 style="font-size: 4rem;">${grade === 2 ? '❌' : '🏆'}</h1>
+                    <h2>Ваш результат: ${percent}%</h2>
+                    <h1 style="color: var(--gold); font-size: 3rem;">Оценка: ${grade}</h1>
+                    <p style="margin: 20px 0; opacity: 0.7;">${statusText}</p>
+                    <button onclick="location.href='rem_course.html'" class="btn-primary">Вернуться в учебный план</button>
+                </div>
+            `;
+        }
+
+    </script>
 </body>
 </html>
