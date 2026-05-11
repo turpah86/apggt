@@ -40,7 +40,18 @@
                     <!-- Темы или Итоговый тест -->
                 </div>
             </div>
-    
+
+            <!-- Окно теста (изначально скрыто) -->
+            <div id="quiz-overlay" class="glass-card fadeInUp" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; width: 90%; max-width: 600px; border: 2px solid var(--gold);">
+                <div id="quiz-content">
+                    <h2 id="q-text" style="margin-bottom: 20px;">Загрузка вопроса...</h2>
+                    <div id="options-container"></div>
+                    <p id="q-progress" style="margin-top: 20px; opacity: 0.5;"></p>
+                </div>
+            </div>
+            <!-- Затемнение фона -->
+            <div id="bg-blur" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 999;"></div>
+  
         </div>
     </div>
 
@@ -124,7 +135,7 @@
                                 <a href="${theme.link}" target="_blank" class="gold-link" onclick="startTimer(${stepNum})">Изучить лекцию 📖</a>
                             </div>
                             <button id="test-btn-${stepNum}" class="btn-primary" 
-                                onclick="location.href='quiz.html?id=${disc.id}_${stepNum}'"
+                                onclick="startInlineQuiz('${disc.id}_${stepNum}')"
                                 ${isDone ? 'style="background:#28a745" disabled' : 'style="background:#555; opacity:0.6; cursor:not-allowed;" disabled'}>
                                 ${isDone ? 'Пройдено' : 'Сдать тест'}
                             </button>
@@ -196,7 +207,75 @@
                 location.href = `quiz.html?id=${discId}_final&strict=true`;
             }
         }
-
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let quizScore = 0;
+        let currentQuizId = "";
+        
+        async function startInlineQuiz(quizId) {
+            currentQuizId = quizId;
+            // 1. Подгружаем файл скрипта
+            const script = document.createElement('script');
+            script.src = `quizzes/${quizId}.js`;
+            script.onload = () => {
+                currentQuestions = questions; // Берём массив из загруженного файла
+                currentIndex = 0;
+                quizScore = 0;
+                document.getElementById('bg-blur').style.display = 'block';
+                document.getElementById('quiz-overlay').style.display = 'block';
+                showQuestion();
+            };
+            script.onerror = () => alert("Файл теста не найден!");
+            document.head.appendChild(script);
+        }
+        
+        function showQuestion() {
+            const q = currentQuestions[currentIndex];
+            document.getElementById('q-text').innerText = q.q;
+            document.getElementById('q-progress').innerText = `Вопрос ${currentIndex + 1} из ${currentQuestions.length}`;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+        
+            q.o.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn'; // Используй свои стили кнопок
+                btn.style.cssText = "display:block; width:100%; margin-bottom:10px; padding:10px; background:rgba(255,255,255,0.1); color:white; border:1px solid var(--gold); border-radius:8px; cursor:pointer;";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx, q.a);
+                container.appendChild(btn);
+            });
+        }
+        
+        function checkAnswer(selected, correct) {
+            if (selected === correct) quizScore++;
+            currentIndex++;
+            
+            if (currentIndex < currentQuestions.length) {
+                showQuestion();
+            } else {
+                finishInlineQuiz();
+            }
+        }
+        
+        async function finishInlineQuiz() {
+            const percent = Math.round((quizScore / currentQuestions.length) * 100);
+            let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
+        
+            alert(`Тест завершен! Ваша оценка: ${mark} (${percent}%)`);
+            
+            // Скрываем тест
+            document.getElementById('bg-blur').style.display = 'none';
+            document.getElementById('quiz-overlay').style.display = 'none';
+        
+            // Если сдал (3 и выше) — обновляем прогресс в Supabase
+            if (mark >= 3) {
+                const login = localStorage.getItem('student_login');
+                const nextStep = (student.current_step || 1) + 1;
+                await _supabase.from('students').update({ current_step: nextStep }).eq('login', login);
+                location.reload(); // Перезагружаем, чтобы открылась следующая тема
+            }
+        }
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
