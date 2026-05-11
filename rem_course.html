@@ -161,10 +161,35 @@
         }
 
         async function startFinalQuiz(discId) {
-            // Здесь должна быть твоя логика проверки времени (30 мин / 1 день)
-            // Если проверка прошла:
-            const ok = confirm("ВНИМАНИЕ! Эта оценка пойдет в диплом. Будет включен контроль сворачивания окна. Начать?");
-            if(ok) location.href = `quiz.html?subject=${discId}_final&strict=true`;
+            const login = localStorage.getItem('student_login');
+            const { data: st } = await _supabase.from('students').select('*').eq('login', login).single();
+        
+            if (st.final_attempts >= 3) {
+                // Проверка на 1 сутки (86400000 мс)
+                const diff = new Date() - new Date(st.last_attempt_time);
+                if (diff < 86400000) {
+                    const hoursLeft = Math.ceil((86400000 - diff) / 3600000);
+                    alert(`Лимит быстрых попыток исчерпан. Следующая попытка через ${hoursLeft} ч.`);
+                    return;
+                }
+            } else {
+                // Проверка на 30 минут (1800000 мс) между быстрыми попытками
+                const diff = new Date() - new Date(st.last_attempt_time);
+                if (diff < 1800000) {
+                    alert("Между попытками должно пройти минимум 30 минут.");
+                    return;
+                }
+            }
+        
+            if(confirm("ВНИМАНИЕ! Эта оценка пойдет в диплом. Начать?")) {
+                // Обновляем время попытки и счетчик в базе перед началом
+                await _supabase.from('students').update({
+                    last_attempt_time: new Date().toISOString(),
+                    final_attempts: st.final_attempts + 1
+                }).eq('login', login);
+        
+                location.href = `quiz.html?id=${discId}_final&strict=true`;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', init);
