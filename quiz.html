@@ -246,7 +246,7 @@
         fetch(fURL, { method: 'POST', mode: 'no-cors', body: fData.toString() });
 
         // 2. ОТПРАВКА В SUPABASE
-        const login = localStorage.getItem('student_login');
+        const login = localStorage.getItem('user_group');
         if (login) {
             await _supabase.from('students')
                 .update({ 
