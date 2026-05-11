@@ -674,5 +674,12 @@ body {
 
 }
     
+.discipline-tab { 
+    display: block; 
+    width: 100%; 
+    text-align: left; 
+    margin-bottom: 5px; 
+    box-sizing: border-box; 
+}
 
 
