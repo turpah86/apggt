@@ -8,6 +8,7 @@
     <title>Вход</title>
     <link rel="stylesheet" href="style.css">
     <script src="config.js"></script>
+    <script src="https://jsdelivr.net"></script>
     <style>
         html, body {
             margin: 0;
@@ -76,15 +77,64 @@
         </p>
     </footer>
     <script>
-        function login() {
+        // Инициализация базы (твои ключи)
+        const SUPABASE_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r'; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        async function login() {
             const user = document.getElementById('login').value.trim();
-            const pass = document.getElementById('pass').value.trim();         
+            const pass = document.getElementById('pass').value.trim();
+            const errorEl = document.getElementById('error');
+            errorEl.style.display = 'none';
+        
+            // 1. Проверка старых групп (огр, РГО) из твоего config.js
             if (typeof USERS !== 'undefined' && USERS[user] && USERS[user].password === pass) {
                 localStorage.setItem('user_group', user);
-                localStorage.setItem('access_' + USERS[user].redirect, 'true');
                 window.location.href = USERS[user].redirect;
-            } else {
-                document.getElementById('error').style.display = 'block';
+                return;
+            }
+        
+            // 2. Проверка Слесарей (РЕМ) в Supabase
+            try {
+                const { data: student, error } = await _supabase
+                    .from('students')
+                    .select('*')
+                    .eq('login', user)
+                    .eq('password', pass)
+                    .single();
+        
+                if (student) {
+                    // Подтягиваем настройки курса для группы РЕМ
+                    const { data: config } = await _supabase
+                        .from('course_config')
+                        .select('*')
+                        .eq('group_id', student.group_name)
+                        .single();
+        
+                    const now = new Date();
+                    // Проверка дат курса
+                    if (now < new Date(config.start_date)) {
+                        alert("Курс еще не начался. Старт: " + new Date(config.start_date).toLocaleDateString());
+                        return;
+                    }
+                    if (now > new Date(config.end_date)) {
+                        alert("Время обучения закончилось.");
+                        return;
+                    }
+        
+                    // Если всё ок — сохраняем данные и пускаем
+                    localStorage.setItem('student_login', student.login);
+                    localStorage.setItem('student_step', student.current_step);
+                    localStorage.setItem('user_group', student.group_name);
+                    
+                    window.location.href = 'slesar.html'; // Страница курса РЕМ
+                } else {
+                    errorEl.style.display = 'block';
+                }
+            } catch (e) {
+                errorEl.style.display = 'block';
+                console.error(e);
             }
         }
     </script>
