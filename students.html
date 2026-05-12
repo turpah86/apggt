@@ -1,21 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <script src="navbar.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://w3.org viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛏️</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход</title>
-    
-    <!-- 1. Сначала стили -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- 2. Библиотека Supabase (самая первая среди скриптов) -->
-    <script src="supabase.js"></script>
-    
-    <!-- 3. Твой конфиг, который использует библиотеку -->
     <script src="config.js"></script>
-    
-    <!-- 4. Остальное -->
-    <script src="navbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         html, body {
             margin: 0;
@@ -73,7 +66,7 @@
             <input type="text" id="login" class="pass-input" placeholder="Логин (Группа)" style="width: 100%; box-sizing: border-box;">
             <input type="password" id="pass" class="pass-input" placeholder="Пароль" style="width: 100%; box-sizing: border-box;">
             
-            <button onclick="handlelogin()" class="btn-primary" style="width: 100%; margin-top: 10px;">Войти</button>
+            <button onclick="login()" class="btn-primary" style="width: 100%; margin-top: 10px;">Войти</button>
         </div>
         <p id="error" style="color: #ff6b6b; display: none; margin-top: 15px;">Ошибка доступа</p>
     </div>
@@ -83,66 +76,65 @@
             <a href="privacy.html" class="privacy-link">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
         </p>
     </footer>
-    <script>  
-        async function handlelogin() {
+    <script>
+        // Инициализация базы (твои ключи)
+        const SUPABASE_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r'; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        async function login() {
             const user = document.getElementById('login').value.trim();
-            // Проверь, чтобы id в инпуте выше был именно "pass"
             const pass = document.getElementById('pass').value.trim();
             const errorEl = document.getElementById('error');
             errorEl.style.display = 'none';
-    
-            // 1. Проверка обычных групп из config.js
+        
+            // 1. Проверка старых групп (огр, РГО) из твоего config.js
             if (typeof USERS !== 'undefined' && USERS[user] && USERS[user].password === pass) {
                 localStorage.setItem('user_group', user);
                 window.location.href = USERS[user].redirect;
                 return;
             }
-    
-            // 2. Проверка студентов РЕМ через Supabase
+        
+            // 2. Проверка Слесарей (РЕМ) в Supabase
             try {
-                // ЗАМЕНЯЕМ .single() на .maybeSingle() здесь!
                 const { data: student, error } = await _supabase
                     .from('students')
                     .select('*')
                     .eq('login', user)
                     .eq('password', pass)
-                    .maybeSingle(); 
+                    .single();
         
-                if (error) throw error;
-    
                 if (student) {
-                    // Получаем настройки курса
-                    const { data: config, error: configErr } = await _supabase
+                    // Подтягиваем настройки курса для группы РЕМ
+                    const { data: config } = await _supabase
                         .from('course_config')
                         .select('*')
                         .eq('group_id', student.group_name)
-                        .maybeSingle();
-    
-                    if (config) {
-                        const now = new Date();
-                        if (now < new Date(config.start_date)) {
-                            alert("Курс еще не начался. Старт: " + new Date(config.start_date).toLocaleDateString());
-                            return;
-                        }
-                        if (now > new Date(config.end_date)) {
-                            alert("Время обучения закончилось.");
-                            return;
-                        }
+                        .single();
+        
+                    const now = new Date();
+                    // Проверка дат курса
+                    if (now < new Date(config.start_date)) {
+                        alert("Курс еще не начался. Старт: " + new Date(config.start_date).toLocaleDateString());
+                        return;
                     }
-    
-                    // СОХРАНЯЕМ ДАННЫЕ (критично для открытия тем!)
+                    if (now > new Date(config.end_date)) {
+                        alert("Время обучения закончилось.");
+                        return;
+                    }
+        
+                    // Если всё ок — сохраняем данные и пускаем
                     localStorage.setItem('student_login', student.login);
                     localStorage.setItem('student_step', student.current_step);
                     localStorage.setItem('user_group', student.group_name);
                     
-                    window.location.href = 'rem_course.html'; 
+                    window.location.href = 'rem_course.html'; // Страница курса РЕМ
                 } else {
-                    // Если student === null (не найден)
                     errorEl.style.display = 'block';
                 }
             } catch (e) {
                 errorEl.style.display = 'block';
-                console.error("Ошибка авторизации:", e);
+                console.error(e);
             }
         }
     </script>
