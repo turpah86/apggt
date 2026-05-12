@@ -63,10 +63,10 @@
         <h2 style="margin-bottom: 30px; color: #ffd700;">🔐 Авторизация</h2>
         
         <div class="auth-container">
-            <input type="text" id="handlelogin" class="pass-input" placeholder="Логин (Группа)" style="width: 100%; box-sizing: border-box;">
+            <input type="text" id="login" class="pass-input" placeholder="Логин (Группа)" style="width: 100%; box-sizing: border-box;">
             <input type="password" id="pass" class="pass-input" placeholder="Пароль" style="width: 100%; box-sizing: border-box;">
             
-            <button onclick="handlelogin()" class="btn-primary" style="width: 100%; margin-top: 10px;">Войти</button>
+            <button onclick="handleLogin()" class="btn-primary" style="width: 100%; margin-top: 10px;">Войти</button>
         </div>
         <p id="error" style="color: #ff6b6b; display: none; margin-top: 15px;">Ошибка доступа</p>
     </div>
@@ -78,8 +78,8 @@
     </footer>
     <script>
 
-        async function handlelogin() {
-            const user = document.getElementById('handlelogin').value.trim();
+        async function handleLogin() {
+            const user = document.getElementById('login').value.trim();
             const pass = document.getElementById('pass').value.trim();
             const errorEl = document.getElementById('error');
             errorEl.style.display = 'none';
@@ -96,7 +96,7 @@
                 const { data: student, error } = await _supabase
                     .from('students')
                     .select('*')
-                    .eq('handlelogin', user)
+                    .eq('login', user)
                     .eq('password', pass)
                     .single();
         
@@ -120,7 +120,7 @@
                     }
         
                     // Если всё ок — сохраняем данные и пускаем
-                    localStorage.setItem('student_handlelogin', student.handlelogin);
+                    localStorage.setItem('student_login', student.login);
                     localStorage.setItem('student_step', student.current_step);
                     localStorage.setItem('user_group', student.group_name);
                     
