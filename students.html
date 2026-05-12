@@ -66,7 +66,7 @@
             <input type="text" id="login" class="pass-input" placeholder="Логин (Группа)" style="width: 100%; box-sizing: border-box;">
             <input type="password" id="pass" class="pass-input" placeholder="Пароль" style="width: 100%; box-sizing: border-box;">
             
-            <button onclick="handleLogin()" class="btn-primary" style="width: 100%; margin-top: 10px;">Войти</button>
+            <button onclick="handlelogin()" class="btn-primary" style="width: 100%; margin-top: 10px;">Войти</button>
         </div>
         <p id="error" style="color: #ff6b6b; display: none; margin-top: 15px;">Ошибка доступа</p>
     </div>
@@ -77,10 +77,12 @@
         </p>
     </footer>
     <script>
-        const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
-        const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r';
-        const _supabase = supabase.createClient(S_URL, S_KEY);
-        async function handleLogin() {
+        // Инициализация базы (твои ключи)
+        const SUPABASE_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r'; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        async function handlelogin() {
             const user = document.getElementById('login').value.trim();
             const pass = document.getElementById('pass').value.trim();
             const errorEl = document.getElementById('error');
