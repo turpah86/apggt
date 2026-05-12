@@ -77,11 +77,7 @@
         </p>
     </footer>
     <script>
-        // Инициализация базы (твои ключи)
-        const SUPABASE_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r'; 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
+
         async function login() {
             const user = document.getElementById('login').value.trim();
             const pass = document.getElementById('pass').value.trim();
