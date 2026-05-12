@@ -86,52 +86,63 @@
     <script>  
         async function handlelogin() {
             const user = document.getElementById('login').value.trim();
+            // Проверь, чтобы id в инпуте выше был именно "pass"
             const pass = document.getElementById('pass').value.trim();
             const errorEl = document.getElementById('error');
             errorEl.style.display = 'none';
-
+    
+            // 1. Проверка обычных групп из config.js
             if (typeof USERS !== 'undefined' && USERS[user] && USERS[user].password === pass) {
                 localStorage.setItem('user_group', user);
                 window.location.href = USERS[user].redirect;
                 return;
             }
-
+    
+            // 2. Проверка студентов РЕМ через Supabase
             try {
+                // ЗАМЕНЯЕМ .single() на .maybeSingle() здесь!
                 const { data: student, error } = await _supabase
                     .from('students')
                     .select('*')
                     .eq('login', user)
                     .eq('password', pass)
-                    .single();
+                    .maybeSingle(); 
         
+                if (error) throw error;
+    
                 if (student) {
-                    const { data: config } = await _supabase
+                    // Получаем настройки курса
+                    const { data: config, error: configErr } = await _supabase
                         .from('course_config')
                         .select('*')
                         .eq('group_id', student.group_name)
                         .maybeSingle();
-        
-                    const now = new Date();
-                    if (now < new Date(config.start_date)) {
-                        alert("Курс еще не начался. Старт: " + new Date(config.start_date).toLocaleDateString());
-                        return;
+    
+                    if (config) {
+                        const now = new Date();
+                        if (now < new Date(config.start_date)) {
+                            alert("Курс еще не начался. Старт: " + new Date(config.start_date).toLocaleDateString());
+                            return;
+                        }
+                        if (now > new Date(config.end_date)) {
+                            alert("Время обучения закончилось.");
+                            return;
+                        }
                     }
-                    if (now > new Date(config.end_date)) {
-                        alert("Время обучения закончилось.");
-                        return;
-                    }
-
+    
+                    // СОХРАНЯЕМ ДАННЫЕ (критично для открытия тем!)
                     localStorage.setItem('student_login', student.login);
                     localStorage.setItem('student_step', student.current_step);
                     localStorage.setItem('user_group', student.group_name);
                     
                     window.location.href = 'rem_course.html'; 
                 } else {
+                    // Если student === null (не найден)
                     errorEl.style.display = 'block';
                 }
             } catch (e) {
                 errorEl.style.display = 'block';
-                console.error(e);
+                console.error("Ошибка авторизации:", e);
             }
         }
     </script>
