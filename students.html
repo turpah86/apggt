@@ -76,26 +76,19 @@
             <a href="privacy.html" class="privacy-link">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
         </p>
     </footer>
-    <script>
-        // Инициализация базы (твои ключи)
-        const SUPABASE_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r'; 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
+    <script>  
         async function handlelogin() {
             const user = document.getElementById('login').value.trim();
             const pass = document.getElementById('pass').value.trim();
             const errorEl = document.getElementById('error');
             errorEl.style.display = 'none';
-        
-            // 1. Проверка старых групп (огр, РГО) из твоего config.js
+
             if (typeof USERS !== 'undefined' && USERS[user] && USERS[user].password === pass) {
                 localStorage.setItem('user_group', user);
                 window.location.href = USERS[user].redirect;
                 return;
             }
-        
-            // 2. Проверка Слесарей (РЕМ) в Supabase
+
             try {
                 const { data: student, error } = await _supabase
                     .from('students')
@@ -105,7 +98,6 @@
                     .single();
         
                 if (student) {
-                    // Подтягиваем настройки курса для группы РЕМ
                     const { data: config } = await _supabase
                         .from('course_config')
                         .select('*')
@@ -113,7 +105,6 @@
                         .single();
         
                     const now = new Date();
-                    // Проверка дат курса
                     if (now < new Date(config.start_date)) {
                         alert("Курс еще не начался. Старт: " + new Date(config.start_date).toLocaleDateString());
                         return;
@@ -122,13 +113,12 @@
                         alert("Время обучения закончилось.");
                         return;
                     }
-        
-                    // Если всё ок — сохраняем данные и пускаем
+
                     localStorage.setItem('student_login', student.login);
                     localStorage.setItem('student_step', student.current_step);
                     localStorage.setItem('user_group', student.group_name);
                     
-                    window.location.href = 'rem_course.html'; // Страница курса РЕМ
+                    window.location.href = 'rem_course.html'; 
                 } else {
                     errorEl.style.display = 'block';
                 }
