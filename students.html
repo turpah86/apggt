@@ -109,7 +109,7 @@
                         .from('course_config')
                         .select('*')
                         .eq('group_id', student.group_name)
-                        .single();
+                        .maybeSingle();
         
                     const now = new Date();
                     if (now < new Date(config.start_date)) {
