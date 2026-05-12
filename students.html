@@ -66,7 +66,7 @@
             <input type="text" id="login" class="pass-input" placeholder="Логин (Группа)" style="width: 100%; box-sizing: border-box;">
             <input type="password" id="pass" class="pass-input" placeholder="Пароль" style="width: 100%; box-sizing: border-box;">
             
-            <button onclick="login()" class="btn-primary" style="width: 100%; margin-top: 10px;">Войти</button>
+            <button onclick="handlelogin()" class="btn-primary" style="width: 100%; margin-top: 10px;">Войти</button>
         </div>
         <p id="error" style="color: #ff6b6b; display: none; margin-top: 15px;">Ошибка доступа</p>
     </div>
@@ -78,7 +78,7 @@
     </footer>
     <script>
 
-        async function login() {
+        async function handlelogin() {
             const user = document.getElementById('login').value.trim();
             const pass = document.getElementById('pass').value.trim();
             const errorEl = document.getElementById('error');
