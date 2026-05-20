@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://googleapis.com" rel="stylesheet">
     <script>
-        if (localStorage.getItem('access_rgo24.html') !== 'true') {
-            window.location.href = 'students.html';
-        }
+      // Проверяем, что вошедшая группа — именно "рго"
+      if (localStorage.getItem('user_group') !== 'рго') {
+          window.location.href = 'students.html';
+      }
     </script>
 </head>
 <body>
