@@ -227,29 +227,33 @@ color: white; padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom
  
  // Выбираем случайную фразу
  const randomComment = comments[mark][Math.floor(Math.random() * comments[mark].length)];
- 
- // 3. Выводим всё на экран
+ const userGroup = localStorage.getItem('user_group') || "Не указана";
+        
  document.getElementById('quiz-card').style.display = 'none';
  document.getElementById('result-screen').style.display = 'block';
- document.getElementById('score-val').innerText = mark; 
- document.getElementById('res-student-name').innerText = studentInfo; 
- document.getElementById('score-text').innerText = randomComment;
- if(mark === 2) document.getElementById('score-val').style.color = '#dc3545';
-
-        // 1. ОТПРАВКА В GOOGLE ТАБЛИЦУ
-        const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse';
-        const fData = new URLSearchParams();
-        const sName = subjectsData[currentSubject]?.name || currentSubject;
-        const uGroup = localStorage.getItem('user_group') || "Группа не указана";
-        const fullInfo = `${uGroup.toUpperCase()} | ${sName} | ${currentSectionName}`;
+ document.getElementById('score-val').innerText = mark;
+ document.getElementById('res-student-name').innerText = studentInfo;
+ document.getElementById('score-text').innerText = comment;
         
-        fData.append('entry.1458374118', studentInfo); 
-        fData.append('entry.1320096689', fullInfo); 
-        fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
-        fData.append('entry.1688940307', mark);
-
-        fetch(fURL, { method: 'POST', mode: 'no-cors', body: fData.toString() });
-
+ // --- ОТПРАВКА В GOOGLE ТАБЛИЦУ ---
+ const fURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfiEZoHThkT4Za9B_LJ50TJTSYxuG0DklY9CSiMjq92vKANhA/formResponse';
+ const fData = new URLSearchParams();
+ fData.append('entry.1458374118', studentInfo); 
+ const sName = subjectsData[currentSubject]?.name || currentSubject;
+ const uGroup = localStorage.getItem('user_group') || "Группа не указана";
+ const fullInfo = `${uGroup.toUpperCase()} | ${sName} | ${currentSectionName}`;
+ fData.append('entry.1320096689', fullInfo); 
+ fData.append('entry.1906150515', `${percent}% (${score}/${questions.length})`); 
+ fData.append('entry.1688940307', mark);
+ fetch(fURL, {
+  method: 'POST',
+  mode: 'no-cors',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: fData.toString()
+ }).then(() => {
+  console.log("Данные успешно отправлены!");
+ }).catch(e => console.error("Ошибка при отправке:", e));
+  
         // 2. ОТПРАВКА В SUPABASE
         // Берем личный логин студента РЕМ. Если его нет (для групп ОГР/РГО) — берем группу
         const currentStudentLogin = localStorage.getItem('student_login') || localStorage.getItem('user_group');
