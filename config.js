@@ -4,12 +4,12 @@ const USERS = {
         redirect: "ogr23.html",
         quizPrefix: "ogr_razdel"
     },
-    "РГО": {
+    "рго": {
         password: "456",
         redirect: "rgo24.html",
         quiz: "rgo24"
     },
-    "Admin": {
+    "admin": {
         password: "6426",
         redirect: "admin.html"
     }
