@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тестирование</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Добавляем эту строку СТРОГО перед config.js -->
+    <script src="supabase.js"></script> 
     <script src="config.js"></script>
     <style>
         .option-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom: 10px; width: 100%; text-align: left; transition: 0.3s; }
@@ -245,15 +247,20 @@
 
         fetch(fURL, { method: 'POST', mode: 'no-cors', body: fData.toString() });
 
-        // 2. ОТПРАВКА В SUPABASE
-        const login = localStorage.getItem('user_group');
-        if (login) {
+    // 2. ОТПРАВКА В SUPABASE
+    // Берем личный логин студента РЕМ. Если его нет (для групп ОГР/РГО) — берем группу
+    const currentStudentLogin = localStorage.getItem('student_login') || localStorage.getItem('user_group');
+    
+    if (currentStudentLogin && typeof _supabase !== 'undefined') {
+        try {
             await _supabase.from('students')
                 .update({ 
                     final_grade: mark,
                     last_attempt_time: new Date().toISOString()
                 })
-                .eq('login', login);
+                .eq('login', currentStudentLogin);
+        } catch(err) {
+            console.error("Ошибка сохранения в Supabase:", err);
         }
     }
     </script>
