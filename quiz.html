@@ -131,7 +131,7 @@ color: white; padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom
  document.getElementById('section-screen').style.display = 'block';
  }
  function selectSection(num, event) {
- currentSectionName = event.target.innerText; 
+ currentSectionName = subjectsData[currentSubject]?.sections[num - 1] || `Раздел ${num}`;
  const quizFileName = `${currentSubject}_razdel${num}`; 
  const script = document.createElement('script');
  script.src = `quizzes/${quizFileName}.js`; // Файлы должны быть в этой папке
