@@ -1,4 +1,4 @@
-const questions = [
+questions = [
     {
         "q": "123",
         "o": [
