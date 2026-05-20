@@ -247,20 +247,21 @@
 
         fetch(fURL, { method: 'POST', mode: 'no-cors', body: fData.toString() });
 
-    // 2. ОТПРАВКА В SUPABASE
-    // Берем личный логин студента РЕМ. Если его нет (для групп ОГР/РГО) — берем группу
-    const currentStudentLogin = localStorage.getItem('student_login') || localStorage.getItem('user_group');
-    
-    if (currentStudentLogin && typeof _supabase !== 'undefined') {
-        try {
-            await _supabase.from('students')
-                .update({ 
-                    final_grade: mark,
-                    last_attempt_time: new Date().toISOString()
-                })
-                .eq('login', currentStudentLogin);
-        } catch(err) {
-            console.error("Ошибка сохранения в Supabase:", err);
+        // 2. ОТПРАВКА В SUPABASE
+        // Берем личный логин студента РЕМ. Если его нет (для групп ОГР/РГО) — берем группу
+        const currentStudentLogin = localStorage.getItem('student_login') || localStorage.getItem('user_group');
+        
+        if (currentStudentLogin && typeof _supabase !== 'undefined') {
+            try {
+                await _supabase.from('students')
+                    .update({ 
+                        final_grade: mark,
+                        last_attempt_time: new Date().toISOString()
+                    })
+                    .eq('login', currentStudentLogin);
+            } catch(err) {
+                console.error("Ошибка сохранения в Supabase:", err);
+            }
         }
     }
     </script>
