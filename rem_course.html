@@ -136,7 +136,7 @@
                             </div>
                             <button id="test-btn-${stepNum}" class="btn-primary" 
                                 onclick="startInlineQuiz('${disc.id}_${stepNum}')"
-                                ${isDone ? 'style="background:#28a745" disabled' : 'style="background:#555; opacity:0.6; cursor:not-allowed;" disabled'}>
+                                ${isDone ? 'style="background:#28a745" disabled' : (isLocked ? 'style="background:#555; opacity:0.6; cursor:not-allowed;" disabled' : 'style="background:#555; opacity:0.6; cursor:not-allowed;" disabled')}>
                                 ${isDone ? 'Пройдено' : 'Сдать тест'}
                             </button>
                         </div>
@@ -149,7 +149,7 @@
                         <h2 style="color: var(--gold);">🏆 Дисциплина изучена!</h2>
                         <p style="margin: 20px 0;">Оценка за этот тест пойдет в <b>ДИПЛОМ</b>. У вас есть 3 быстрых попытки (раз в 30 мин), далее — 1 попытка в сутки.</p>
                         <button onclick="startFinalQuiz('${disc.id}')" class="btn-primary" style="width: 100%;">
-                            НАЧАТЬ ИТОГОВУЙ ТЕСТ 🏁
+                            НАЧАТЬ ИТОГОВЫЙ ТЕСТ 🏁
                         </button>
                     </div>
                 `;
@@ -168,6 +168,7 @@
                     clearInterval(itv);
                     btn.disabled = false;
                     btn.innerText = "Сдать тест ✍️";
+                    btn.removeAttribute('disabled');
                     btn.style.opacity = "1";
                     btn.style.background = ""; // Убираем серый цвет, возвращается желтый из CSS
                     btn.style.cursor = "pointer";
