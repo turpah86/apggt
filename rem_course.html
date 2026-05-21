@@ -363,7 +363,7 @@
             }
         }
          
-        // --- 8. СОХРАНЕНИЕ РЕЗУЛЬТАТОВ И УЛУЧШЕНИЕ ОЦЕНОК JSONB ---
+        // --- ФИНАЛЬНЫЙ ИСПРАВЛЕННЫЙ ВАРИАНТ finishInlineQuiz ---
         async function finishInlineQuiz() {
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
@@ -371,25 +371,28 @@
             if (mark >= 3) {
                 const login = localStorage.getItem('student_login');
                 
-                // Скачиваем актуальные данные из Supabase
-                const { data: st } = await _supabase.from('students').select('*').eq('login', login).single();
+                // Меняем текст на экране, чтобы студент видел процесс отправки
+                document.getElementById('q-text').innerText = "Сохранение результата... ⏳";
                 
-                const grades = st.grades || {};
+                // Берём данные из глобальной переменной globalStudent, которую скачали при входе
+                const grades = globalStudent.grades || {};
                 const oldGrade = grades[currentQuizId] || 0;
                 
-                // 1. Логика улучшения оценки
+                // 1. ЛОГИКА УЛУЧШЕНИЯ: Перезаписываем оценку, только если новый балл выше прежнего
                 if (mark > oldGrade) {
                     grades[currentQuizId] = mark;
                 }
                 
-                // 2. Логика прогресса шага: двигаем только если сдан ТЕКУЩИЙ активный тест
-                let nextStep = st.current_step;
-                const currentDiscKey = st.current_disc === 0 ? 'electro' : 'tech';
-                if (currentQuizId === `${currentDiscKey}_${st.current_step}`) {
-                    nextStep = st.current_step + 1;
+                // 2. ЛОГИКА ПРОГРЕССА: Сверяем точные префиксы 'rem_electro' или 'rem_tech'
+                let nextStep = globalStudent.current_step || 1;
+                const currentDiscKey = currentSelectedDisc === 0 ? 'rem_electro' : 'rem_tech';
+                
+                // Теперь строки идеально совпадут (например, "rem_electro_2" === "rem_electro_2")
+                if (currentQuizId === `${currentDiscKey}_${nextStep}`) {
+                    nextStep = nextStep + 1;
                 }
                 
-                // Отправляем всё одним чистым запросом
+                // ОТПРАВЛЯЕМ ВСЁ ОДНИМ СКОРОСТНЫМ ЗАПРОСОМ В SUPABASE
                 const { error: updateError } = await _supabase
                     .from('students')
                     .update({ 
@@ -399,19 +402,23 @@
                     .eq('login', login);
                     
                 if (updateError) {
-                    alert("Не удалось сохранить результат в базу!");
+                    alert("Не удалось сохранить результат в базу из-за ошибки сети!");
+                    location.reload();
                 } else {
-                    alert(`Тест успешно обработан! Ваша оценка: ${mark}.`);
+                    // Обновляем шаг локально в памяти браузера
+                    localStorage.setItem('student_step', nextStep);
+                    alert(`Тест успешно сдан! Ваша оценка: ${mark}.`);
+                    
+                    // Скрываем окно теста и мгновенно обновляем страницу
                     document.getElementById('quiz-overlay').style.display = 'none';
                     document.getElementById('bg-blur').style.display = 'none';
                     location.reload(); 
                 }
             } else {
-                alert(`Оценка: ${mark}. Тест не сдан. Старая оценка сохранена.`);
+                alert(`Оценка: ${mark}. Тест не сдан. Старая оценка сохранена. Подучите материал!`);
                 location.reload();
             }
         }
-        
         document.addEventListener('DOMContentLoaded', init);
 
     </script>
