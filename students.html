@@ -139,10 +139,13 @@
                 }
     
                 // Сохраняем сессию
+                
                 localStorage.setItem('student_login', student.login || user);
                 localStorage.setItem('student_step', student.current_step || 1);
                 localStorage.setItem('user_group', student.group_name || 'rem');
-    
+                if (config && config.end_date) {
+                    localStorage.setItem('course_deadline', config.end_date);
+                }
                 window.location.href = 'rem_course.html';
             } else {
                 errorEl.style.display = 'block';
