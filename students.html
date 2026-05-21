@@ -78,30 +78,34 @@
         const user = document.getElementById('login').value.trim().toLowerCase();
         const pass = document.getElementById('pass').value.trim();
         const errorEl = document.getElementById('error');
+        const btn = document.querySelector('.btn-primary'); // Находим кнопку входа
+        
         errorEl.style.display = 'none';
     
         // 1. Проверка фиксированных групп (огр, рго, admin) из config.js
         if (typeof USERS !== 'undefined' && USERS[user] && USERS[user].password === pass) {
             localStorage.setItem('user_group', user);
-            localStorage.setItem('access_' + USERS[user].redirect, 'true'); // Защита от вылета ОГР
+            localStorage.setItem('access_' + USERS[user].redirect, 'true');
             window.location.href = USERS[user].redirect;
             return;
         }
     
-        // 2. Проверка студентов РЕМ (slesar1) через Supabase
+        // Блокируем кнопку на время запроса, чтобы студент не кликал сто раз
+        const originalBtnText = btn.innerText;
+        btn.innerText = "Вход... ⏳";
+        btn.disabled = true;
+    
+        // 2. Проверка студентов РЕМ (slesar1) через глобальный _supabase из config.js
         try {
-            const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
-            const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r';
-
-            if (typeof supabase === 'undefined') {
-                alert("Критическая ошибка: файл supabase.js не загрузился!");
+            if (typeof _supabase === 'undefined') {
+                alert("Критическая ошибка: подключение _supabase не найдено в config.js!");
+                btn.innerText = originalBtnText;
+                btn.disabled = false;
                 return;
             }
-            
-            const client = supabase.createClient(S_URL, S_KEY);
     
-            // Ищем студента
-            const { data: student, error } = await client
+            // Делаем ОДИН чистый запрос через уже существующее подключение
+            const { data: student, error } = await _supabase
                 .from('students')
                 .select('*')
                 .eq('login', user)
@@ -111,8 +115,8 @@
             if (error) throw error;
     
             if (student) {
-                // --- ВОЗВРАЩАЕМ ПРОВЕРКУ ДАТ КУРСА ---
-                const { data: config } = await client
+                // Проверка дедлайнов курса
+                const { data: config } = await _supabase
                     .from('course_config')
                     .select('*')
                     .eq('group_id', student.group_name)
@@ -122,14 +126,17 @@
                     const now = new Date();
                     if (now < new Date(config.start_date)) {
                         alert("Курс еще не начался. Старт: " + new Date(config.start_date).toLocaleDateString());
+                        btn.innerText = originalBtnText;
+                        btn.disabled = false;
                         return;
                     }
                     if (now > new Date(config.end_date)) {
                         alert("Время обучения закончилось.");
+                        btn.innerText = originalBtnText;
+                        btn.disabled = false;
                         return;
                     }
                 }
-                // -------------------------------------
     
                 // Сохраняем сессию
                 localStorage.setItem('student_login', student.login || user);
@@ -140,12 +147,16 @@
             } else {
                 errorEl.style.display = 'block';
                 errorEl.innerText = 'Неверный логин или пароль';
+                btn.innerText = originalBtnText;
+                btn.disabled = false;
             }
     
         } catch (e) {
             errorEl.style.display = 'block';
             errorEl.innerText = 'Ошибка базы данных. Проверьте консоль.';
             console.error("Детали:", e);
+            btn.innerText = originalBtnText;
+            btn.disabled = false;
         }
     }
     </script>
