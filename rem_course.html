@@ -94,6 +94,33 @@
             
             renderNav(student.current_disc || 0);
             renderCurrentPlan(student);
+            // --- НАЧАЛО БЛОКА ТАЙМЕРА ДЕДЛАЙНА ---
+            const deadline = localStorage.getItem('course_deadline');
+            if (deadline) {
+                const countdownEl = document.getElementById('countdown-time');
+                const endDate = new Date(deadline).getTime();
+        
+                setInterval(() => {
+                    const now = new Date().getTime();
+                    const distance = endDate - now;
+        
+                    if (distance < 0) {
+                        countdownEl.innerHTML = "ДОСТУП ИСТЕК";
+                        return;
+                    }
+        
+                    // Рассчитываем дни, часы и минуты
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        
+                    // Красиво выводим на страницу
+                    countdownEl.innerHTML = `${days} дн. ${hours} ч. ${minutes} мин.`;
+                }, 1000);
+            } else {
+                document.getElementById('deadline-timer').style.display = 'none';
+            }
+            // --- КОНЕЦ БЛОКА ТАЙМЕРА ---
         }
 
         function renderNav(currentDiscIdx) {
