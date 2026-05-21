@@ -92,6 +92,7 @@
             if (!login) { location.href = 'students.html'; return; }
 
             const { data: student } = await _supabase.from('students').select('*').eq('login', login).single();
+            globalStudent = student; // Запоминаем студента глобально на всей странице!
             if (!student) return;
 
             document.getElementById('student-info').innerText = `Студент: ${student.login}`;
@@ -144,6 +145,10 @@
         }
 
         function renderCurrentPlan(student) {
+            // Если при клике кнопка не передала студента, берем его из нашей глобальной переменной!
+            if (!student && typeof globalStudent !== 'undefined') {
+                student = globalStudent;
+            }
             const container = document.getElementById('themes-container');
             
             // Если контейнер ЕСТЬ на экране, то рисуем темы
