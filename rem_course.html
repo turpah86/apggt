@@ -115,9 +115,11 @@
                     // Рассчитываем дни, часы и минуты
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); // <-- Проверьте, чтобы тут было ровно 'minutes'
+                    
                     if (countdownEl) {
                         countdownEl.innerHTML = `${days} дн. ${hours} ч. ${minutes} мин.`;
-                    }      
+                    }
                     // Красиво выводим на страницу
                     countdownEl.innerHTML = `${days} дн. ${hours} ч. ${minutes} мин.`;
                 }, 1000);
