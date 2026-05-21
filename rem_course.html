@@ -144,72 +144,74 @@
 
         function renderCurrentPlan(student) {
             const container = document.getElementById('themes-container');
-            container.innerHTML = '';
             
-            // Безопасно берем оценки из новой jsonb колонки в базе данных
-            const grades = student.grades || {}; 
-            const currentStep = student.current_step || 1;
-            const currentDiscKey = student.current_disc === 0 ? 'electro' : 'tech';
-        
-            // 1. ОТРИСОВКА ОБЫЧНЫХ ТЕМ КУРСА
-            themes.forEach((theme, index) => {
-                const themeNum = index + 1;
-                const quizKey = `${currentDiscKey}_${themeNum}`;
-                const currentGrade = grades[quizKey] || null; // Ищем сохраненную оценку
+            // Если контейнер ЕСТЬ на экране, то рисуем темы
+            if (container) {
+                container.innerHTML = '';
                 
-                let statusHTML = '';
-                let btnHTML = '';
+                // Безопасно берем оценки из новой jsonb колонки в базе данных
+                const grades = student.grades || {}; 
+                const currentStep = student.current_step || 1;
+                const currentDiscKey = student.current_disc === 0 ? 'electro' : 'tech';
         
-                if (themeNum < currentStep) {
-                    // ТЕМА ПРОЙДЕНА РАНЕЕ: Показываем оценку и кнопку «Улучшить»
-                    statusHTML = `<span class="status-tag status-passed" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 5px 10px; border-radius: 4px;">Пройдено (Оценка: ${currentGrade || '3'})</span>`;
-                    btnHTML = `<button class="btn-action" onclick="startInlineQuiz('${quizKey}')" style="background: var(--gold); color: #000; font-weight: bold;">Улучшить оценку 📈</button>`;
-                } else if (themeNum === currentStep) {
-                    // ТЕКУЩАЯ ТЕМА СТУДЕНТА:
-                    statusHTML = `<span class="status-tag status-current" style="background: rgba(241, 196, 15, 0.2); color: #f1c40f; padding: 5px 10px; border-radius: 4px;">Текущая тема</span>`;
-                    btnHTML = `<button id="btn-quiz-${themeNum}" class="btn-action" onclick="startInlineQuiz('${quizKey}')" disabled>Сдать тест ✍️</button>`;
-                } else {
-                    // ЗАКРЫТАЯ ТЕМА (ДОСТУПНА ПОЗЖЕ):
-                    statusHTML = `<span class="status-tag status-locked" style="opacity: 0.5;">Доступ закрыт</span>`;
-                    btnHTML = `<button class="btn-action" disabled style="opacity: 0.3;">Сдать тест</button>`;
+                // 1. ОТРИСОВКА ОБЫЧНЫХ ТЕМ КУРСА
+                themes.forEach((theme, index) => {
+                    const themeNum = index + 1;
+                    const quizKey = `${currentDiscKey}_${themeNum}`;
+                    const currentGrade = grades[quizKey] || null;
+                    
+                    let statusHTML = '';
+                    let btnHTML = '';
+        
+                    if (themeNum < currentStep) {
+                        statusHTML = `<span class="status-tag status-passed" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 5px 10px; border-radius: 4px;">Пройдено (Оценка: ${currentGrade || '3'})</span>`;
+                        btnHTML = `<button class="btn-action" onclick="startInlineQuiz('${quizKey}')" style="background: var(--gold); color: #000; font-weight: bold;">Улучшить оценку 📈</button>`;
+                    } else if (themeNum === currentStep) {
+                        statusHTML = `<span class="status-tag status-current" style="background: rgba(241, 196, 15, 0.2); color: #f1c40f; padding: 5px 10px; border-radius: 4px;">Текущая тема</span>`;
+                        btnHTML = `<button id="btn-quiz-${themeNum}" class="btn-action" onclick="startInlineQuiz('${quizKey}')" disabled>Сдать тест ✍️</button>`;
+                    } else {
+                        statusHTML = `<span class="status-tag status-locked" style="opacity: 0.5;">Доступ закрыт</span>`;
+                        btnHTML = `<button class="btn-action" disabled style="opacity: 0.3;">Сдать тест</button>`;
+                    }
+        
+                    const card = document.createElement('div');
+                    card.className = `theme-card ${themeNum === currentStep ? 'active' : ''}`;
+                    card.innerHTML = `
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 10px 0;">Тема ${themeNum}. ${theme.title}</h3>
+                            <a href="${theme.link}" target="_blank" onclick="unlockQuiz(${themeNum})" class="lecture-link" style="color: var(--gold); text-decoration: none; border-bottom: 1px dashed var(--gold);">Изучить лекцию 📖</a>
+                            <span id="timer-${themeNum}" style="margin-left: 15px; color: var(--gold); font-weight: bold;"></span>
+                        </div>
+                        <div style="text-align: right; min-width: 200px;">
+                            ${statusHTML}
+                            <div style="margin-top: 15px;">${btnHTML}</div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+        
+                // 2. ОТРИСОВКА БЛОКА ИТОГОВОГО ТЕСТА
+                if (currentStep > themes.length) {
+                    const examGrade = grades[`${currentDiscKey}_final`] || null;
+                    let examStatusHTML = examGrade 
+                        ? `<h2 style="color: #2ecc71; margin: 0 0 10px 0;">🎉 Экзамен сдан! Итоговая оценка: ${examGrade}</h2>` 
+                        : `<h2 style="color: var(--gold); margin: 0 0 10px 0;">Дисциплина изучена!</h2>`;
+                    
+                    let examBtnText = examGrade ? "Пересдать экзамен для улучшения оценки 📈" : "НАЧАТЬ ИТОГОВЫЙ ТЕСТ 📝";
+        
+                    container.innerHTML += `
+                        <div class="glass-card" style="text-align: center; border: 2px solid var(--gold); padding: 40px; margin-top: 20px;">
+                            ${examStatusHTML}
+                            <p style="margin: 20px 0; opacity: 0.8;">Оценка за этот тест пойдет в <b>ДИПЛОМ</b>. У вас есть 3 быстрых попытки (раз в 30 мин), далее — 1 попытка в сутки.</p>
+                            <button onclick="window.location.href = 'quiz.html?quiz=${currentDiscKey}_final&strict=true'" class="btn-primary" style="width: 100%; padding: 15px; background: var(--gold); color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;">
+                                ${examBtnText}
+                            </button>
+                        </div>
+                    `;
                 }
-        
-                const card = document.createElement('div');
-                card.className = `theme-card ${themeNum === currentStep ? 'active' : ''}`;
-                card.innerHTML = `
-                    <div style="flex: 1;">
-                        <h3 style="margin: 0 0 10px 0;">Тема ${themeNum}. ${theme.title}</h3>
-                        <a href="${theme.link}" target="_blank" onclick="unlockQuiz(${themeNum})" class="lecture-link" style="color: var(--gold); text-decoration: none; border-bottom: 1px dashed var(--gold);">Изучить лекцию 📖</a>
-                        <span id="timer-${themeNum}" style="margin-left: 15px; color: var(--gold); font-weight: bold;"></span>
-                    </div>
-                    <div style="text-align: right; min-width: 200px;">
-                        ${statusHTML}
-                        <div style="margin-top: 15px;">${btnHTML}</div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        
-            // 2. ОТРИСОВКА БЛОКА ИТОГОВОГО ТЕСТА (ЕСЛИ ВСЕ ТЕМЫ СДАНЫ)
-            if (currentStep > themes.length) {
-                const examGrade = grades[`${currentDiscKey}_final`] || null; // Ищем оценку за экзамен
-                let examStatusHTML = examGrade 
-                    ? `<h2 style="color: #2ecc71; margin: 0 0 10px 0;">🎉 Экзамен сдан! Итоговая оценка: ${examGrade}</h2>` 
-                    : `<h2 style="color: var(--gold); margin: 0 0 10px 0;">Дисциплина изучена!</h2>`;
-                
-                let examBtnText = examGrade ? "Пересдать экзамен для улучшения оценки 📈" : "НАЧАТЬ ИТОГОВЫЙ ТЕСТ 📝";
-        
-                container.innerHTML += `
-                    <div class="glass-card" style="text-align: center; border: 2px solid var(--gold); padding: 40px; margin-top: 20px;">
-                        ${examStatusHTML}
-                        <p style="margin: 20px 0; opacity: 0.8;">Оценка за этот тест пойдет в <b>ДИПЛОМ</b>. У вас есть 3 быстрых попытки (раз в 30 мин), далее — 1 попытка в сутки.</p>
-                        <button onclick="window.location.href = 'quiz.html?quiz=${currentDiscKey}_final&strict=true'" class="btn-primary" style="width: 100%; padding: 15px; background: var(--gold); color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;">
-                            ${examBtnText}
-                        </button>
-                    </div>
-                `;
-            }
+            } // Конец проверки if (container)
         }
+
         // Таймер на 60 секунд для тем
         function startTimer(num) {
             const btn = document.getElementById(`test-btn-${num}`);
