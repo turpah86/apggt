@@ -59,170 +59,207 @@
     </div>
 
     <script>
-        // 1. КОНФИГУРАЦИЯ УЧЕБНОГО ПЛАНА
+        // --- 1. КОНФИГУРАЦИЯ УЧЕБНОГО ПЛАНА ---
         const COURSE_MAP = [
             {
                 id: "rem_electro",
                 title: "Электротехника",
                 themes: [
-                    { name: "Основные понятия и закон Ома", link: "https://disk.yandex.ru/i/LHkTfjvHvLUweQ" },
-                    { name: "Законы Кирхгофа", link: "https://disk.yandex.ru/i/vt-2nWk6_ExHqw" },
-                    { name: "Цепи постоянного тока. Соединение элементов", link: "https://disk.yandex.ru/i/lCFdq0_zaWHqTA" },
-                    { name: "Элементы электрических схем и их обозначения", link: "https://disk.yandex.ru/i/NadjwgwSnKwR2Q" },
-                    { name: "Элементы электрических схем и их обозначения", link: "https://disk.yandex.ru/i/wwN9wC2uPKO24w" },
-                    { name: "Цепи переменного тока. Часть 2 (Реактивное сопротивление)", link: "https://disk.yandex.ru/i/ffdyhvkEfTJClQ" },
-                    { name: "Основы безопасности при работе с электрооборудованием", link: "https://disk.yandex.ru/i/kgoLUJ0NNgvaDw" },
-                    { name: "Практическая работа, средства защиты и первая помощь", link: "https://disk.yandex.ru/i/kaZi-jfuK25cqw" }
+                    { name: "Основные понятия и закон Ома", link: "https://yandex.ru" },
+                    { name: "Законы Кирхгофа", link: "https://yandex.ru" },
+                    { name: "Цепи постоянного тока. Соединение элементов", link: "https://yandex.ru" },
+                    { name: "Элементы электрических схем и их обозначения", link: "https://yandex.ru" },
+                    { name: "Элементы электрических схем и их обозначения", link: "https://yandex.ru" },
+                    { name: "Цепи переменного тока. Часть 2 (Реактивное сопротивление)", link: "https://yandex.ru" },
+                    { name: "Основы безопасности при работе с электрооборудованием", link: "https://yandex.ru" },
+                    { name: "Практическая работа, средства защиты и первая помощь", link: "https://yandex.ru" }
                 ]
             },
             {
                 id: "rem_tech",
                 title: "Технология ремонта",
-                themes: [ /* Аналогично 8 тем */ ]
+                themes: [
+                    { name: "Введение в технологию ремонта горных машин", link: "https://yandex.ru" },
+                    { name: "Разборка и очистка деталей оборудования", link: "https://yandex.ru" },
+                    { name: "Дефектация деталей и узлов", link: "https://yandex.ru" },
+                    { name: "Технология ремонта резьбовых и шпоночных соединений", link: "https://yandex.ru" },
+                    { name: "Восстановление деталей наплавкой и сваркой", link: "https://yandex.ru" },
+                    { name: "Ремонт подшипниковых узлов и валов", link: "https://yandex.ru" },
+                    { name: "Сборка и регулировка механизмов", link: "https://yandex.ru" },
+                    { name: "Испытание и приемка оборудования после ремонта", link: "https://yandex.ru" }
+                ]
             }
         ];
-
-        const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
+        
+        const S_URL = 'https://supabase.co';
         const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r';
         const _supabase = supabase.createClient(S_URL, S_KEY);
         let globalStudent = null;
+        let currentSelectedDisc = 0; // Какую вкладку сейчас просматриваем
         
+        // --- 2. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
         async function init() {
             const login = localStorage.getItem('student_login');
             if (!login) { location.href = 'students.html'; return; }
-
+            
             const { data: student } = await _supabase.from('students').select('*').eq('login', login).single();
-            globalStudent = student; // Запоминаем студента глобально на всей странице!
+            globalStudent = student; 
             if (!student) return;
-
+            
             document.getElementById('student-info').innerText = `Студент: ${student.login}`;
             
+            // Автоматически открываем ту дисциплину, на которой студент остановился в базе
+            currentSelectedDisc = student.current_disc || 0;
+            
             renderNav(student.current_disc || 0);
-            renderCurrentPlan(student);
-            // --- НАЧАЛО БЛОКА ТАЙМЕРА ДЕДЛАЙНА ---
+            renderCurrentPlan(globalStudent);
+        
+            // --- БЛОК ТАЙМЕРА ДЕДЛАЙНА ---
             const deadline = localStorage.getItem('course_deadline');
             if (deadline) {
                 const countdownEl = document.getElementById('countdown-time');
                 const endDate = new Date(deadline).getTime();
-        
+                
                 setInterval(() => {
                     const now = new Date().getTime();
                     const distance = endDate - now;
-        
+                    
                     if (distance < 0) {
-                        countdownEl.innerHTML = "ДОСТУП ИСТЕК";
+                        if (countdownEl) countdownEl.innerHTML = "ДОСТУП ИСТЕК";
                         return;
                     }
-        
-                    // Рассчитываем дни, часы и минуты
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); // <-- Проверьте, чтобы тут было ровно 'minutes'
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     
                     if (countdownEl) {
                         countdownEl.innerHTML = `${days} дн. ${hours} ч. ${minutes} мин.`;
                     }
-                    // Красиво выводим на страницу
-                    countdownEl.innerHTML = `${days} дн. ${hours} ч. ${minutes} мин.`;
                 }, 1000);
             } else {
-                document.getElementById('deadline-timer').style.display = 'none';
+                const timerBlock = document.getElementById('deadline-timer');
+                if (timerBlock) timerBlock.style.display = 'none';
             }
-            // --- КОНЕЦ БЛОКА ТАЙМЕРА ---
         }
-
-        function renderNav(currentDiscIdx) {
+        
+        // --- 3. ГЕНЕРАЦИЯ ЛЕВОГО МЕНЮ НАВИГАЦИИ (С КЛИКАМИ) ---
+        function renderNav(allowedDiscIdx) {
             const nav = document.getElementById('disciplines-nav');
+            if (!nav) return;
+            
             nav.innerHTML = COURSE_MAP.map((disc, idx) => {
-                const isLocked = idx > currentDiscIdx;
-                const isDone = idx < currentDiscIdx;
+                const isLocked = idx > allowedDiscIdx;
+                const isDone = idx < allowedDiscIdx;
+                const isActive = idx === currentSelectedDisc;
+                
+                // Добавили onclick="switchDisc(${idx}, ${isLocked})" для обработки нажатий!
                 return `
-                    <div class="discipline-tab ${isLocked ? 'locked' : ''} ${idx === currentDiscIdx ? 'active' : ''}">
+                    <div class="discipline-tab ${isLocked ? 'locked' : ''} ${isActive ? 'active' : ''}" 
+                         onclick="switchDisc(${idx}, ${isLocked})">
                         ${isDone ? '🗸' : (isLocked ? '🔒' : '✍️')} ${disc.title}
                     </div>
                 `;
             }).join('');
         }
-
-        function renderCurrentPlan(student) {
-            // Если при клике кнопка не передала студента, берем его из нашей глобальной переменной!
-            if (!student && typeof globalStudent !== 'undefined') {
-                student = globalStudent;
+        
+        // Функция ручного переключения вкладок по клику
+        function switchDisc(idx, isLocked) {
+            if (isLocked) {
+                alert("Эта дисциплина пока заблокирована. Пройдите предыдущую!");
+                return;
             }
-            const container = document.getElementById('themes-container');
-            
-            // Если контейнер ЕСТЬ на экране, то рисуем темы
-            if (container) {
-                container.innerHTML = '';
-                
-                // Безопасно берем оценки из новой jsonb колонки в базе данных
-                const grades = student.grades || {}; 
-                const currentStep = student.current_step || 1;
-                const currentDiscKey = student.current_disc === 0 ? 'electro' : 'tech';
-        
-                // 1. ОТРИСОВКА ОБЫЧНЫХ ТЕМ КУРСА
-                themes.forEach((theme, index) => {
-                    const themeNum = index + 1;
-                    const quizKey = `${currentDiscKey}_${themeNum}`;
-                    const currentGrade = grades[quizKey] || null;
-                    
-                    let statusHTML = '';
-                    let btnHTML = '';
-        
-                    if (themeNum < currentStep) {
-                        statusHTML = `<span class="status-tag status-passed" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 5px 10px; border-radius: 4px;">Пройдено (Оценка: ${currentGrade || '3'})</span>`;
-                        btnHTML = `<button class="btn-action" onclick="startInlineQuiz('${quizKey}')" style="background: var(--gold); color: #000; font-weight: bold;">Улучшить оценку 📈</button>`;
-                    } else if (themeNum === currentStep) {
-                        statusHTML = `<span class="status-tag status-current" style="background: rgba(241, 196, 15, 0.2); color: #f1c40f; padding: 5px 10px; border-radius: 4px;">Текущая тема</span>`;
-                        btnHTML = `<button id="btn-quiz-${themeNum}" class="btn-action" onclick="startInlineQuiz('${quizKey}')" disabled>Сдать тест ✍️</button>`;
-                    } else {
-                        statusHTML = `<span class="status-tag status-locked" style="opacity: 0.5;">Доступ закрыт</span>`;
-                        btnHTML = `<button class="btn-action" disabled style="opacity: 0.3;">Сдать тест</button>`;
-                    }
-        
-                    const card = document.createElement('div');
-                    card.className = `theme-card ${themeNum === currentStep ? 'active' : ''}`;
-                    card.innerHTML = `
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 10px 0;">Тема ${themeNum}. ${theme.title}</h3>
-                            <a href="${theme.link}" target="_blank" onclick="unlockQuiz(${themeNum})" class="lecture-link" style="color: var(--gold); text-decoration: none; border-bottom: 1px dashed var(--gold);">Изучить лекцию 📖</a>
-                            <span id="timer-${themeNum}" style="margin-left: 15px; color: var(--gold); font-weight: bold;"></span>
-                        </div>
-                        <div style="text-align: right; min-width: 200px;">
-                            ${statusHTML}
-                            <div style="margin-top: 15px;">${btnHTML}</div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-        
-                // 2. ОТРИСОВКА БЛОКА ИТОГОВОГО ТЕСТА
-                if (currentStep > themes.length) {
-                    const examGrade = grades[`${currentDiscKey}_final`] || null;
-                    let examStatusHTML = examGrade 
-                        ? `<h2 style="color: #2ecc71; margin: 0 0 10px 0;">🎉 Экзамен сдан! Итоговая оценка: ${examGrade}</h2>` 
-                        : `<h2 style="color: var(--gold); margin: 0 0 10px 0;">Дисциплина изучена!</h2>`;
-                    
-                    let examBtnText = examGrade ? "Пересдать экзамен для улучшения оценки 📈" : "НАЧАТЬ ИТОГОВЫЙ ТЕСТ 📝";
-        
-                    container.innerHTML += `
-                        <div class="glass-card" style="text-align: center; border: 2px solid var(--gold); padding: 40px; margin-top: 20px;">
-                            ${examStatusHTML}
-                            <p style="margin: 20px 0; opacity: 0.8;">Оценка за этот тест пойдет в <b>ДИПЛОМ</b>. У вас есть 3 быстрых попытки (раз в 30 мин), далее — 1 попытка в сутки.</p>
-                            <button onclick="window.location.href = 'quiz.html?quiz=${currentDiscKey}_final&strict=true'" class="btn-primary" style="width: 100%; padding: 15px; background: var(--gold); color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;">
-                                ${examBtnText}
-                            </button>
-                        </div>
-                    `;
-                }
-            } // Конец проверки if (container)
+            currentSelectedDisc = idx;
+            // Перерисовываем меню, чтобы сменилась активная подсветка таба
+            renderNav(globalStudent.current_disc || 0);
+            // Показываем темы выбранного предмета
+            renderCurrentPlan(globalStudent);
         }
-
-        // Таймер на 60 секунд для тем
+        
+        // --- 4. ОТРИСОВКА КАРТОЧЕК ТЕМ КУРСА И ОЦЕНОК JSONB ---
+        function renderCurrentPlan(student) {
+            const container = document.getElementById('course-plan'); // Исправлено на ваш реальный ID!
+            if (!container) return;
+            container.innerHTML = '';
+        
+            const currentDisc = COURSE_MAP[currentSelectedDisc];
+            
+            // Меняем заголовок правой колонки на название предмета
+            const titleEl = document.getElementById('disc-title');
+            if (titleEl) titleEl.innerText = currentDisc.title;
+        
+            const grades = student.grades || {}; 
+            const isCurrentDisc = currentSelectedDisc === (student.current_disc || 0);
+            
+            // Вычисляем текущую тему студента: если курс не его — для него тут все пройдено
+            const currentStep = isCurrentDisc ? (student.current_step || 1) : 99;
+            const currentDiscKey = currentSelectedDisc === 0 ? 'electro' : 'tech';
+        
+            currentDisc.themes.forEach((theme, index) => {
+                const themeNum = index + 1;
+                const quizKey = `${currentDiscKey}_${themeNum}`;
+                const currentGrade = grades[quizKey] || null;
+                
+                let statusHTML = '';
+                let btnHTML = '';
+                
+                if (themeNum < currentStep) {
+                    statusHTML = `<span class="status-tag status-passed" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 5px 10px; border-radius: 4px;">Пройдено (Оценка: ${currentGrade || '3'})</span>`;
+                    btnHTML = `<button class="btn-action" onclick="startInlineQuiz('${quizKey}')" style="background: var(--gold); color: #000; font-weight: bold; padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none;">Улучшить оценку 📈</button>`;
+                } else if (themeNum === currentStep) {
+                    statusHTML = `<span class="status-tag status-current" style="background: rgba(241, 196, 15, 0.2); color: #f1c40f; padding: 5px 10px; border-radius: 4px;">Текущая тема</span>`;
+                    btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${quizKey}')" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.5;">Сдать тест ✍️</button>`;
+                } else {
+                    statusHTML = `<span class="status-tag status-locked" style="opacity: 0.5;">Доступ закрыт</span>`;
+                    btnHTML = `<button class="btn-action" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.3;">Сдать тест</button>`;
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'lesson-card glass-card'; // Интегрировано с вашими стилями!
+                card.style.cssText = "display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 20px;";
+                card.innerHTML = `
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0 0 10px 0; font-size: 1.1rem;">Тема ${themeNum}. ${theme.name}</h3>
+                        <a href="${theme.link}" target="_blank" onclick="startTimer(${themeNum})" class="lecture-link" style="color: var(--gold); text-decoration: underline;">Изучить лекцию 📖</a>
+                    </div>
+                    <div style="text-align: right; min-width: 180px;">
+                        ${statusHTML}
+                        <div style="margin-top: 10px;">${btnHTML}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            // Отрисовка блока итогового теста экзамена
+            if (currentStep > currentDisc.themes.length) {
+                const examGrade = grades[`${currentDiscKey}_final`] || null;
+                let examStatusHTML = examGrade 
+                    ? `<h2 style="color: #2ecc71; margin-bottom: 10px;">🎉 Экзамен сдан! Итоговая оценка: ${examGrade}</h2>` 
+                    : `<h2 style="color: var(--gold); margin-bottom: 10px;">Дисциплина изучена!</h2>`;
+                
+                let examBtnText = examGrade ? "Пересдать экзамен для улучшения оценки 📈" : "НАЧАТЬ ИТОГОВЫЙ ТЕСТ 📝";
+                
+                container.innerHTML += `
+                    <div class="glass-card" style="text-align: center; border: 2px solid var(--gold); padding: 40px; margin-top: 20px;">
+                        ${examStatusHTML}
+                        <p style="margin: 20px 0; opacity: 0.8;">Оценка за этот тест пойдет в <b>ДИПЛОМ</b>. У вас есть 3 быстрых попытки (раз в 30 мин), далее — 1 попытка в сутки.</p>
+                        <button onclick="startFinalQuiz('${currentDiscKey}')" class="btn-primary" style="width: 100%; padding: 12px; background: var(--gold); color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;">
+                            ${examBtnText}
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        // --- 5. ТАЙМЕР ИЗУЧЕНИЯ МАТЕРИАЛА ---
         function startTimer(num) {
             const btn = document.getElementById(`test-btn-${num}`);
+            if (!btn) return; // Защита для старых или улучшаемых тем
+            
             let time = 60;
+            btn.disabled = true;
             btn.style.opacity = "0.5";
+            btn.style.cursor = "not-allowed";
+            
             const itv = setInterval(() => {
                 btn.innerText = `Изучение... ${time}с`;
                 time--;
@@ -232,66 +269,64 @@
                     btn.innerText = "Сдать тест ✍️";
                     btn.removeAttribute('disabled');
                     btn.style.opacity = "1";
-                    btn.style.background = ""; // Убираем серый цвет, возвращается желтый из CSS
                     btn.style.cursor = "pointer";
                     btn.style.boxShadow = "0 0 15px var(--gold)";
                 }
             }, 1000);
         }
-
+        
+        // --- 6. ЗАПУСК И СДАЧА ИТОГОВОГО ЭКЗАМЕНА ---
         async function startFinalQuiz(discId) {
             const login = localStorage.getItem('student_login');
             const { data: st } = await _supabase.from('students').select('*').eq('login', login).single();
-        
+            
             if (st.final_attempts >= 3) {
-                // Проверка на 1 сутки (86400000 мс)
                 const diff = new Date() - new Date(st.last_attempt_time);
                 if (diff < 86400000) {
                     const hoursLeft = Math.ceil((86400000 - diff) / 3600000);
                     alert(`Лимит быстрых попыток исчерпан. Следующая попытка через ${hoursLeft} ч.`);
                     return;
                 }
-            } else {
-                // Проверка на 30 минут (1800000 мс) между быстрыми попытками
+            } else if (st.last_attempt_time) {
                 const diff = new Date() - new Date(st.last_attempt_time);
                 if (diff < 1800000) {
                     alert("Между попытками должно пройти минимум 30 минут.");
                     return;
                 }
             }
-        
+            
             if(confirm("ВНИМАНИЕ! Эта оценка пойдет в диплом. Начать?")) {
-                // Обновляем время попытки и счетчик в базе перед началом
                 await _supabase.from('students').update({
                     last_attempt_time: new Date().toISOString(),
-                    final_attempts: st.final_attempts + 1
+                    final_attempts: (st.final_attempts || 0) + 1
                 }).eq('login', login);
-        
-                location.href = `quiz.html?id=${discId}_final&strict=true`;
+                
+                location.href = `quiz.html?quiz=${discId}_final&strict=true`;
             }
         }
+        
+        // --- 7. ДВИЖОК ОНЛАЙН ТЕСТИРОВАНИЯ ---
         let currentQuestions = [];
         let currentIndex = 0;
         let quizScore = 0;
         let currentQuizId = "";
-        
+         
         async function startInlineQuiz(quizId) {
             currentQuizId = quizId;
-            // 1. Подгружаем файл скрипта
             const script = document.createElement('script');
             script.src = `quizzes/${quizId}.js`;
             script.onload = () => {
-                currentQuestions = questions; // Берём массив из загруженного файла
+                currentQuestions = questions; 
                 currentIndex = 0;
                 quizScore = 0;
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
                 showQuestion();
             };
-            script.onerror = () => alert("Файл теста не найден!");
+            script.onerror = () => alert("Файл теста не найден! Проверьте папку quizzes/ на хостинге.");
             document.head.appendChild(script);
         }
-        
+         
         function showQuestion() {
             const q = currentQuestions[currentIndex];
             document.getElementById('q-text').innerText = q.q;
@@ -299,17 +334,17 @@
             
             const container = document.getElementById('options-container');
             container.innerHTML = '';
-        
+            
             q.o.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = 'option-btn'; // Используй свои стили кнопок
+                btn.className = 'option-btn'; 
                 btn.style.cssText = "display:block; width:100%; margin-bottom:10px; padding:10px; background:rgba(255,255,255,0.1); color:white; border:1px solid var(--gold); border-radius:8px; cursor:pointer;";
                 btn.innerText = opt;
                 btn.onclick = () => checkAnswer(idx, q.a);
                 container.appendChild(btn);
             });
         }
-        
+         
         function checkAnswer(selected, correct) {
             if (selected === correct) quizScore++;
             currentIndex++;
@@ -320,56 +355,58 @@
                 finishInlineQuiz();
             }
         }
-        
+         
+        // --- 8. СОХРАНЕНИЕ РЕЗУЛЬТАТОВ И УЛУЧШЕНИЕ ОЦЕНОК JSONB ---
         async function finishInlineQuiz() {
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
-        
+            
             if (mark >= 3) {
-                // Берем логин из памяти. ВАЖНО: убедись, что при входе ты сохраняешь именно его!
                 const login = localStorage.getItem('student_login');
                 
-                console.log("Пытаюсь обновить прогресс для:", login);
-        
-                // 1. Сначала проверяем, какой шаг сейчас в базе
-                const { data: st, error: fetchError } = await _supabase
-                    .from('students')
-                    .select('current_step')
-                    .eq('login', login)
-                    .single();
-        
-                if (fetchError) {
-                    console.error("Ошибка поиска студента:", fetchError);
-                    alert("Ошибка: Студент не найден в базе!");
-                    return;
+                // Скачиваем актуальные данные из Supabase
+                const { data: st } = await _supabase.from('students').select('*').eq('login', login).single();
+                
+                const grades = st.grades || {};
+                const oldGrade = grades[currentQuizId] || 0;
+                
+                // 1. Логика улучшения оценки
+                if (mark > oldGrade) {
+                    grades[currentQuizId] = mark;
                 }
-        
-                const nextStep = st.current_step + 1;
-                console.log("Текущий шаг:", st.current_step, "Следующий:", nextStep);
-        
-                // 2. Обновляем базу
+                
+                // 2. Логика прогресса шага: двигаем только если сдан ТЕКУЩИЙ активный тест
+                let nextStep = st.current_step;
+                const currentDiscKey = st.current_disc === 0 ? 'electro' : 'tech';
+                if (currentQuizId === `${currentDiscKey}_${st.current_step}`) {
+                    nextStep = st.current_step + 1;
+                }
+                
+                // Отправляем всё одним чистым запросом
                 const { error: updateError } = await _supabase
                     .from('students')
-                    .update({ current_step: nextStep })
+                    .update({ 
+                        grades: grades,
+                        current_step: nextStep 
+                    })
                     .eq('login', login);
-        
+                    
                 if (updateError) {
-                    console.error("Ошибка при обновлении:", updateError);
                     alert("Не удалось сохранить результат в базу!");
                 } else {
-                    alert(`Тест сдан! Оценка: ${mark}. Открыта следующая тема.`);
-                    // Скрываем тест и перезагружаем страницу
+                    alert(`Тест успешно обработан! Ваша оценка: ${mark}.`);
                     document.getElementById('quiz-overlay').style.display = 'none';
                     document.getElementById('bg-blur').style.display = 'none';
                     location.reload(); 
                 }
             } else {
-                alert(`Оценка: ${mark}. Тест не сдан. Изучите лекцию еще раз.`);
+                alert(`Оценка: ${mark}. Тест не сдан. Старая оценка сохранена.`);
                 location.reload();
             }
         }
-
+        
         document.addEventListener('DOMContentLoaded', init);
+
     </script>
 </body>
 </html>
