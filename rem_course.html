@@ -201,25 +201,32 @@
                 
                 let statusHTML = '';
                 let btnHTML = '';
-                
+                let lectureLinkHTML = ''; // Переменная для ссылки на лекцию
+        
                 if (themeNum < currentStep) {
+                    // ТЕМА ПРОЙДЕНА: Ссылка доступна для повторения
                     statusHTML = `<span class="status-tag status-passed" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 5px 10px; border-radius: 4px;">Пройдено (Оценка: ${currentGrade || '3'})</span>`;
                     btnHTML = `<button class="btn-action" onclick="startInlineQuiz('${quizKey}')" style="background: var(--gold); color: #000; font-weight: bold; padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none;">Улучшить оценку 📈</button>`;
+                    lectureLinkHTML = `<a href="${theme.link}" target="_blank" class="lecture-link" style="color: var(--gold); text-decoration: underline;">Изучить лекцию 📖</a>`;
                 } else if (themeNum === currentStep) {
+                    // ТЕКУЩАЯ ТЕМА: Ссылка активна, при клике запускается таймер
                     statusHTML = `<span class="status-tag status-current" style="background: rgba(241, 196, 15, 0.2); color: #f1c40f; padding: 5px 10px; border-radius: 4px;">Текущая тема</span>`;
                     btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${quizKey}')" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.5;">Сдать тест ✍️</button>`;
+                    lectureLinkHTML = `<a href="${theme.link}" target="_blank" onclick="startTimer(${themeNum})" class="lecture-link" style="color: var(--gold); text-decoration: underline;">Изучить лекцию 📖</a>`;
                 } else {
+                    // ЗАКРЫТАЯ ТЕМА: Ссылка превращается в серый заблокированный текст!
                     statusHTML = `<span class="status-tag status-locked" style="opacity: 0.5;">Доступ закрыт</span>`;
                     btnHTML = `<button class="btn-action" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.3;">Сдать тест</button>`;
+                    lectureLinkHTML = `<span class="lecture-link" style="color: #555; cursor: not-allowed; text-decoration: none; opacity: 0.5;">Лекция заблокирована 🔒</span>`;
                 }
                 
                 const card = document.createElement('div');
-                card.className = 'lesson-card glass-card'; // Интегрировано с вашими стилями!
+                card.className = 'lesson-card glass-card';
                 card.style.cssText = "display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 20px;";
                 card.innerHTML = `
-                    <div style="flex: 1;">
+                    <div style="flex: 1; ${themeNum > currentStep ? 'opacity: 0.4;' : ''}">
                         <h3 style="margin: 0 0 10px 0; font-size: 1.1rem;">Тема ${themeNum}. ${theme.name}</h3>
-                        <a href="${theme.link}" target="_blank" onclick="startTimer(${themeNum})" class="lecture-link" style="color: var(--gold); text-decoration: underline;">Изучить лекцию 📖</a>
+                        ${lectureLinkHTML}
                     </div>
                     <div style="text-align: right; min-width: 180px;">
                         ${statusHTML}
