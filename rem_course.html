@@ -192,7 +192,7 @@
             
             // Вычисляем текущую тему студента: если курс не его — для него тут все пройдено
             const currentStep = isCurrentDisc ? (student.current_step || 1) : 99;
-            const currentDiscKey = currentSelectedDisc === 0 ? 'electro' : 'tech';
+            const currentDiscKey = currentSelectedDisc === 0 ? 'rem_electro' : 'rem_tech';
         
             currentDisc.themes.forEach((theme, index) => {
                 const themeNum = index + 1;
