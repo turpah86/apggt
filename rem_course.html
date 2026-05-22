@@ -316,12 +316,13 @@
             }
         }
         
-        // --- 7. ДВИЖОК ОНЛАЙН ТЕСТИРОВАНИЯ С АНТИ-ЧИТОМ ---
+        // --- 7. ДВИЖОК ОНЛАЙН ТЕСТИРОВАНИЯ С АНТИ-ЧИТОМ И ТАЙМЕРОМ ---
         let currentQuestions = [];
         let currentIndex = 0;
         let quizScore = 0;
         let currentQuizId = "";
         let hasBeenWarned = false; // Флаг, чтобы знать, было ли уже предупреждение
+        let quizTimerInterval = null; // Переменная для управления интервалом времени
         
         async function startInlineQuiz(quizId) {
             currentQuizId = quizId;
@@ -337,7 +338,35 @@
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
          
-                // Включаем защиту от копирования, F12 и контекстного меню
+                // ================= БЛОК ТАЙМЕРА (20 МИНУТ) =================
+                const timerEl = document.getElementById('quiz-timer');
+                if (timerEl) {
+                    timerEl.style.display = 'block'; // Показываем скрытый элемент таймера
+                    let totalSeconds = 20 * 60; // 20 минут переводим в секунды
+                    
+                    // Запускаем ежесекундный отсчет
+                    quizTimerInterval = setInterval(() => {
+                        let minutes = Math.floor(totalSeconds / 60);
+                        let seconds = totalSeconds % 60;
+                        
+                        // Добавляем ведущие нули, чтобы время выглядело аккуратно (например, 09:05 вместо 9:5)
+                        let strMinutes = minutes < 10 ? '0' + minutes : minutes;
+                        let strSeconds = seconds < 10 ? '0' + seconds : seconds;
+                        timerEl.innerText = `Осталось: ${strMinutes}:${strSeconds}`;
+                        
+                        // Если время полностью вышло — аннулируем тест
+                        if (totalSeconds <= 0) {
+                            clearInterval(quizTimerInterval);
+                            disableQuizProtection();
+                            alert("Время на сдачу теста истекло! Результат аннулирован (оценка 2).");
+                            location.reload(); // Перезагрузка страницы жестко сжигает попытку
+                        }
+                        totalSeconds--;
+                    }, 1000);
+                }
+                // ==========================================================
+        
+                // Включаем защиту от копирования, выделения текста и контекстного меню
                 document.body.style.userSelect = 'none';
                 document.body.style.webkitUserSelect = 'none';
                 
@@ -351,6 +380,7 @@
                     return false; 
                 };
                 
+                // Блокируем клавиши разработчика F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+U
                 document.onkeydown = (e) => {
                     if (e.keyCode === 123 || 
                        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 67)) || 
@@ -362,22 +392,24 @@
         
                 // НАДЕЖНАЯ ЗАЩИТА: Отслеживаем скрытие вкладки или сворачивание окна
                 document.onvisibilitychange = function() {
-                    // Реагируем только в момент, когда студент ушел со страницы (вкладка скрыта)
+                    // Реагируем только в момент, когда студент реально ушел со страницы
                     if (document.hidden) {
                         if (!hasBeenWarned) {
                             hasBeenWarned = true;
                             
-                            // Показываем строгое предупреждение
+                            // Показываем строгое предупреждение, дающее второй шанс
                             const stay = confirm("ВНИМАНИЕ! Вы свернули браузер или переключили вкладку. При повторной попытке ваш результат будет АННУЛИРОВАН (оценка 2). Вернуться к тесту?");
                             
                             if (!stay) {
                                 document.onvisibilitychange = null;
+                                if (quizTimerInterval) clearInterval(quizTimerInterval);
                                 alert("Результат аннулирован.");
                                 location.reload();
                             }
                         } else {
-                            // Если это второе нарушение — сжигаем попытку
+                            // Если это второе нарушение правил — сжигаем попытку без разговоров
                             document.onvisibilitychange = null;
+                            if (quizTimerInterval) clearInterval(quizTimerInterval);
                             alert("Вы повторно покинули тест. Результат аннулирован (оценка 2).");
                             location.reload();
                         }
@@ -391,6 +423,7 @@
             document.head.appendChild(script);
         }
         
+        // Функция полной очистки всех защит и таймеров (вызывается при штатном закрытии)
         function disableQuizProtection() {
             document.body.style.userSelect = 'auto';
             document.body.style.webkitUserSelect = 'auto';
@@ -398,6 +431,17 @@
             document.oncontextmenu = null;
             document.onkeydown = null;
             document.onvisibilitychange = null; // Отключаем слежку за вкладками
+            
+            // Останавливаем таймер
+            if (quizTimerInterval) {
+                clearInterval(quizTimerInterval);
+            }
+            
+            // Скрываем плавающий блок таймера с экрана
+            const timerEl = document.getElementById('quiz-timer');
+            if (timerEl) {
+                timerEl.style.display = 'none';
+            }
         }
         
         function showQuestion() {
@@ -417,6 +461,8 @@
                 container.appendChild(btn);
             });
         }
+
+
         // --- 8. ОБРАБОТКА И ФИКСАЦИЯ РЕЗУЛЬТАТОВ ТЕСТА ---
         function checkAnswer(selected, correct) {
             if (selected === correct) quizScore++;
