@@ -321,6 +321,7 @@
         let currentIndex = 0;
         let quizScore = 0;
         let currentQuizId = "";
+        let hasBeenWarned = false; // Флаг, чтобы знать, было ли уже предупреждение
         
         async function startInlineQuiz(quizId) {
             currentQuizId = quizId;
@@ -331,6 +332,7 @@
                 currentQuestions = questions; 
                 currentIndex = 0;
                 quizScore = 0;
+                hasBeenWarned = false; // Сбрасываем флаг при старте нового теста
                 
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
@@ -358,11 +360,25 @@
                     }
                 };
         
-                // Защита от переключения вкладок
+                // Защита от переключения вкладок и сворачивания с ПРЕДУПРЕЖДЕНИЕМ
                 window.onblur = function() {
-                    window.onblur = null; 
-                    alert("ВНИМАНИЕ! Вы покинули вкладку теста или свернули браузер. Результат аннулирован (оценка 2).");
-                    location.reload(); // Перезагрузка жестко сжигает эту попытку
+                    if (!hasBeenWarned) {
+                        hasBeenWarned = true;
+                        // Показываем строгое предупреждение
+                        const stay = confirm("ВНИМАНИЕ! Вы попытались покинуть вкладку теста или свернуть браузер. При повторной попытке или если вы уйдете со страницы прямо сейчас, ваш результат будет АННУЛИРОВАН (оценка 2). Вернуться к тесту?");
+                        
+                        if (!stay) {
+                            // Если студент всё же нажал отмену (решил уйти) — аннулируем
+                            window.onblur = null; 
+                            alert("Результат аннулирован.");
+                            location.reload();
+                        }
+                    } else {
+                        // Если это уже вторая попытка читерства — сжигаем попытку без разговоров
+                        window.onblur = null; 
+                        alert("Вы повторно покинули вкладку. Тест аннулирован (оценка 2).");
+                        location.reload();
+                    }
                 };
         
                 showQuestion();
@@ -371,34 +387,7 @@
             script.onerror = () => alert("Файл теста не найден! Проверьте папку quizzes/ на хостинге.");
             document.head.appendChild(script);
         }
-        
-        function disableQuizProtection() {
-            document.body.style.userSelect = 'auto';
-            document.body.style.webkitUserSelect = 'auto';
-            document.oncopy = null;
-            document.oncontextmenu = null;
-            document.onkeydown = null;
-            window.onblur = null;
-        }
-        
-        function showQuestion() {
-            const q = currentQuestions[currentIndex];
-            document.getElementById('q-text').innerText = q.q;
-            document.getElementById('q-progress').innerText = `Вопрос ${currentIndex + 1} из ${currentQuestions.length}`;
-         
-            const container = document.getElementById('options-container');
-            container.innerHTML = '';
-         
-            q.o.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn'; 
-                btn.style.cssText = "display:block; width:100%; margin-bottom:10px; padding:10px; background:rgba(255,255,255,0.1); color:white; border:1px solid var(--gold); border-radius:8px; cursor:pointer;";
-                btn.innerText = opt;
-                btn.onclick = () => checkAnswer(idx, q.a);
-                container.appendChild(btn);
-            });
-        }
-        
+                
         // --- 8. ОБРАБОТКА И ФИКСАЦИЯ РЕЗУЛЬТАТОВ ТЕСТА ---
         function checkAnswer(selected, correct) {
             if (selected === correct) quizScore++;
