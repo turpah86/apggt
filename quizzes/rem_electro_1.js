@@ -15,3 +15,4 @@ questions = [
         a: 2
     }
 ];
+questions.sort(() => Math.random() - 0.5);
