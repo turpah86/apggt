@@ -49,4 +49,5 @@ questions = [
     ],
     "a": 3
   }
-]
+];
+questions.sort(() => Math.random() - 0.5);
