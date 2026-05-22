@@ -282,66 +282,113 @@
             }, 1000);
         }
         
-        // --- 6. ЗАПУСК И СДАЧА ИТОГОВОГО ЭКЗАМЕНА ---
+        // --- 6. ЗАПУСК И СДАЧА ИТОГОВОГО ЭКЗАМЕНА (С ПРОВЕРКОЙ ВРЕМЕНИ И ПОПЫТОК) ---
         async function startFinalQuiz(discId) {
             const login = localStorage.getItem('student_login');
             const { data: st } = await _supabase.from('students').select('*').eq('login', login).single();
-            
+         
+            // Проверка 1: Если совершено 3 и более попыток — доступ раз в сутки (24 часа)
             if (st.final_attempts >= 3) {
                 const diff = new Date() - new Date(st.last_attempt_time);
-                if (diff < 86400000) {
+                if (diff < 86400000) { // 24 часа в миллисекундах
                     const hoursLeft = Math.ceil((86400000 - diff) / 3600000);
                     alert(`Лимит быстрых попыток исчерпан. Следующая попытка через ${hoursLeft} ч.`);
                     return;
                 }
             } else if (st.last_attempt_time) {
+                // Проверка 2: Между первыми тремя попытками должно пройти минимум 30 минут
                 const diff = new Date() - new Date(st.last_attempt_time);
-                if (diff < 1800000) {
+                if (diff < 1800000) { // 30 минут в миллисекундах
                     alert("Между попытками должно пройти минимум 30 минут.");
                     return;
                 }
             }
-            
-            if(confirm("ВНИМАНИЕ! Эта оценка пойдет в диплом. Начать?")) {
+         
+            // Если проверки пройдены, обновляем счетчик в базе и запускаем защищенный тест
+            if (confirm("ВНИМАНИЕ! Эта оценка пойдет в диплом. Начать?")) {
                 await _supabase.from('students').update({
                     last_attempt_time: new Date().toISOString(),
                     final_attempts: (st.final_attempts || 0) + 1
                 }).eq('login', login);
-                
-                location.href = `quiz.html?quiz=${discId}_final&strict=true`;
+         
+                // Запускаем встроенный тест с защитой от копирования и вкладок
+                startInlineQuiz(`${discId}_final`);
             }
         }
         
-        // --- 7. ДВИЖОК ОНЛАЙН ТЕСТИРОВАНИЯ ---
+        // --- 7. ДВИЖОК ОНЛАЙН ТЕСТИРОВАНИЯ С АНТИ-ЧИТОМ ---
         let currentQuestions = [];
         let currentIndex = 0;
         let quizScore = 0;
         let currentQuizId = "";
-         
+        
         async function startInlineQuiz(quizId) {
             currentQuizId = quizId;
             const script = document.createElement('script');
             script.src = `quizzes/${quizId}.js`;
+            
             script.onload = () => {
                 currentQuestions = questions; 
                 currentIndex = 0;
                 quizScore = 0;
+                
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
+         
+                // Включаем защиту от копирования, F12 и контекстного меню
+                document.body.style.userSelect = 'none';
+                document.body.style.webkitUserSelect = 'none';
+                
+                document.oncopy = (e) => { 
+                    e.preventDefault(); 
+                    return false; 
+                };
+                
+                document.oncontextmenu = (e) => { 
+                    e.preventDefault(); 
+                    return false; 
+                };
+                
+                document.onkeydown = (e) => {
+                    if (e.keyCode === 123 || 
+                       (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 67)) || 
+                       (e.ctrlKey && e.keyCode === 85)) {
+                        e.preventDefault();
+                        return false;
+                    }
+                };
+        
+                // Защита от переключения вкладок
+                window.onblur = function() {
+                    window.onblur = null; 
+                    alert("ВНИМАНИЕ! Вы покинули вкладку теста или свернули браузер. Результат аннулирован (оценка 2).");
+                    location.reload(); // Перезагрузка жестко сжигает эту попытку
+                };
+        
                 showQuestion();
             };
+            
             script.onerror = () => alert("Файл теста не найден! Проверьте папку quizzes/ на хостинге.");
             document.head.appendChild(script);
         }
-         
+        
+        function disableQuizProtection() {
+            document.body.style.userSelect = 'auto';
+            document.body.style.webkitUserSelect = 'auto';
+            document.oncopy = null;
+            document.oncontextmenu = null;
+            document.onkeydown = null;
+            window.onblur = null;
+        }
+        
         function showQuestion() {
             const q = currentQuestions[currentIndex];
             document.getElementById('q-text').innerText = q.q;
             document.getElementById('q-progress').innerText = `Вопрос ${currentIndex + 1} из ${currentQuestions.length}`;
-            
+         
             const container = document.getElementById('options-container');
             container.innerHTML = '';
-            
+         
             q.o.forEach((opt, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn'; 
@@ -351,48 +398,44 @@
                 container.appendChild(btn);
             });
         }
-         
+        
+        // --- 8. ОБРАБОТКА И ФИКСАЦИЯ РЕЗУЛЬТАТОВ ТЕСТА ---
         function checkAnswer(selected, correct) {
             if (selected === correct) quizScore++;
             currentIndex++;
-            
+         
             if (currentIndex < currentQuestions.length) {
                 showQuestion();
             } else {
                 finishInlineQuiz();
             }
         }
-         
-        // --- ФИНАЛЬНЫЙ ИСПРАВЛЕННЫЙ ВАРИАНТ finishInlineQuiz ---
+        
         async function finishInlineQuiz() {
+            // Отключаем анти-чит защиту, так как тест завершен штатно
+            disableQuizProtection();
+        
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
-            
+         
             if (mark >= 3) {
                 const login = localStorage.getItem('student_login');
-                
-                // Меняем текст на экране, чтобы студент видел процесс отправки
                 document.getElementById('q-text').innerText = "Сохранение результата... ⏳";
-                
-                // Берём данные из глобальной переменной globalStudent, которую скачали при входе
+         
                 const grades = globalStudent.grades || {};
                 const oldGrade = grades[currentQuizId] || 0;
-                
-                // 1. ЛОГИКА УЛУЧШЕНИЯ: Перезаписываем оценку, только если новый балл выше прежнего
+         
                 if (mark > oldGrade) {
                     grades[currentQuizId] = mark;
                 }
-                
-                // 2. ЛОГИКА ПРОГРЕССА: Сверяем точные префиксы 'rem_electro' или 'rem_tech'
+         
                 let nextStep = globalStudent.current_step || 1;
                 const currentDiscKey = currentSelectedDisc === 0 ? 'rem_electro' : 'rem_tech';
-                
-                // Теперь строки идеально совпадут (например, "rem_electro_2" === "rem_electro_2")
+         
                 if (currentQuizId === `${currentDiscKey}_${nextStep}`) {
                     nextStep = nextStep + 1;
                 }
-                
-                // ОТПРАВЛЯЕМ ВСЁ ОДНИМ СКОРОСТНЫМ ЗАПРОСОМ В SUPABASE
+         
                 const { error: updateError } = await _supabase
                     .from('students')
                     .update({ 
@@ -400,16 +443,13 @@
                         current_step: nextStep 
                     })
                     .eq('login', login);
-                    
+         
                 if (updateError) {
                     alert("Не удалось сохранить результат в базу из-за ошибки сети!");
                     location.reload();
                 } else {
-                    // Обновляем шаг локально в памяти браузера
                     localStorage.setItem('student_step', nextStep);
                     alert(`Тест успешно сдан! Ваша оценка: ${mark}.`);
-                    
-                    // Скрываем окно теста и мгновенно обновляем страницу
                     document.getElementById('quiz-overlay').style.display = 'none';
                     document.getElementById('bg-blur').style.display = 'none';
                     location.reload(); 
@@ -419,8 +459,6 @@
                 location.reload();
             }
         }
-        document.addEventListener('DOMContentLoaded', init);
-
     </script>
 </body>
 </html>
