@@ -177,21 +177,20 @@
         
         // --- 4. ОТРИСОВКА КАРТОЧЕК ТЕМ КУРСА И ОЦЕНОК JSONB ---
         function renderCurrentPlan(student) {
-            const container = document.getElementById('course-plan'); // Исправлено на ваш реальный ID!
+            const container = document.getElementById('course-plan');
             if (!container) return;
-            container.innerHTML = '';
+            container.innerHTML = "";
         
             const currentDisc = COURSE_MAP[currentSelectedDisc];
-            
-            // Меняем заголовок правой колонки на название предмета
+        
             const titleEl = document.getElementById('disc-title');
             if (titleEl) titleEl.innerText = currentDisc.title;
         
-            const grades = student.grades || {}; 
-            const stepKey = `${currentDisc.id}_step_progress`; // Создает ключ, например: current_step_ogr_tech
-            const currentStep = grades[stepKey] || 1; // Берет шаг для этого предмета из Supabase, по умолчанию 1
-            // Автоматически подтягиваем префикс текущего выбранного предмета из COURSE_MAP
-            const currentDisc = COURSE_MAP[currentSelectedDisc];
+            const grades = student.grades || {};
+            const stepKey = `${currentDisc.id}_step_progress`;
+            const currentStep = grades[stepKey] || 1;
+            
+            // ПРАВИЛЬНЫЙ ПЕРЕКЛЮЧАТЕЛЬ ДЛЯ РГО:
             const currentDiscKey = currentDisc.id === 'rem' ? 'rem_electro' : 'electro';
 
         
@@ -467,8 +466,10 @@
         }
         
         async function finishInlineQuiz() {
+            disableQuizProtection();
             // Определяем, какой предмет сейчас сдается ('ogr' или 'electro')
-            const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro';
+            const currentDisc = COURSE_MAP[currentSelectedDisc];
+            const currentDiscKey = currentDisc.id === 'rem' ? 'rem_electro' : 'electro';
             
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
