@@ -91,7 +91,8 @@
                     { name: "Линии электроснабжения горного предприятия", link: "https://disk.yandex.ru/d/U-6BCPSTGE_rSA" },
                 ]
             }
-        ];        
+        ];       
+        
         const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
         const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r';
         const _supabase = supabase.createClient(S_URL, S_KEY);
@@ -193,18 +194,7 @@
         
             currentDisc.themes.forEach((theme, index) => {
                 const themeNum = index + 1;
-                
-                // 1. Динамически собираем ИМЯ ФАЙЛА ДЛЯ GITHUB
-                // Если флаг true — соберет rem_electro_1, если false — electro_razdel1
-                const fileName = currentDisc.isRemStyle ? 
-                    `${currentDisc.filePrefix}_${themeNum}` : 
-                    `${currentDisc.filePrefix}${themeNum}`;
-        
-                // 2. Динамически собираем КЛЮЧ ОЦЕНКИ ДЛЯ SUPABASE
-                const quizKey = currentDisc.isRemStyle ? 
-                    `${currentDisc.dbPrefix}_${themeNum}` : 
-                    `${currentDisc.dbPrefix}_razdel${themeNum}`;
-        
+                const quizKey = `${currentDiscKey}_razdel${themeNum}`;
                 const currentGrade = grades[quizKey] || null;
                 
                 let statusHTML = '';
@@ -219,7 +209,7 @@
                 } else if (themeNum === currentStep) {
                     // ТЕКУЩАЯ ТЕМА: Ссылка активна, при клике запускается таймер
                     statusHTML = `<span class="status-tag status-current" style="background: rgba(241, 196, 15, 0.2); color: #f1c40f; padding: 5px 10px; border-radius: 4px;">Текущая тема</span>`;
-                    btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${fileName}', '${quizKey}')" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.5;">Сдать тест ✍️</button>`;
+                    btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${quizKey}')" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.5;">Сдать тест ✍️</button>`;
                     lectureLinkHTML = `<a href="${theme.link}" target="_blank" onclick="startTimer(${themeNum})" class="lecture-link" style="color: var(--gold); text-decoration: underline;">Изучить лекцию 📖</a>`;
                 } else {
                     // ЗАКРЫТАЯ ТЕМА: Ссылка превращается в серый заблокированный текст!
@@ -333,107 +323,94 @@
         let quizTimerInterval = null; // Переменная для управления интервалом времени
         
         async function startInlineQuiz(quizId) {
-            // 1. Запоминаем ID теста для последующего сохранения оценки в Supabase
-            currentQuizId = quizId; 
-        
-            // 2. Логика автоматического определения имени файла на GitHub
-            // Скрипт смотрит на ID теста: если он начинается на 'rem_electro', загружает файл с подчеркиванием (_1),
-            // во всех остальных случаях загружает стандартный файл со словом 'razdel' (electro_razdel1)
+            currentQuizId = quizId;
+            
+            // Чистая сборка имени файла под ОГР
             let fileParam = quizId;
-            if (quizId.startsWith('rem_electro_')) {
-                // Оставляем имя как есть (например: rem_electro_1)
-                fileParam = quizId; 
-            } else if (quizId.includes('_razdel')) {
-                // Оставляем имя как есть (например: electro_razdel1)
-                fileParam = quizId;
-            } else {
-                // Резервный случай: если вдруг префикс не сформировался, подставляем слово 'razdel'
-                fileParam = quizId.replace('_', '_razdel');
+            if (!quizId.includes('_razdel') && quizId.includes('_theme_')) {
+                fileParam = quizId.replace('_theme_', '_razdel');
             }
         
-            // 3. Динамически создаем тег скрипта для загрузки вопросов с GitHub
             const script = document.createElement('script');
-            
-            // Подставляем точное имя файла в путь к папке quizzes
-            script.src = `quizzes/${fileParam}.js`; 
+            script.src = `quizzes/${fileParam}.js`;
         
-            // 4. Логика, которая сработает СРАЗУ ПОСЛЕ успешной загрузки файла вопросов
             script.onload = () => {
-                currentQuestions = questions;
+                if (typeof questions === 'undefined' || questions.length === 0) {
+                    alert(`Ошибка: Массив вопросов в файле quizzes/${fileParam}.js пуст или объявлен неверно!`);
+                    location.reload();
+                    return;
+                }
+        
+                // 1. Перемешиваем всю базу случайным образом
+                const shuffled = questions.sort(() => Math.random() - 0.5);
+        
+                // 2. ДИНАМИЧЕСКИЙ ЛИМИТ ВОПРОСОВ И ВРЕМЕНИ ТАЙМЕРА
+                let limit;
+                let quizMinutes;
+        
+                if (fileParam.includes('final')) {
+                    limit = questions.length;   // Для финала берем ВСЕ 100 вопросов
+                    quizMinutes = 50;           // ДЛЯ ФИНАЛА СТАВИМ 50 МИНУТ ⏱️
+                } else {
+                    limit = questions.length > 40 ? 40 : questions.length; // Для лекций — 40 вопросов
+                    quizMinutes = 20;           // Для лекций оставляем стандартные 20 минут
+                }
+                
+                currentQuestions = shuffled.slice(0, limit);
+        
                 currentIndex = 0;
                 quizScore = 0;
-                hasBeenWarned = false; // Сбрасываем флаг предупреждения анти-чит защиты
+                hasBeenWarned = false;
         
-                // Показываем модальное окно встроенного теста и размываем задний фон
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
         
                 // =========================================================================
-                // ⏱️ БЛОК ТАЙМЕРА (ЖЕСТКИЕ 20 МИНУТ НА СДАЧУ ТЕСТА)
+                // ⏱️ АВТОМАТИЧЕСКИЙ БЛОК ТАЙМЕРА (20 или 50 МИНУТ)
                 // =========================================================================
                 const timerEl = document.getElementById('quiz-timer');
                 if (timerEl) {
-                    timerEl.style.display = 'block'; // Включаем плавающий блок таймера на экране
-                    let totalSeconds = 20 * 60; // 20 минут переводим в секунды (1200 секунд)
+                    timerEl.style.display = 'block';
+                    let totalSeconds = quizMinutes * 60; // Автоматически подставит 1200 или 3000 секунд
         
-                    // Сбрасываем старый интервал таймера, если он завис с прошлого тестирования
                     if (quizTimerInterval) clearInterval(quizTimerInterval);
         
-                    // Запускаем ежесекундный отсчет времени
                     quizTimerInterval = setInterval(() => {
                         let minutes = Math.floor(totalSeconds / 60);
                         let seconds = totalSeconds % 60;
-        
-                        // Добавляем ведущие нули, чтобы время выглядело аккуратно (например, 09:05)
                         let strMinutes = minutes < 10 ? '0' + minutes : minutes;
                         let strSeconds = seconds < 10 ? '0' + seconds : seconds;
                         
                         timerEl.innerText = `Осталось: ${strMinutes}:${strSeconds}`;
         
-                        // Если время полностью вышло — принудительно аннулируем тест с двойкой
                         if (totalSeconds <= 0) {
                             clearInterval(quizTimerInterval);
-                            disableQuizProtection(); // Отключаем защиту от копирования, чтобы разблокировать мышь
-                            
+                            disableQuizProtection();
                             alert("Время на сдачу теста истекло! Результат аннулирован (оценка 2).");
-                            
                             quizScore = 0;
-                            finishInlineQuiz(); // Принудительно вызываем фиксацию двойки в Supabase
+                            finishInlineQuiz();
                         }
-        
                         totalSeconds--;
                     }, 1000);
                 }
         
-                // Включаем надежную защиту от копирования контента теста
                 document.body.style.userSelect = 'none';
                 document.body.style.webkitUserSelect = 'none';
+                document.oncopy = (e) => { e.preventDefault(); return false; };
+                document.oncontextmenu = (e) => { e.preventDefault(); return false; };
         
-                document.oncopy = (e) => {
-                    e.preventDefault();
-                    return false;
-                };
-        
-                document.oncontextmenu = (e) => {
-                    e.preventDefault();
-                    return false;
-                };
-        
-                // Запускаем отрисовку первого вопроса из загруженного файла
+                // Запускаем вывод вопроса на экран
                 showQuestion();
             };
         
-            // 5. Логика перехвата ошибки, если файла с таким именем на GitHub не существует
             script.onerror = () => {
-                alert(`Ошибка: Файл теста "quizzes/${fileParam}.js" не найден в репозитории! Проверьте имя файла на хостинге.`);
-                location.reload(); // Перезагружаем страницу, чтобы разблокировать учебный план
+                alert(`Ошибка: Файл теста "quizzes/${fileParam}.js" не найден на Хосте! Проверьте имя файла.`);
+                location.reload();
             };
         
-            // Внедряем сформированный скрипт в head документа для запуска скачивания
             document.head.appendChild(script);
         }
 
-        
         // Функция полной очистки всех защит и таймеров (вызывается при штатном закрытии)
         function disableQuizProtection() {
             document.body.style.userSelect = 'auto';
@@ -533,9 +510,32 @@
                 alert(`Оценка: ${mark}. Тест не сдан. Старая оценка сохранена. Подучите материал!`);
                 location.reload();
             }
+        document.onvisibilitychange = function() {
+            // Анти-чит сработает, только если окно теста РЕАЛЬНО открыто на экране
+            const quizOverlay = document.getElementById('quiz-overlay');
+            const isQuizActive = quizOverlay && (quizOverlay.style.display === 'block' || quizOverlay.style.display === 'flex');
+            if (isQuizActive && document.hidden) {
+                if (!hasBeenWarned) {
+                    hasBeenWarned = true;
+                    const stay = confirm("ВНИМАНИЕ! Вы свернули браузер или переключили вкладку. При повторной попытке ваш результат будет АННУЛИРОВАН (оценка 2). Вернуться к тесту?");
+                    if (!stay) {
+                        annulQuizForce();
+                    }
+                } else {
+                    annulQuizForce();
+                }
+            }
+        };
+        
+        async function annulQuizForce() {
+            document.onvisibilitychange = null;
+            if (quizTimerInterval) clearInterval(quizTimerInterval);
+            alert("Вы повторно покинули тест. Результат аннулирован (оценка 2).");
+            quizScore = 0; 
+            await finishInlineQuiz(); // Автоматически отправит двойку в Supabase    
         }
-        document.addEventListener('DOMContentLoaded', init);
+    }
+    document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
-
