@@ -419,13 +419,10 @@
                     }
                 };
         
-                showQuestion();
-            };
-            
+                showQuestion();            
             script.onerror = () => alert("Файл теста не найден! Проверьте папку quizzes/ на хостинге.");
             document.head.appendChild(script);
-        }
-        
+        }        
         // Функция полной очистки всех защит и таймеров (вызывается при штатном закрытии)
         function disableQuizProtection() {
             document.body.style.userSelect = 'auto';
