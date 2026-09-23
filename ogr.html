@@ -316,19 +316,32 @@
         
         async function startInlineQuiz(quizId) {
             currentQuizId = quizId;
-            const script = document.createElement('script');
-            script.src = `quizzes/${quizId}.js`;
             
-            script.onload = () => {
-                // 1. Перемешиваем все вопросы из файла случайным образом
-                const shuffled = questions.sort(() => Math.random() - 0.5);
+            // Чистая сборка имени файла под ОГР
+            let fileParam = quizId;
+            if (!quizId.includes('_razdel') && quizId.includes('_theme_')) {
+                fileParam = quizId.replace('_theme_', '_razdel');
+            }
         
-                // 2. Вырезаем ровно 35 случайных вопросов (можете поменять 35 на 30 или 40)
-                currentQuestions = shuffled.slice(0, 40); 
+            const script = document.createElement('script');
+            script.src = `quizzes/${fileParam}.js`;
+        
+            script.onload = () => {
+                // Проверяем, что вопросы долетели с GitHub
+                if (typeof questions === 'undefined' || questions.length === 0) {
+                    alert(`Ошибка: Массив вопросов в файле quizzes/${fileParam}.js пуст или объявлен неверно!`);
+                    location.reload();
+                    return;
+                }
+        
+                // ПЕРЕМЕШИВАЕМ И БЕРЕМ РОВНО 40 СЛУЧАЙНЫХ ВОПРОСОВ ДЛЯ ОГР
+                const shuffled = questions.sort(() => Math.random() - 0.5);
+                const limit = questions.length > 40 ? 40 : questions.length; // Изменено на 40
+                currentQuestions = shuffled.slice(0, limit);
         
                 currentIndex = 0;
                 quizScore = 0;
-                hasBeenWarned = false; 
+                hasBeenWarned = false;
         
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
@@ -337,7 +350,7 @@
                 const timerEl = document.getElementById('quiz-timer');
                 if (timerEl) {
                     timerEl.style.display = 'block';
-                    let totalSeconds = 20 * 60; 
+                    let totalSeconds = 20 * 60;
         
                     if (quizTimerInterval) clearInterval(quizTimerInterval);
         
@@ -354,7 +367,7 @@
                             disableQuizProtection();
                             alert("Время на сдачу теста истекло! Результат аннулирован (оценка 2).");
                             quizScore = 0;
-                            finishInlineQuiz(); 
+                            finishInlineQuiz();
                         }
                         totalSeconds--;
                     }, 1000);
@@ -365,10 +378,18 @@
                 document.oncopy = (e) => { e.preventDefault(); return false; };
                 document.oncontextmenu = (e) => { e.preventDefault(); return false; };
         
+                // Запускаем вывод вопроса на экран
                 showQuestion();
             };
-                // ==========================================================
         
+            script.onerror = () => {
+                alert(`Ошибка: Файл теста "quizzes/${fileParam}.js" не найден на GitHub! Проверьте имя файла.`);
+                location.reload();
+            };
+        
+            document.head.appendChild(script);
+        }
+       
                 // Включаем защиту от копирования, выделения текста и контекстного меню
                 document.body.style.userSelect = 'none';
                 document.body.style.webkitUserSelect = 'none';
