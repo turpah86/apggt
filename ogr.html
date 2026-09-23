@@ -320,40 +320,53 @@
             script.src = `quizzes/${quizId}.js`;
             
             script.onload = () => {
-                currentQuestions = questions; 
+                // 1. Перемешиваем все вопросы из файла случайным образом
+                const shuffled = questions.sort(() => Math.random() - 0.5);
+        
+                // 2. Вырезаем ровно 35 случайных вопросов (можете поменять 35 на 30 или 40)
+                currentQuestions = shuffled.slice(0, 40); 
+        
                 currentIndex = 0;
                 quizScore = 0;
-                hasBeenWarned = false; // Сбрасываем флаг при старте нового теста
-                
+                hasBeenWarned = false; 
+        
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
-         
-                // ================= БЛОК ТАЙМЕРА (20 МИНУТ) =================
+        
+                // БЛОК ТАЙМЕРА (20 МИНУТ)
                 const timerEl = document.getElementById('quiz-timer');
                 if (timerEl) {
-                    timerEl.style.display = 'block'; // Показываем скрытый элемент таймера
-                    let totalSeconds = 20 * 60; // 20 минут переводим в секунды
-                    
-                    // Запускаем ежесекундный отсчет
+                    timerEl.style.display = 'block';
+                    let totalSeconds = 20 * 60; 
+        
+                    if (quizTimerInterval) clearInterval(quizTimerInterval);
+        
                     quizTimerInterval = setInterval(() => {
                         let minutes = Math.floor(totalSeconds / 60);
                         let seconds = totalSeconds % 60;
-                        
-                        // Добавляем ведущие нули, чтобы время выглядело аккуратно (например, 09:05 вместо 9:5)
                         let strMinutes = minutes < 10 ? '0' + minutes : minutes;
                         let strSeconds = seconds < 10 ? '0' + seconds : seconds;
-                        timerEl.innerText = `Осталось: ${strMinutes}:${strSeconds}`;
                         
-                        // Если время полностью вышло — аннулируем тест
+                        timerEl.innerText = `Осталось: ${strMinutes}:${strSeconds}`;
+        
                         if (totalSeconds <= 0) {
                             clearInterval(quizTimerInterval);
                             disableQuizProtection();
                             alert("Время на сдачу теста истекло! Результат аннулирован (оценка 2).");
-                            location.reload(); // Перезагрузка страницы жестко сжигает попытку
+                            quizScore = 0;
+                            finishInlineQuiz(); 
                         }
                         totalSeconds--;
                     }, 1000);
                 }
+        
+                document.body.style.userSelect = 'none';
+                document.body.style.webkitUserSelect = 'none';
+                document.oncopy = (e) => { e.preventDefault(); return false; };
+                document.oncontextmenu = (e) => { e.preventDefault(); return false; };
+        
+                showQuestion();
+            };
                 // ==========================================================
         
                 // Включаем защиту от копирования, выделения текста и контекстного меню
