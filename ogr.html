@@ -483,20 +483,36 @@
                     grades[currentQuizId] = mark;
                 }
          
-                let nextStep = globalStudent.current_step || 1;
-                const currentDiscKey = currentSelectedDisc === 0 ? 'ogr_razdel' : 'electro_razdel';
-         
-                if (currentQuizId === `${currentDiscKey}_${nextStep}`) {
+                // Определяем, какой шаг обновлять для текущего предмета
+                const stepKey = `current_step_${currentDiscKey}`; 
+                let nextStep = globalStudent[stepKey] || 1;
+                
+                if (currentQuizId === `${currentDiscKey}_theme_${nextStep}`) {
                     nextStep = nextStep + 1;
                 }
-         
+                
+                // Создаем объект для динамического обновления поля в базе данных
+                const updateData = {
+                    grades: grades
+                };
+                updateData[stepKey] = nextStep; // Записываем шаг именно для этого предмета (например: current_step_ogr_tech = 2)
+                
                 const { error: updateError } = await _supabase
                     .from('students')
-                    .update({ 
-                        grades: grades,
-                        current_step: nextStep 
-                    })
+                    .update(updateData)
                     .eq('login', login);
+                
+                if (updateError) {
+                    alert("Не удалось сохранить результат в базу из-за ошибки сети!");
+                    location.reload();
+                } else {
+                    localStorage.setItem(`student_step_${currentDiscKey}`, nextStep);
+                    alert(`Тест успешно сдан! Ваша оценка: ${mark}.`);
+                    document.getElementById('quiz-overlay').style.display = 'none';
+                    document.getElementById('bg-blur').style.display = 'none';
+                    location.reload(); // Перезагрузка страницы сразу подтянет новый открытый шаг из базы!
+                }
+
          
                 if (updateError) {
                     alert("Не удалось сохранить результат в базу из-за ошибки сети!");
