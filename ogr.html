@@ -142,15 +142,13 @@
             if (!nav) return;
             
             nav.innerHTML = COURSE_MAP.map((disc, idx) => {
-                const isLocked = idx > allowedDiscIdx;
-                const isDone = idx < allowedDiscIdx;
+                // Убираем блокировку для предметов — левое меню теперь всегда активно!
+                const isLocked = false; 
                 const isActive = idx === currentSelectedDisc;
-                
-                // Добавили onclick="switchDisc(${idx}, ${isLocked})" для обработки нажатий!
+        
                 return `
-                    <div class="discipline-tab ${isLocked ? 'locked' : ''} ${isActive ? 'active' : ''}" 
-                         onclick="switchDisc(${idx}, ${isLocked})">
-                        ${isDone ? '🗸' : (isLocked ? '🔒' : '✍️')} ${disc.title}
+                    <div class="discipline-tab ${isActive ? 'active' : ''}" onclick="switchDisc(${idx}, ${isLocked})">
+                        📖 ${disc.title}
                     </div>
                 `;
             }).join('');
