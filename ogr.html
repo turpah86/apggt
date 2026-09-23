@@ -327,26 +327,31 @@
             script.src = `quizzes/${fileParam}.js`;
         
             script.onload = () => {
-                // Проверяем, что вопросы долетели с GitHub
+                // Проверяем, что вопросы успешно загрузились с GitHub
                 if (typeof questions === 'undefined' || questions.length === 0) {
                     alert(`Ошибка: Массив вопросов в файле quizzes/${fileParam}.js пуст или объявлен неверно!`);
                     location.reload();
                     return;
                 }
         
-                // ПЕРЕМЕШИВАЕМ И БЕРЕМ РОВНО 40 СЛУЧАЙНЫХ ВОПРОСОВ ДЛЯ ОГР
+                // 1. ПЕРЕМЕШИВАЕМ ВСЮ БАЗУ ВОПРОСОВ СЛУЧАЙНЫМ ОБРАЗОМ
                 const shuffled = questions.sort(() => Math.random() - 0.5);
-                const limit = questions.length > 40 ? 40 : questions.length; // Изменено на 40
+        
+                // 2. БЕРЕМ РОВНО 40 СЛУЧАЙНЫХ ВОПРОСОВ (или меньше, если в базе всего 15)
+                const limit = questions.length > 40 ? 40 : questions.length;
                 currentQuestions = shuffled.slice(0, limit);
         
                 currentIndex = 0;
                 quizScore = 0;
                 hasBeenWarned = false;
         
+                // Открываем модальное окно встроенного теста
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
         
-                // БЛОК ТАЙМЕРА (20 МИНУТ)
+                // =========================================================================
+                // ⏱️ БЛОК ТАЙМЕРА (ЖЕСТКИЕ 20 МИНУТ НА СДАЧУ ТЕСТА)
+                // =========================================================================
                 const timerEl = document.getElementById('quiz-timer');
                 if (timerEl) {
                     timerEl.style.display = 'block';
@@ -373,14 +378,15 @@
                     }, 1000);
                 }
         
+                // Включаем надежную защиту от копирования контента теста
                 document.body.style.userSelect = 'none';
                 document.body.style.webkitUserSelect = 'none';
                 document.oncopy = (e) => { e.preventDefault(); return false; };
                 document.oncontextmenu = (e) => { e.preventDefault(); return false; };
         
-                // Запускаем вывод вопроса на экран
+                // Запускаем вывод первого случайного вопроса на экран
                 showQuestion();
-            };
+            }; // <-- Строка 446: script.onload закрывается строго ОДИН РАЗ!
         
             script.onerror = () => {
                 alert(`Ошибка: Файл теста "quizzes/${fileParam}.js" не найден на GitHub! Проверьте имя файла.`);
@@ -389,61 +395,7 @@
         
             document.head.appendChild(script);
         }
-       
-                // Включаем защиту от копирования, выделения текста и контекстного меню
-                document.body.style.userSelect = 'none';
-                document.body.style.webkitUserSelect = 'none';
-                
-                document.oncopy = (e) => { 
-                    e.preventDefault(); 
-                    return false; 
-                };
-                
-                document.oncontextmenu = (e) => { 
-                    e.preventDefault(); 
-                    return false; 
-                };
-                
-                // Блокируем клавиши разработчика F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+U
-                document.onkeydown = (e) => {
-                    if (e.keyCode === 123 || 
-                       (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 67)) || 
-                       (e.ctrlKey && e.keyCode === 85)) {
-                        e.preventDefault();
-                        return false;
-                    }
-                };
-        
-                // НАДЕЖНАЯ ЗАЩИТА: Отслеживаем скрытие вкладки или сворачивание окна
-                document.onvisibilitychange = function() {
-                    // Реагируем только в момент, когда студент реально ушел со страницы
-                    if (document.hidden) {
-                        if (!hasBeenWarned) {
-                            hasBeenWarned = true;
-                            
-                            // Показываем строгое предупреждение, дающее второй шанс
-                            const stay = confirm("ВНИМАНИЕ! Вы свернули браузер или переключили вкладку. При повторной попытке ваш результат будет АННУЛИРОВАН (оценка 2). Вернуться к тесту?");
-                            
-                            if (!stay) {
-                                document.onvisibilitychange = null;
-                                if (quizTimerInterval) clearInterval(quizTimerInterval);
-                                alert("Результат аннулирован.");
-                                location.reload();
-                            }
-                        } else {
-                            // Если это второе нарушение правил — сжигаем попытку без разговоров
-                            document.onvisibilitychange = null;
-                            if (quizTimerInterval) clearInterval(quizTimerInterval);
-                            alert("Вы повторно покинули тест. Результат аннулирован (оценка 2).");
-                            location.reload();
-                        }
-                    }
-                };
-        
-                showQuestion();            
-            script.onerror = () => alert("Файл теста не найден! Проверьте папку quizzes/ на хостинге.");
-            document.head.appendChild(script);
-        }        
+
         // Функция полной очистки всех защит и таймеров (вызывается при штатном закрытии)
         function disableQuizProtection() {
             document.body.style.userSelect = 'auto';
