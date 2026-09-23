@@ -324,23 +324,21 @@
         let hasBeenWarned = false; // Флаг, чтобы знать, было ли уже предупреждение
         let quizTimerInterval = null; // Переменная для управления интервалом времени
         
-        async function startInlineQuiz(quizId) {
-            currentQuizId = quizId;
+        // Перепишите строки 327-338, чтобы они выглядели ТАК:
+        
+        async function startInlineQuiz(fileParam, dbKey) {
+            // Если функция вызвана старой кнопкой (передан один параметр)
+            if (!dbKey) {
+                dbKey = fileParam;
+            }
+        
+            currentQuizId = dbKey;
             
-            // Чистая сборка имени файла под ОГР
-            async function startInlineQuiz(fileParam, dbKey) {
-                // Если функция вызвана старой кнопкой (передан один параметр)
-                if (!dbKey) {
-                    dbKey = fileParam;
-                }
-            
-                currentQuizId = dbKey;
-            
-                const script = document.createElement('script');
+            const script = document.createElement('script');
                 // Теперь fileParam прилетит из кнопок лекций в идеальном виде: 
                 // либо "rem_electro_1", либо "electro_razdel1" без всяких принудительных замен!
-                script.src = `quizzes/${fileParam}.js`
-        
+            script.src = `quizzes/${fileParam}.js`
+                
             script.onload = () => {
                 if (typeof questions === 'undefined' || questions.length === 0) {
                     alert(`Ошибка: Массив вопросов в файле quizzes/${fileParam}.js пуст или объявлен неверно!`);
