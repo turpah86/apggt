@@ -83,6 +83,7 @@
                 title: "Электроснабжение ГП",
                 dbPrefix: "electro",      // В базу Supabase оценки пойдут как: electro_razdel1
                 filePrefix: "electro_razdel", // На GitHub файл загрузится как: electro_razdel1.js
+                isRemStyle: false,
                 themes: [
                     { name: "Понятие об энергосистеме и электросетями", link: "https://disk.yandex.ru/d/0ggJ-5bJ1DVyUg" },
                     { name: "Схемы внешних распределительных сетей", link: "https://disk.yandex.ru/d/UAXUl83kK79YXw" },
@@ -192,7 +193,18 @@
         
             currentDisc.themes.forEach((theme, index) => {
                 const themeNum = index + 1;
-                const quizKey = `${currentDiscKey}_razdel${themeNum}`;
+                
+                // 1. Динамически собираем ИМЯ ФАЙЛА ДЛЯ GITHUB
+                // Если флаг true — соберет rem_electro_1, если false — electro_razdel1
+                const fileName = currentDisc.isRemStyle ? 
+                    `${currentDisc.filePrefix}_${themeNum}` : 
+                    `${currentDisc.filePrefix}${themeNum}`;
+        
+                // 2. Динамически собираем КЛЮЧ ОЦЕНКИ ДЛЯ SUPABASE
+                const quizKey = currentDisc.isRemStyle ? 
+                    `${currentDisc.dbPrefix}_${themeNum}` : 
+                    `${currentDisc.dbPrefix}_razdel${themeNum}`;
+        
                 const currentGrade = grades[quizKey] || null;
                 
                 let statusHTML = '';
@@ -207,7 +219,7 @@
                 } else if (themeNum === currentStep) {
                     // ТЕКУЩАЯ ТЕМА: Ссылка активна, при клике запускается таймер
                     statusHTML = `<span class="status-tag status-current" style="background: rgba(241, 196, 15, 0.2); color: #f1c40f; padding: 5px 10px; border-radius: 4px;">Текущая тема</span>`;
-                    btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${quizKey}')" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.5;">Сдать тест ✍️</button>`;
+                    btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${fileName}', '${quizKey}')" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.5;">Сдать тест ✍️</button>`;
                     lectureLinkHTML = `<a href="${theme.link}" target="_blank" onclick="startTimer(${themeNum})" class="lecture-link" style="color: var(--gold); text-decoration: underline;">Изучить лекцию 📖</a>`;
                 } else {
                     // ЗАКРЫТАЯ ТЕМА: Ссылка превращается в серый заблокированный текст!
