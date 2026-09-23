@@ -1,13 +1,9 @@
+// Инициализация Supabase (ваши рабочие ключи)
 const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
 const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r';
 const _supabase = supabase.createClient(S_URL, S_KEY);
-// ГЛОБАЛЬНАЯ КАРТА ВСЕХ КУРСОВ ТЕХНИКУМА
-// Инициализация Supabase (ваши рабочие ключи)
-const S_URL = 'https://supabase.co';
-const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r';
-const _supabase = supabase.createClient(S_URL, S_KEY);
 
-// ГЛОБАЛЬНАЯ КАРТА ВСЕХ КУРСОВ И ИХ ДИСЦИПЛИН ТЕХНИКУМА
+// ГЛОБАЛЬНАЯ КАРТА ВСЕХ КУРСОВ
 const GLOBAL_COURSES = {
     // =========================================================================
     // НАПРАВЛЕНИЕ ДЛЯ ГРУППЫ СЛЕСАРЬ
