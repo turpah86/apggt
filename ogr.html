@@ -327,35 +327,43 @@
             script.src = `quizzes/${fileParam}.js`;
         
             script.onload = () => {
-                // Проверяем, что вопросы успешно загрузились с GitHub
                 if (typeof questions === 'undefined' || questions.length === 0) {
                     alert(`Ошибка: Массив вопросов в файле quizzes/${fileParam}.js пуст или объявлен неверно!`);
                     location.reload();
                     return;
                 }
         
-                // 1. ПЕРЕМЕШИВАЕМ ВСЮ БАЗУ ВОПРОСОВ СЛУЧАЙНЫМ ОБРАЗОМ
+                // 1. Перемешиваем всю базу случайным образом
                 const shuffled = questions.sort(() => Math.random() - 0.5);
         
-                // 2. БЕРЕМ РОВНО 40 СЛУЧАЙНЫХ ВОПРОСОВ (или меньше, если в базе всего 15)
-                const limit = questions.length > 40 ? 40 : questions.length;
+                // 2. ДИНАМИЧЕСКИЙ ЛИМИТ ВОПРОСОВ И ВРЕМЕНИ ТАЙМЕРА
+                let limit;
+                let quizMinutes;
+        
+                if (quizId.includes('_final')) {
+                    limit = questions.length;   // Для финала берем ВСЕ 100 вопросов
+                    quizMinutes = 50;           // ДЛЯ ФИНАЛА СТАВИМ 50 МИНУТ ⏱️
+                } else {
+                    limit = questions.length > 40 ? 40 : questions.length; // Для лекций — 40 вопросов
+                    quizMinutes = 20;           // Для лекций оставляем стандартные 20 минут
+                }
+                
                 currentQuestions = shuffled.slice(0, limit);
         
                 currentIndex = 0;
                 quizScore = 0;
                 hasBeenWarned = false;
         
-                // Открываем модальное окно встроенного теста
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
         
                 // =========================================================================
-                // ⏱️ БЛОК ТАЙМЕРА (ЖЕСТКИЕ 20 МИНУТ НА СДАЧУ ТЕСТА)
+                // ⏱️ АВТОМАТИЧЕСКИЙ БЛОК ТАЙМЕРА (20 или 50 МИНУТ)
                 // =========================================================================
                 const timerEl = document.getElementById('quiz-timer');
                 if (timerEl) {
                     timerEl.style.display = 'block';
-                    let totalSeconds = 20 * 60;
+                    let totalSeconds = quizMinutes * 60; // Автоматически подставит 1200 или 3000 секунд
         
                     if (quizTimerInterval) clearInterval(quizTimerInterval);
         
@@ -378,18 +386,17 @@
                     }, 1000);
                 }
         
-                // Включаем надежную защиту от копирования контента теста
                 document.body.style.userSelect = 'none';
                 document.body.style.webkitUserSelect = 'none';
                 document.oncopy = (e) => { e.preventDefault(); return false; };
                 document.oncontextmenu = (e) => { e.preventDefault(); return false; };
         
-                // Запускаем вывод первого случайного вопроса на экран
+                // Запускаем вывод вопроса на экран
                 showQuestion();
-            }; // <-- Строка 446: script.onload закрывается строго ОДИН РАЗ!
+            };
         
             script.onerror = () => {
-                alert(`Ошибка: Файл теста "quizzes/${fileParam}.js" не найден на GitHub! Проверьте имя файла.`);
+                alert(`Ошибка: Файл теста "quizzes/${fileParam}.js" не найден на Хосте! Проверьте имя файла.`);
                 location.reload();
             };
         
@@ -495,6 +502,29 @@
                 alert(`Оценка: ${mark}. Тест не сдан. Старая оценка сохранена. Подучите материал!`);
                 location.reload();
             }
+        document.onvisibilitychange = function() {
+            // Анти-чит сработает, только если окно теста РЕАЛЬНО открыто на экране
+            const quizOverlay = document.getElementById('quiz-overlay');
+            const isQuizActive = quizOverlay && (quizOverlay.style.display === 'block' || quizOverlay.style.display === 'flex');
+            if (isQuizActive && document.hidden) {
+                if (!hasBeenWarned) {
+                    hasBeenWarned = true;
+                    const stay = confirm("ВНИМАНИЕ! Вы свернули браузер или переключили вкладку. При повторной попытке ваш результат будет АННУЛИРОВАН (оценка 2). Вернуться к тесту?");
+                    if (!stay) {
+                        annulQuizForce();
+                    }
+                } else {
+                    annulQuizForce();
+                }
+            }
+        };
+        
+        async function annulQuizForce() {
+            document.onvisibilitychange = null;
+            if (quizTimerInterval) clearInterval(quizTimerInterval);
+            alert("Вы повторно покинули тест. Результат аннулирован (оценка 2).");
+            quizScore = 0; 
+            await finishInlineQuiz(); // Автоматически отправит двойку в Supabase    
         }
         document.addEventListener('DOMContentLoaded', init);
     </script>
