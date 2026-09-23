@@ -211,7 +211,7 @@
                 } else if (themeNum === currentStep) {
                     // ТЕКУЩАЯ ТЕМА: Ссылка активна, при клике запускается таймер
                     statusHTML = `<span class="status-tag status-current" style="background: rgba(241, 196, 15, 0.2); color: #f1c40f; padding: 5px 10px; border-radius: 4px;">Текущая тема</span>`;
-                    btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${quizKey}')" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.5;">Сдать тест ✍️</button>`;
+                    btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${fileName}', '${quizKey}')" disabled style="padding: 8px 15px; border-radius: 5px; border: none; opacity: 0.5;">Сдать тест ✍️</button>`;
                     lectureLinkHTML = `<a href="${theme.link}" target="_blank" onclick="startTimer(${themeNum})" class="lecture-link" style="color: var(--gold); text-decoration: underline;">Изучить лекцию 📖</a>`;
                 } else {
                     // ЗАКРЫТАЯ ТЕМА: Ссылка превращается в серый заблокированный текст!
