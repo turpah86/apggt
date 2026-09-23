@@ -180,10 +180,8 @@
             if (titleEl) titleEl.innerText = currentDisc.title;
         
             const grades = student.grades || {}; 
-            const isCurrentDisc = currentSelectedDisc === (student.current_disc || 0);
-            
-            // Вычисляем текущую тему студента: если курс не его — для него тут все пройдено
-            const currentStep = isCurrentDisc ? (student.current_step || 1) : 99;
+            const stepKey = `current_step_${currentDisc.id}`; // Создает ключ, например: current_step_ogr_tech
+            const currentStep = student[stepKey] || 1; // Берет шаг для этого предмета из Supabase, по умолчанию 1
             const currentDiscKey = currentSelectedDisc === 0 ? 'ogr_razdel' : 'electro_razdel';
         
             currentDisc.themes.forEach((theme, index) => {
