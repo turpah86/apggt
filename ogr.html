@@ -180,8 +180,8 @@
             if (titleEl) titleEl.innerText = currentDisc.title;
         
             const grades = student.grades || {}; 
-            const stepKey = `current_step_${currentDisc.id}`; // Создает ключ, например: current_step_ogr_tech
-            const currentStep = student[stepKey] || 1; // Берет шаг для этого предмета из Supabase, по умолчанию 1
+            const stepKey = `${currentDisc.id}_step_progress`; // Создает ключ, например: current_step_ogr_tech
+            const currentStep = grades[stepKey] || 1; // Берет шаг для этого предмета из Supabase, по умолчанию 1
             const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro';
         
             currentDisc.themes.forEach((theme, index) => {
