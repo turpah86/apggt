@@ -67,12 +67,15 @@
                 dbPrefix: "rem_electro",   // В базу Supabase оценки пойдут как: rem_electro_1
                 filePrefix: "rem_electro", // На GitHub файл загрузится как: rem_electro_1.js
                 isRemStyle: true,          // Маркер, что для этого предмета не нужно слово _razdel в имени файла
-                    { name: "Введение в дисциплину", link: "https://disk.yandex.ru/d/8HBwCQrA1_spCw" },
-                    { name: "Общие сведение о технологии открытых горных работ", link: "https://disk.yandex.ru/d/anSXyy1fVtwm4w" },
-                    { name: "Подготовка горных пород к выемке", link: "https://disk.yandex.ru/d/vhDTiQ4YwvZg5g" },
-                    { name: "Выемочно-погрузочные работы", link: "https://disk.yandex.ru/d/pQVvVwzrFysHcA" },
-                    { name: "Перемещение карьерных грузов", link: "https://disk.yandex.ru/d/5rfKGGUYocklZQ" },
-                    { name: "Отвалообразование вскрышных пород", link: "https://disk.yandex.ru/d/bfguQzBj9jEBcQ" },
+                themes: [
+                    { name: "Основные понятия и закон Ома", link: "https://disk.yandex.ru/i/LHkTfjvHvLUweQ" },
+                    { name: "Законы Кирхгофа", link: "https://disk.yandex.ru/i/vt-2nWk6_ExHqw" },
+                    { name: "Цепи постоянного тока. Соединение элементов", link: "https://disk.yandex.ru/i/lCFdq0_zaWHqTA" },
+                    { name: "Элементы электрических схем и их обозначения", link: "https://disk.yandex.ru/i/NadjwgwSnKwR2Q" },
+                    { name: "Элементы электрических схем и их обозначения", link: "https://disk.yandex.ru/i/wwN9wC2uPKO24w" },
+                    { name: "Цепи переменного тока. Часть 2 (Реактивное сопротивление)", link: "https://disk.yandex.ru/i/ffdyhvkEfTJClQ" },
+                    { name: "Основы безопасности при работе с электрооборудованием", link: "https://disk.yandex.ru/i/kgoLUJ0NNgvaDw" },
+                    { name: "Практическая работа, средства защиты и первая помощь", link: "https://disk.yandex.ru/i/kaZi-jfuK25cqw" }
                 ]
             },
             {
@@ -189,8 +192,21 @@
         
             currentDisc.themes.forEach((theme, index) => {
                 const themeNum = index + 1;
-                const quizKey = `${currentDiscKey}_razdel${themeNum}`;
+                
+                // 1. Автоматически собираем ИМЯ ФАЙЛА ДЛЯ GITHUB
+                // Если есть маркер слecaря (isRemStyle) — собирает как rem_electro_1.js, иначе как electro_razdel1.js
+                const fileName = currentDisc.isRemStyle ? 
+                    `${currentDisc.filePrefix}_${themeNum}` : 
+                    `${currentDisc.filePrefix}${themeNum}`;
+            
+                // 2. Автоматически собираем КЛЮЧ ОЦЕНКИ ДЛЯ SUPABASE
+                // Для ОГР соберет: electro_razdel1, для слесарей: rem_electro_1
+                const quizKey = currentDisc.isRemStyle ? 
+                    `${currentDisc.dbPrefix}_${themeNum}` : 
+                    `${currentDisc.dbPrefix}_razdel${themeNum}`;
+            
                 const currentGrade = grades[quizKey] || null;
+
                 
                 let statusHTML = '';
                 let btnHTML = '';
@@ -199,7 +215,7 @@
                 if (themeNum < currentStep) {
                     // ТЕМА ПРОЙДЕНА: Ссылка доступна для повторения
                     statusHTML = `<span class="status-tag status-passed" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 5px 10px; border-radius: 4px;">Пройдено (Оценка: ${currentGrade || '3'})</span>`;
-                    btnHTML = `<button class="btn-action" onclick="startInlineQuiz('${quizKey}')" style="background: var(--gold); color: #000; font-weight: bold; padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none;">Улучшить оценку 📈</button>`;
+                    btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${fileName}', '${quizKey}')" style="background: var(--gold); color: #000; font-weight: bold; padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none;">Улучшить оценку 📈</button>`;
                     lectureLinkHTML = `<a href="${theme.link}" target="_blank" class="lecture-link" style="color: var(--gold); text-decoration: underline;">Изучить лекцию 📖</a>`;
                 } else if (themeNum === currentStep) {
                     // ТЕКУЩАЯ ТЕМА: Ссылка активна, при клике запускается таймер
