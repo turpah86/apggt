@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Учебный план</title>
+    <title>Учебный план | ПАН</title>
     <link rel="stylesheet" href="style.css">
     <script src="supabase.js"></script>
     <style>
@@ -62,35 +62,32 @@
         // --- 1. КОНФИГУРАЦИЯ УЧЕБНОГО ПЛАНА ---
         const COURSE_MAP = [
             {
-                id: "rem_electro",
-                title: "Электротехника",
-                themes: [
-                    { name: "Основные понятия и закон Ома", link: "https://disk.yandex.ru/i/LHkTfjvHvLUweQ" },
-                    { name: "Законы Кирхгофа", link: "https://disk.yandex.ru/i/vt-2nWk6_ExHqw" },
-                    { name: "Цепи постоянного тока. Соединение элементов", link: "https://disk.yandex.ru/i/lCFdq0_zaWHqTA" },
-                    { name: "Элементы электрических схем и их обозначения", link: "https://disk.yandex.ru/i/NadjwgwSnKwR2Q" },
-                    { name: "Элементы электрических схем и их обозначения", link: "https://disk.yandex.ru/i/wwN9wC2uPKO24w" },
-                    { name: "Цепи переменного тока. Часть 2 (Реактивное сопротивление)", link: "https://disk.yandex.ru/i/ffdyhvkEfTJClQ" },
-                    { name: "Основы безопасности при работе с электрооборудованием", link: "https://disk.yandex.ru/i/kgoLUJ0NNgvaDw" },
-                    { name: "Практическая работа, средства защиты и первая помощь", link: "https://disk.yandex.ru/i/kaZi-jfuK25cqw" }
+                id: "rem",
+                title: "Электротехника (Слесари)",
+                dbPrefix: "rem_electro",   // В базу Supabase оценки пойдут как: rem_electro_1
+                filePrefix: "rem_electro", // На GitHub файл загрузится как: rem_electro_1.js
+                isRemStyle: true,          // Маркер, что для этого предмета не нужно слово _razdel в имени файла
+                    { name: "Введение в дисциплину", link: "https://disk.yandex.ru/d/8HBwCQrA1_spCw" },
+                    { name: "Общие сведение о технологии открытых горных работ", link: "https://disk.yandex.ru/d/anSXyy1fVtwm4w" },
+                    { name: "Подготовка горных пород к выемке", link: "https://disk.yandex.ru/d/vhDTiQ4YwvZg5g" },
+                    { name: "Выемочно-погрузочные работы", link: "https://disk.yandex.ru/d/pQVvVwzrFysHcA" },
+                    { name: "Перемещение карьерных грузов", link: "https://disk.yandex.ru/d/5rfKGGUYocklZQ" },
+                    { name: "Отвалообразование вскрышных пород", link: "https://disk.yandex.ru/d/bfguQzBj9jEBcQ" },
                 ]
             },
             {
-                id: "rem_tech",
-                title: "Технология ремонта",
+                id: "electro",
+                title: "Электроснабжение ГП",
+                dbPrefix: "electro",      // В базу Supabase оценки пойдут как: electro_razdel1
+                filePrefix: "electro_razdel", // На GitHub файл загрузится как: electro_razdel1.js
                 themes: [
-                    { name: "Введение в технологию ремонта горных машин", link: "https://yandex.ru" },
-                    { name: "Разборка и очистка деталей оборудования", link: "https://yandex.ru" },
-                    { name: "Дефектация деталей и узлов", link: "https://yandex.ru" },
-                    { name: "Технология ремонта резьбовых и шпоночных соединений", link: "https://yandex.ru" },
-                    { name: "Восстановление деталей наплавкой и сваркой", link: "https://yandex.ru" },
-                    { name: "Ремонт подшипниковых узлов и валов", link: "https://yandex.ru" },
-                    { name: "Сборка и регулировка механизмов", link: "https://yandex.ru" },
-                    { name: "Испытание и приемка оборудования после ремонта", link: "https://yandex.ru" }
+                    { name: "Понятие об энергосистеме и электросетями", link: "https://disk.yandex.ru/d/0ggJ-5bJ1DVyUg" },
+                    { name: "Схемы внешних распределительных сетей", link: "https://disk.yandex.ru/d/UAXUl83kK79YXw" },
+                    { name: "Определение электрических нагрузок", link: "https://disk.yandex.ru/d/0wlevSXD-1IZTw" },
+                    { name: "Линии электроснабжения горного предприятия", link: "https://disk.yandex.ru/d/U-6BCPSTGE_rSA" },
                 ]
             }
         ];
-        
         const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
         const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r';
         const _supabase = supabase.createClient(S_URL, S_KEY);
@@ -148,15 +145,13 @@
             if (!nav) return;
             
             nav.innerHTML = COURSE_MAP.map((disc, idx) => {
-                const isLocked = idx > allowedDiscIdx;
-                const isDone = idx < allowedDiscIdx;
+                // Убираем блокировку для предметов — левое меню теперь всегда активно!
+                const isLocked = false; 
                 const isActive = idx === currentSelectedDisc;
-                
-                // Добавили onclick="switchDisc(${idx}, ${isLocked})" для обработки нажатий!
+        
                 return `
-                    <div class="discipline-tab ${isLocked ? 'locked' : ''} ${isActive ? 'active' : ''}" 
-                         onclick="switchDisc(${idx}, ${isLocked})">
-                        ${isDone ? '🗸' : (isLocked ? '🔒' : '✍️')} ${disc.title}
+                    <div class="discipline-tab ${isActive ? 'active' : ''}" onclick="switchDisc(${idx}, ${isLocked})">
+                        📖 ${disc.title}
                     </div>
                 `;
             }).join('');
@@ -188,15 +183,13 @@
             if (titleEl) titleEl.innerText = currentDisc.title;
         
             const grades = student.grades || {}; 
-            const isCurrentDisc = currentSelectedDisc === (student.current_disc || 0);
-            
-            // Вычисляем текущую тему студента: если курс не его — для него тут все пройдено
-            const currentStep = isCurrentDisc ? (student.current_step || 1) : 99;
-            const currentDiscKey = currentSelectedDisc === 0 ? 'rem_electro' : 'rem_tech';
+            const stepKey = `current_step_${currentDisc.id}`; // Создает ключ, например: current_step_ogr_tech
+            const currentStep = student[stepKey] || 1; // Берет шаг для этого предмета из Supabase, по умолчанию 1
+            const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro';
         
             currentDisc.themes.forEach((theme, index) => {
                 const themeNum = index + 1;
-                const quizKey = `${currentDiscKey}_${themeNum}`;
+                const quizKey = `${currentDiscKey}_razdel${themeNum}`;
                 const currentGrade = grades[quizKey] || null;
                 
                 let statusHTML = '';
@@ -476,47 +469,47 @@
         }
         
         async function finishInlineQuiz() {
-            // Отключаем анти-чит защиту, так как тест завершен штатно
-            disableQuizProtection();
-        
+            // Определяем, какой предмет сейчас сдается ('ogr' или 'electro')
+            const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro';
+            
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
-         
+            
             if (mark >= 3) {
                 const login = localStorage.getItem('student_login');
-                document.getElementById('q-text').innerText = "Сохранение результата... ⏳";
-         
+                document.getElementById('q-text').innerText = "Сохранение результата...";
+            
                 const grades = globalStudent.grades || {};
-                const oldGrade = grades[currentQuizId] || 0;
-         
-                if (mark > oldGrade) {
-                    grades[currentQuizId] = mark;
-                }
-         
-                let nextStep = globalStudent.current_step || 1;
-                const currentDiscKey = currentSelectedDisc === 0 ? 'rem_electro' : 'rem_tech';
-         
-                if (currentQuizId === `${currentDiscKey}_${nextStep}`) {
+                
+                // 1. Фиксируем оценку за текущий тест (например: ogr_razdel1 = 4)
+                grades[currentQuizId] = mark; 
+            
+                // 2. Вычисляем и обновляем шаг прогресса именно для этой дисциплины
+                const progressKey = `${currentDiscKey}_step_progress`;
+                let nextStep = grades[progressKey] || 1;
+                
+                // Если сдан именно текущий открытый раздел, открываем следующий
+                if (currentQuizId === `${currentDiscKey}_razdel${nextStep}`) {
                     nextStep = nextStep + 1;
                 }
-         
+                grades[progressKey] = nextStep; // Записываем новый шаг в объект оценок
+            
+                // 3. Отправляем обновленный объект в Supabase
                 const { error: updateError } = await _supabase
                     .from('students')
-                    .update({ 
-                        grades: grades,
-                        current_step: nextStep 
+                    .update({
+                        grades: grades // Отправляем обратно в существующее JSONB-поле
                     })
                     .eq('login', login);
-         
+            
                 if (updateError) {
                     alert("Не удалось сохранить результат в базу из-за ошибки сети!");
                     location.reload();
                 } else {
-                    localStorage.setItem('student_step', nextStep);
                     alert(`Тест успешно сдан! Ваша оценка: ${mark}.`);
-                    document.getElementById('quiz-overlay').style.display = 'none';
+                    document.getElementById('quiz-overlay').style.style.display = 'none';
                     document.getElementById('bg-blur').style.display = 'none';
-                    location.reload(); 
+                    location.reload(); // Перезагрузка страницы мгновенно применит новые открытые замочки!
                 }
             } else {
                 alert(`Оценка: ${mark}. Тест не сдан. Старая оценка сохранена. Подучите материал!`);
