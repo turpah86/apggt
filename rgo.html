@@ -90,7 +90,7 @@
                     { name: "Линии электроснабжения горного предприятия", link: "https://disk.yandex.ru/d/U-6BCPSTGE_rSA" },
                 ]
             }
-        ];
+        ];        
         const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
         const S_KEY = 'sb_publishable_WefHBfPDA7Fx9ZDRMnZDUA_FfqINH2r';
         const _supabase = supabase.createClient(S_URL, S_KEY);
@@ -186,27 +186,14 @@
             if (titleEl) titleEl.innerText = currentDisc.title;
         
             const grades = student.grades || {}; 
-            const stepKey = `current_step_${currentDisc.id}`; // Создает ключ, например: current_step_ogr_tech
-            const currentStep = student[stepKey] || 1; // Берет шаг для этого предмета из Supabase, по умолчанию 1
+            const stepKey = `${currentDisc.id}_step_progress`; // Создает ключ, например: current_step_ogr_tech
+            const currentStep = grades[stepKey] || 1; // Берет шаг для этого предмета из Supabase, по умолчанию 1
             const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro';
         
             currentDisc.themes.forEach((theme, index) => {
                 const themeNum = index + 1;
-                
-                // 1. Автоматически собираем ИМЯ ФАЙЛА ДЛЯ GITHUB
-                // Если есть маркер слecaря (isRemStyle) — собирает как rem_electro_1.js, иначе как electro_razdel1.js
-                const fileName = currentDisc.isRemStyle ? 
-                    `${currentDisc.filePrefix}_${themeNum}` : 
-                    `${currentDisc.filePrefix}${themeNum}`;
-            
-                // 2. Автоматически собираем КЛЮЧ ОЦЕНКИ ДЛЯ SUPABASE
-                // Для ОГР соберет: electro_razdel1, для слесарей: rem_electro_1
-                const quizKey = currentDisc.isRemStyle ? 
-                    `${currentDisc.dbPrefix}_${themeNum}` : 
-                    `${currentDisc.dbPrefix}_razdel${themeNum}`;
-            
+                const quizKey = `${currentDiscKey}_razdel${themeNum}`;
                 const currentGrade = grades[quizKey] || null;
-
                 
                 let statusHTML = '';
                 let btnHTML = '';
@@ -215,7 +202,7 @@
                 if (themeNum < currentStep) {
                     // ТЕМА ПРОЙДЕНА: Ссылка доступна для повторения
                     statusHTML = `<span class="status-tag status-passed" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 5px 10px; border-radius: 4px;">Пройдено (Оценка: ${currentGrade || '3'})</span>`;
-                    btnHTML = `<button id="test-btn-${themeNum}" class="btn-action" onclick="startInlineQuiz('${fileName}', '${quizKey}')" style="background: var(--gold); color: #000; font-weight: bold; padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none;">Улучшить оценку 📈</button>`;
+                    btnHTML = `<button class="btn-action" onclick="startInlineQuiz('${quizKey}')" style="background: var(--gold); color: #000; font-weight: bold; padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none;">Улучшить оценку 📈</button>`;
                     lectureLinkHTML = `<a href="${theme.link}" target="_blank" class="lecture-link" style="color: var(--gold); text-decoration: underline;">Изучить лекцию 📖</a>`;
                 } else if (themeNum === currentStep) {
                     // ТЕКУЩАЯ ТЕМА: Ссылка активна, при клике запускается таймер
@@ -523,7 +510,7 @@
                     location.reload();
                 } else {
                     alert(`Тест успешно сдан! Ваша оценка: ${mark}.`);
-                    document.getElementById('quiz-overlay').style.style.display = 'none';
+                    document.getElementById('quiz-overlay').style.display = 'none';
                     document.getElementById('bg-blur').style.display = 'none';
                     location.reload(); // Перезагрузка страницы мгновенно применит новые открытые замочки!
                 }
@@ -536,3 +523,4 @@
     </script>
 </body>
 </html>
+
