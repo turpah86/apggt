@@ -333,103 +333,106 @@
         let quizTimerInterval = null; // Переменная для управления интервалом времени
         
         async function startInlineQuiz(quizId) {
-            currentQuizId = quizId;
+            // 1. Запоминаем ID теста для последующего сохранения оценки в Supabase
+            currentQuizId = quizId; 
+        
+            // 2. Логика автоматического определения имени файла на GitHub
+            // Скрипт смотрит на ID теста: если он начинается на 'rem_electro', загружает файл с подчеркиванием (_1),
+            // во всех остальных случаях загружает стандартный файл со словом 'razdel' (electro_razdel1)
+            let fileParam = quizId;
+            if (quizId.startsWith('rem_electro_')) {
+                // Оставляем имя как есть (например: rem_electro_1)
+                fileParam = quizId; 
+            } else if (quizId.includes('_razdel')) {
+                // Оставляем имя как есть (например: electro_razdel1)
+                fileParam = quizId;
+            } else {
+                // Резервный случай: если вдруг префикс не сформировался, подставляем слово 'razdel'
+                fileParam = quizId.replace('_', '_razdel');
+            }
+        
+            // 3. Динамически создаем тег скрипта для загрузки вопросов с GitHub
             const script = document.createElement('script');
-            script.src = `quizzes/${quizId}.js`;
             
+            // Подставляем точное имя файла в путь к папке quizzes
+            script.src = `quizzes/${fileParam}.js`; 
+        
+            // 4. Логика, которая сработает СРАЗУ ПОСЛЕ успешной загрузки файла вопросов
             script.onload = () => {
-                currentQuestions = questions; 
+                currentQuestions = questions;
                 currentIndex = 0;
                 quizScore = 0;
-                hasBeenWarned = false; // Сбрасываем флаг при старте нового теста
-                
+                hasBeenWarned = false; // Сбрасываем флаг предупреждения анти-чит защиты
+        
+                // Показываем модальное окно встроенного теста и размываем задний фон
                 document.getElementById('bg-blur').style.display = 'block';
                 document.getElementById('quiz-overlay').style.display = 'block';
-         
-                // ================= БЛОК ТАЙМЕРА (20 МИНУТ) =================
+        
+                // =========================================================================
+                // ⏱️ БЛОК ТАЙМЕРА (ЖЕСТКИЕ 20 МИНУТ НА СДАЧУ ТЕСТА)
+                // =========================================================================
                 const timerEl = document.getElementById('quiz-timer');
                 if (timerEl) {
-                    timerEl.style.display = 'block'; // Показываем скрытый элемент таймера
-                    let totalSeconds = 20 * 60; // 20 минут переводим в секунды
-                    
-                    // Запускаем ежесекундный отсчет
+                    timerEl.style.display = 'block'; // Включаем плавающий блок таймера на экране
+                    let totalSeconds = 20 * 60; // 20 минут переводим в секунды (1200 секунд)
+        
+                    // Сбрасываем старый интервал таймера, если он завис с прошлого тестирования
+                    if (quizTimerInterval) clearInterval(quizTimerInterval);
+        
+                    // Запускаем ежесекундный отсчет времени
                     quizTimerInterval = setInterval(() => {
                         let minutes = Math.floor(totalSeconds / 60);
                         let seconds = totalSeconds % 60;
-                        
-                        // Добавляем ведущие нули, чтобы время выглядело аккуратно (например, 09:05 вместо 9:5)
+        
+                        // Добавляем ведущие нули, чтобы время выглядело аккуратно (например, 09:05)
                         let strMinutes = minutes < 10 ? '0' + minutes : minutes;
                         let strSeconds = seconds < 10 ? '0' + seconds : seconds;
-                        timerEl.innerText = `Осталось: ${strMinutes}:${strSeconds}`;
                         
-                        // Если время полностью вышло — аннулируем тест
+                        timerEl.innerText = `Осталось: ${strMinutes}:${strSeconds}`;
+        
+                        // Если время полностью вышло — принудительно аннулируем тест с двойкой
                         if (totalSeconds <= 0) {
                             clearInterval(quizTimerInterval);
-                            disableQuizProtection();
+                            disableQuizProtection(); // Отключаем защиту от копирования, чтобы разблокировать мышь
+                            
                             alert("Время на сдачу теста истекло! Результат аннулирован (оценка 2).");
-                            location.reload(); // Перезагрузка страницы жестко сжигает попытку
+                            
+                            quizScore = 0;
+                            finishInlineQuiz(); // Принудительно вызываем фиксацию двойки в Supabase
                         }
+        
                         totalSeconds--;
                     }, 1000);
                 }
-                // ==========================================================
         
-                // Включаем защиту от копирования, выделения текста и контекстного меню
+                // Включаем надежную защиту от копирования контента теста
                 document.body.style.userSelect = 'none';
                 document.body.style.webkitUserSelect = 'none';
-                
-                document.oncopy = (e) => { 
-                    e.preventDefault(); 
-                    return false; 
-                };
-                
-                document.oncontextmenu = (e) => { 
-                    e.preventDefault(); 
-                    return false; 
-                };
-                
-                // Блокируем клавиши разработчика F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+U
-                document.onkeydown = (e) => {
-                    if (e.keyCode === 123 || 
-                       (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 67)) || 
-                       (e.ctrlKey && e.keyCode === 85)) {
-                        e.preventDefault();
-                        return false;
-                    }
+        
+                document.oncopy = (e) => {
+                    e.preventDefault();
+                    return false;
                 };
         
-                // НАДЕЖНАЯ ЗАЩИТА: Отслеживаем скрытие вкладки или сворачивание окна
-                document.onvisibilitychange = function() {
-                    // Реагируем только в момент, когда студент реально ушел со страницы
-                    if (document.hidden) {
-                        if (!hasBeenWarned) {
-                            hasBeenWarned = true;
-                            
-                            // Показываем строгое предупреждение, дающее второй шанс
-                            const stay = confirm("ВНИМАНИЕ! Вы свернули браузер или переключили вкладку. При повторной попытке ваш результат будет АННУЛИРОВАН (оценка 2). Вернуться к тесту?");
-                            
-                            if (!stay) {
-                                document.onvisibilitychange = null;
-                                if (quizTimerInterval) clearInterval(quizTimerInterval);
-                                alert("Результат аннулирован.");
-                                location.reload();
-                            }
-                        } else {
-                            // Если это второе нарушение правил — сжигаем попытку без разговоров
-                            document.onvisibilitychange = null;
-                            if (quizTimerInterval) clearInterval(quizTimerInterval);
-                            alert("Вы повторно покинули тест. Результат аннулирован (оценка 2).");
-                            location.reload();
-                        }
-                    }
+                document.oncontextmenu = (e) => {
+                    e.preventDefault();
+                    return false;
                 };
         
+                // Запускаем отрисовку первого вопроса из загруженного файла
                 showQuestion();
             };
-            
-            script.onerror = () => alert("Файл теста не найден! Проверьте папку quizzes/ на хостинге.");
+        
+            // 5. Логика перехвата ошибки, если файла с таким именем на GitHub не существует
+            script.onerror = () => {
+                alert(`Ошибка: Файл теста "quizzes/${fileParam}.js" не найден в репозитории! Проверьте имя файла на хостинге.`);
+                location.reload(); // Перезагружаем страницу, чтобы разблокировать учебный план
+            };
+        
+            // Внедряем сформированный скрипт в head документа для запуска скачивания
             document.head.appendChild(script);
         }
+
         
         // Функция полной очистки всех защит и таймеров (вызывается при штатном закрытии)
         function disableQuizProtection() {
