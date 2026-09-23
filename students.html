@@ -139,20 +139,40 @@
                 }
     
                 // Сохраняем сессию
-                
                 localStorage.setItem('student_login', student.login || user);
                 localStorage.setItem('student_step', student.current_step || 1);
-                localStorage.setItem('user_group', student.group_name || 'rem');
+                
+                // Приводим название группы к нижнему регистру для точного сравнения (ОГР -> огр)
+                const userGroup = (student.group_name || 'rem').toLowerCase().trim();
+                localStorage.setItem('user_group', userGroup);
+                
                 if (config && config.end_date) {
                     localStorage.setItem('course_deadline', config.end_date);
                 }
-                window.location.href = 'rem_course.html';
+
+                // АВТОМАТИЧЕСКИЙ РАСПРЕДЕЛИТЕЛЬ ПО СТРАНИЦАМ КУРСОВ
+                if (userGroup === 'rem') {
+                    window.location.href = 'rem_course.html';  // Слесари РЕМ
+                } else if (userGroup === 'огр') {
+                    window.location.href = 'ogr.html';       // Открытые горные работы
+                } else if (userGroup === 'рго') {
+                    window.location.href = 'rgo.html';       // Ремонт горного оборудования
+                } else if (userGroup === 'мд') {
+                    window.location.href = 'md.html';        // Маркшейдерское дело
+                } else if (userGroup === 'прм') {
+                    window.location.href = 'prm.html';       // Подземные горные работы
+                } else {
+                    // Если группа нестандартная, по умолчанию открываем базовый rem
+                    window.location.href = 'rem_course.html'; 
+                }
+
             } else {
                 errorEl.style.display = 'block';
                 errorEl.innerText = 'Неверный логин или пароль';
                 btn.innerText = originalBtnText;
                 btn.disabled = false;
             }
+
     
         } catch (e) {
             errorEl.style.display = 'block';
