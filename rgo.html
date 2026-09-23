@@ -190,7 +190,10 @@
             const grades = student.grades || {}; 
             const stepKey = `${currentDisc.id}_step_progress`; // Создает ключ, например: current_step_ogr_tech
             const currentStep = grades[stepKey] || 1; // Берет шаг для этого предмета из Supabase, по умолчанию 1
-            const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro';
+            // Автоматически подтягиваем префикс текущего выбранного предмета из COURSE_MAP
+            const currentDisc = COURSE_MAP[currentSelectedDisc];
+            const currentDiscKey = currentDisc.id === 'rem' ? 'rem_electro' : 'electro';
+
         
             currentDisc.themes.forEach((theme, index) => {
                 const themeNum = index + 1;
