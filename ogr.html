@@ -83,6 +83,21 @@
                     { name: "Линии электроснабжения горного предприятия", link: "https://disk.yandex.ru/d/U-6BCPSTGE_rSA" },
                 ]
             }
+            {
+                id: "slesar",
+                title: "Слесарно-ремонтник",
+                themes: [
+                    { name: "Введение", link: "https://disk.yandex.ru/i/pDKvxR-oLCXsDA" },
+                    { name: "Контрольно-измерительные инструменты", link: "https://disk.yandex.ru/i/ME_BbOkdQlZ6zg" },
+                    { name: "Подготовительные операции слесарной обработки", link: "https://disk.yandex.ru/i/6FTPePAsQraibQ" },
+                    { name: "Размерная слесарная обработка", link: "https://disk.yandex.ru/i/QSVaSHihw6bePg" },
+                    { name: "Пригоночные операции слесарной обработки", link: "https://disk.yandex.ru/i/1eUcLtMOoZRqqg" },
+                    { name: "Технологический процесс слесарной обработки", link: "https://disk.yandex.ru/i/BxFWGCH327lOYg" },
+                    { name: "Обработка на металлорежущих станках", link: "https://disk.yandex.ru/i/p7n4S_nRqGgo5Q" },
+                    { name: "Сборка неразъемных и разъемных соединений", link: "https://disk.yandex.ru/i/XETfg0xMP5es_Q" },
+                    { name: "Подъемно-транспортное оборудование", link: "https://disk.yandex.ru/i/Tn-RYwiHATLCOg" },
+                ]
+            }
         ];
         
         const S_URL = 'https://uqekwkidsuargeulwkuw.supabase.co';
@@ -182,7 +197,7 @@
             const grades = student.grades || {}; 
             const stepKey = `${currentDisc.id}_step_progress`; // Создает ключ, например: current_step_ogr_tech
             const currentStep = grades[stepKey] || 1; // Берет шаг для этого предмета из Supabase, по умолчанию 1
-            const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro';
+            const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro' : 'slesar';
         
             currentDisc.themes.forEach((theme, index) => {
                 const themeNum = index + 1;
@@ -457,7 +472,7 @@
         
         async function finishInlineQuiz() {
             // Определяем, какой предмет сейчас сдается ('ogr' или 'electro')
-            const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro';
+            const currentDiscKey = currentSelectedDisc === 0 ? 'ogr' : 'electro' : 'slesar' ;
             
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
