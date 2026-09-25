@@ -479,7 +479,7 @@
         
         async function finishInlineQuiz() {
             // Определяем, какой предмет сейчас сдается ('ogr' или 'electro')
-            const currentDiscKey = currentSelectedDisc === 0 ? 'prm' : (currentSelectedDisc === 1 ? 'electro' : 'ogr');
+            const currentDiscKey = currentSelectedDisc === 0 ? 'prm' : (currentSelectedDisc === 1 ? 'ogr' : 'electro');
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
             
