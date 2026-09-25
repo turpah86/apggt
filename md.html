@@ -333,10 +333,12 @@
         let currentIndex = 0;
         let quizScore = 0;
         let currentQuizId = "";
+        let isQuizFinished = false;
         let hasBeenWarned = false; // Флаг, чтобы знать, было ли уже предупреждение
         let quizTimerInterval = null; // Переменная для управления интервалом времени
         
         async function startInlineQuiz(quizId) {
+            isQuizFinished = false;
             currentQuizId = quizId;
             
             // Чистая сборка имени файла под ОГР
@@ -478,6 +480,7 @@
         }
         
         async function finishInlineQuiz() {
+            isQuizFinished = true;
             // Определяем, какой предмет сейчас сдается ('ogr' или 'electro')
             const currentDiscKey = currentSelectedDisc === 0 ? 'prm' : (currentSelectedDisc === 1 ? 'ogr' : 'electro');
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
@@ -523,23 +526,6 @@
                 alert(`Оценка: ${mark}. Тест не сдан. Старая оценка сохранена. Подучите материал!`);
                 location.reload();
             }
-        document.onvisibilitychange = function() {
-            // Анти-чит сработает, только если окно теста РЕАЛЬНО открыто на экране
-            const quizOverlay = document.getElementById('quiz-overlay');
-            const isQuizActive = quizOverlay && (quizOverlay.style.display === 'block' || quizOverlay.style.display === 'flex');
-            if (isQuizActive && document.hidden) {
-                if (!hasBeenWarned) {
-                    hasBeenWarned = true;
-                    const stay = confirm("ВНИМАНИЕ! Вы свернули браузер или переключили вкладку. При повторной попытке ваш результат будет АННУЛИРОВАН (оценка 2). Вернуться к тесту?");
-                    if (!stay) {
-                        annulQuizForce();
-                    }
-                } else {
-                    annulQuizForce();
-                }
-            }
-        };
-
         
         async function annulQuizForce() {
             document.onvisibilitychange = null;
@@ -549,7 +535,17 @@
             await finishInlineQuiz(); // Автоматически отправит двойку в Supabase    
         }
     }
-    document.addEventListener('DOMContentLoaded', init);
+    // НАДЕЖНЫЙ АНТИЧИТ
+    document.addEventListener('visibilitychange', function () {
+        const quizOverlay = document.getElementById('quiz-overlay');
+        // Проверяем, открыто ли окно теста физически по его размерам
+        const isQuizActive = quizOverlay && (quizOverlay.offsetWidth > 0 || quizOverlay.offsetHeight > 0);
+    
+        // Срабатывает только если тест идет, вкладка скрыта и тест еще НЕ завершен штатно
+        if (isQuizActive && document.hidden && !isQuizFinished) {
+            annulQuizForce(); // Жесткое аннулирование без лишних окон подтверждения
+        }
+    });
     </script>
 </body>
 </html>
