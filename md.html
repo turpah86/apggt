@@ -480,6 +480,7 @@
         }
         
         async function finishInlineQuiz() {
+            document.removeEventListener('visibilitychange', handleAntiCheat);
             isQuizFinished = true;
             // Определяем, какой предмет сейчас сдается ('ogr' или 'electro')
             const currentDiscKey = currentSelectedDisc === 0 ? 'prm' : (currentSelectedDisc === 1 ? 'ogr' : 'electro');
@@ -527,25 +528,36 @@
                 location.reload();
             }
         
-        async function annulQuizForce() {
-            document.onvisibilitychange = null;
-            if (quizTimerInterval) clearInterval(quizTimerInterval);
-            alert("Вы повторно покинули тест. Результат аннулирован (оценка 2).");
-            quizScore = 0; 
-            await finishInlineQuiz(); // Автоматически отправит двойку в Supabase    
-        }
+    async function annulQuizForce() {
+      document.onvisibilitychange = null;
+      if (quizTimerInterval) clearInterval(quizTimerInterval);
+      
+      // Вместо ломающего фокус alert() пишем текст прямо в окно теста
+      document.getElementById('q-text').innerText = "Тест аннулирован! Вы покинули страницу (Оценка 2).";
+      document.getElementById('options-container').innerHTML = "<p style='color:#ff6b6b; font-weight:bold;'>Результат сохранен в базу. Страница сейчас обновится...</p>";
+      
+      quizScore = 0;
+      
+      // Ждем 3 секунды, чтобы студент успел прочитать надпись, и только потом шлем в базу и релоадим
+      setTimeout(async () => {
+          await finishInlineQuiz(); // Автоматически отправит двойку в Supabase
+      }, 3000);
     }
+    
     // НАДЕЖНЫЙ АНТИЧИТ
-    document.addEventListener('visibilitychange', function () {
+    function handleAntiCheat() {
         const quizOverlay = document.getElementById('quiz-overlay');
-        // Проверяем, открыто ли окно теста физически по его размерам
         const isQuizActive = quizOverlay && (quizOverlay.offsetWidth > 0 || quizOverlay.offsetHeight > 0);
     
-        // Срабатывает только если тест идет, вкладка скрыта и тест еще НЕ завершен штатно
-        if (isQuizActive && document.hidden && !isQuizFinished) {
-            annulQuizForce(); // Жесткое аннулирование без лишних окон подтверждения
+        if (isQuizActive && document.hidden) {
+            // Мгновенно отключаем слежку, чтобы не было повторных вызовов
+            document.removeEventListener('visibilitychange', handleAntiCheat);
+            annulQuizForce(); 
         }
-        });
+    }
+    
+    // Запуск прослушивания
+    document.addEventListener('visibilitychange', handleAntiCheat);
     document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
