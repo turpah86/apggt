@@ -523,22 +523,18 @@
                 alert(`Оценка: ${mark}. Тест не сдан. Старая оценка сохранена. Подучите материал!`);
                 location.reload();
             }
-        document.onvisibilitychange = function() {
-            // Анти-чит сработает, только если окно теста РЕАЛЬНО открыто на экране
+        // Переносим слежку на уровень всего окна браузера
+        window.onblur = function () {
             const quizOverlay = document.getElementById('quiz-overlay');
-            const isQuizActive = quizOverlay && (quizOverlay.style.display === 'block' || quizOverlay.style.display === 'flex');
-            if (isQuizActive && document.hidden) {
-                if (!hasBeenWarned) {
-                    hasBeenWarned = true;
-                    const stay = confirm("ВНИМАНИЕ! Вы свернули браузер или переключили вкладку. При повторной попытке ваш результат будет АННУЛИРОВАН (оценка 2). Вернуться к тесту?");
-                    if (!stay) {
-                        annulQuizForce();
-                    }
-                } else {
-                    annulQuizForce();
-                }
+            // Проверяем видимость: если элемент имеет размеры, значит он открыт на экране
+            const isQuizActive = quizOverlay && (quizOverlay.offsetWidth > 0 || quizOverlay.offsetHeight > 0);
+        
+            if (isQuizActive) {
+                // Не спрашиваем ни о чем — сразу караем за уход с экрана
+                annulQuizForce();
             }
         };
+
         
         async function annulQuizForce() {
             document.onvisibilitychange = null;
