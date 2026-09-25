@@ -528,34 +528,34 @@
                 location.reload();
             }
         
-    async function annulQuizForce() {
-      document.onvisibilitychange = null;
-      if (quizTimerInterval) clearInterval(quizTimerInterval);
-      
-      // Вместо ломающего фокус alert() пишем текст прямо в окно теста
-      document.getElementById('q-text').innerText = "Тест аннулирован! Вы покинули страницу (Оценка 2).";
-      document.getElementById('options-container').innerHTML = "<p style='color:#ff6b6b; font-weight:bold;'>Результат сохранен в базу. Страница сейчас обновится...</p>";
-      
-      quizScore = 0;
-      
-      // Ждем 3 секунды, чтобы студент успел прочитать надпись, и только потом шлем в базу и релоадим
-      setTimeout(async () => {
-          await finishInlineQuiz(); // Автоматически отправит двойку в Supabase
-      }, 3000);
-    }
-    
-    // НАДЕЖНЫЙ АНТИЧИТ
-    function handleAntiCheat() {
-        const quizOverlay = document.getElementById('quiz-overlay');
-        const isQuizActive = quizOverlay && (quizOverlay.offsetWidth > 0 || quizOverlay.offsetHeight > 0);
-    
-        if (isQuizActive && document.hidden) {
-            // Мгновенно отключаем слежку, чтобы не было повторных вызовов
-            document.removeEventListener('visibilitychange', handleAntiCheat);
-            annulQuizForce(); 
+        async function annulQuizForce() {
+          document.onvisibilitychange = null;
+          if (quizTimerInterval) clearInterval(quizTimerInterval);
+          
+          // Вместо ломающего фокус alert() пишем текст прямо в окно теста
+          document.getElementById('q-text').innerText = "Тест аннулирован! Вы покинули страницу (Оценка 2).";
+          document.getElementById('options-container').innerHTML = "<p style='color:#ff6b6b; font-weight:bold;'>Результат сохранен в базу. Страница сейчас обновится...</p>";
+          
+          quizScore = 0;
+          
+          // Ждем 3 секунды, чтобы студент успел прочитать надпись, и только потом шлем в базу и релоадим
+          setTimeout(async () => {
+              await finishInlineQuiz(); // Автоматически отправит двойку в Supabase
+          }, 3000);
         }
-    }
-    
+        
+        // НАДЕЖНЫЙ АНТИЧИТ
+        function handleAntiCheat() {
+            const quizOverlay = document.getElementById('quiz-overlay');
+            const isQuizActive = quizOverlay && (quizOverlay.offsetWidth > 0 || quizOverlay.offsetHeight > 0);
+        
+            if (isQuizActive && document.hidden) {
+                // Мгновенно отключаем слежку, чтобы не было повторных вызовов
+                document.removeEventListener('visibilitychange', handleAntiCheat);
+                annulQuizForce(); 
+            }
+        }
+        
     // Запуск прослушивания
     document.addEventListener('visibilitychange', handleAntiCheat, 'DOMContentLoaded', init);
     </script>
