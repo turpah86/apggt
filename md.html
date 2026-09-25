@@ -545,7 +545,8 @@
         if (isQuizActive && document.hidden && !isQuizFinished) {
             annulQuizForce(); // Жесткое аннулирование без лишних окон подтверждения
         }
-    });
+        });
+    document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
