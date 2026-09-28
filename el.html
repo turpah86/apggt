@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -62,82 +63,37 @@
         // --- 1. КОНФИГУРАЦИЯ УЧЕБНОГО ПЛАНА ---
         const COURSE_MAP = [
             {
-                id: "rem",
-                title: "Электротехника",
-                dbPrefix: "rem_electro",   // В базу Supabase оценки пойдут как: rem_electro_1
-                filePrefix: "rem_electro", // На GitHub файл загрузится как: rem_electro_1.js
-                isRemStyle: true,          // Маркер, что для этого предмета не нужно слово _razdel в имени файла
+                id: "tech",
+                title: "Общетехнический курс",
+                dbPrefix: "tech",   
+                filePrefix: "tech_razdel", 
+                isRemStyle: false,         
                 themes: [
-                    { name: "Основные понятия и закон Ома", link: "https://disk.yandex.ru/i/LHkTfjvHvLUweQ" },
-                    { name: "Законы Кирхгофа", link: "https://disk.yandex.ru/i/vt-2nWk6_ExHqw" },
-                    { name: "Цепи постоянного тока. Соединение элементов", link: "https://disk.yandex.ru/i/lCFdq0_zaWHqTA" },
-                    { name: "Элементы электрических схем и их обозначения", link: "https://disk.yandex.ru/i/NadjwgwSnKwR2Q" },
-                    { name: "Элементы электрических схем и их обозначения", link: "https://disk.yandex.ru/i/wwN9wC2uPKO24w" },
-                    { name: "Цепи переменного тока. Часть 2 (Реактивное сопротивление)", link: "https://disk.yandex.ru/i/ffdyhvkEfTJClQ" },
-                    { name: "Основы безопасности при работе с электрооборудованием", link: "https://disk.yandex.ru/i/kgoLUJ0NNgvaDw" },
-                    { name: "Практическая работа, средства защиты и первая помощь", link: "https://disk.yandex.ru/i/kaZi-jfuK25cqw" }
+                    { name: "Электротехника", link: "https://disk.yandex.ru/d/MztHnJHpDN9qRw" },
+                    { name: "Материаловедение", link: "https://disk.yandex.ru/d/VFUG1nGjkd7rXQ" },                    
+                    { name: "Техническое черчение", link: "https://disk.yandex.ru/d/bzDyjWbXlfaeHw" },
+                    { name: "Допуски и технические измерения", link: "https://disk.yandex.ru/d/pXpQhfbPcJnu3A" },
+                    { name: "Основы слесарного дела", link: "https://disk.yandex.ru/d/CenUNjtieSM86Q" },
+                    { name: "Охрана труда и промышленная безопасность", link: "https://disk.yandex.ru/d/6hy0J8mHR_i8hw" },
+                    { name: "Общие сведения об оборудовании горных предприятий", link: "https://disk.yandex.ru/d/HkLnhALH4TTd6A" },
                 ]
             },
             {
-                id: "material",
-                title: "Материаловедение",
-                dbPrefix: "material",      
-                filePrefix: "material_razdel", 
+                id: "special",
+                title: "Специальный курс",
+                dbPrefix: "special",      
+                filePrefix: "special_razdel", 
                 isRemStyle: false,
                 themes: [
-                    { name: "Введение. Качество и свойства материалов", link: "https://disk.yandex.ru/i/oG3bKkJGrLJ16A" },
-                    { name: "Металлы и сплавы", link: "https://disk.yandex.ru/i/NntPJQKBkVxCJQ" },
-                    { name: "Неметаллические материалы", link: "https://disk.yandex.ru/i/rzScGs7IJ98iwg" },
-                    { name: "Термическая и химико-термическая обработка", link: "https://disk.yandex.ru/i/hCx-06eGAwbOAQ" },
-                ]
-            },
-            {
-                id: "cherchenie",
-                title: "Техническое черчение",
-                dbPrefix: "cherchenie",      
-                filePrefix: "cherchenie_razdel", 
-                isRemStyle: false,
-                themes: [
-                    { name: "Архитектура чертежа", link: "https://disk.yandex.ru/i/I5toE-QQgTBajQ" },
-                    { name: "Наглядность чертежа", link: "https://disk.yandex.ru/i/GxXjmnEBzzumyg" },
-                    { name: "Разъемные соединения", link: "https://disk.yandex.ru/i/gWqZSTT_ZZ2OdA" },
-                    { name: "Чтение сборочных чертежей, правила сопряжения деталей и структура спецификаций", link: "https://disk.yandex.ru/i/wq8fKT0flMPrcw" },
-                ]
-            },
-            {
-                id: "prombez",
-                title: "Промышленная безопасность",
-                dbPrefix: "prombez",      
-                filePrefix: "prombez_razdel", 
-                isRemStyle: false,
-                themes: [
-                    { name: "Введение", link: "https://disk.yandex.ru/i/Z9LBjQjFS_5fMg" },
-                    { name: "Общие требования по обеспечению промышленной безопасности", link: "https://disk.yandex.ru/i/ENF7e2KPRcICJg" },
-                ]
-            },
-            {
-                id: "slesar",
-                title: "Слесарь-ремонтник",
-                themes: [
-                    { name: "Введение", link: "https://disk.yandex.ru/i/pDKvxR-oLCXsDA" },
-                    { name: "Контрольно-измерительные инструменты", link: "https://disk.yandex.ru/i/ME_BbOkdQlZ6zg" },
-                    { name: "Подготовительные операции слесарной обработки", link: "https://disk.yandex.ru/i/6FTPePAsQraibQ" },
-                    { name: "Размерная слесарная обработка", link: "https://disk.yandex.ru/i/QSVaSHihw6bePg" },
-                    { name: "Пригоночные операции слесарной обработки", link: "https://disk.yandex.ru/i/1eUcLtMOoZRqqg" },
-                    { name: "Технологический процесс слесарной обработки", link: "https://disk.yandex.ru/i/BxFWGCH327lOYg" },
-                    { name: "Обработка на металлорежущих станках", link: "https://disk.yandex.ru/i/p7n4S_nRqGgo5Q" },
-                    { name: "Сборка неразъемных и разъемных соединений", link: "https://disk.yandex.ru/i/XETfg0xMP5es_Q" },
-                    { name: "Подъемно-транспортное оборудование", link: "https://disk.yandex.ru/i/Tn-RYwiHATLCOg" },
-                ]
-            },
-            {
-                id: "oborud",
-                title: "Общие сведения об оборудовании горных предприятий",
-                dbPrefix: "oborud",      
-                filePrefix: "oborud_razdel", 
-                isRemStyle: false,
-                themes: [
-                    { name: "Общие сведения", link: "https://disk.yandex.ru/i/NbGEjGv1triQaw" },
+                    { name: "Классификация и устройство промышленного оборудования", link: "" },
+                    { name: "Дефектация и диагностика механизмов оборудования", link: "" },
+                    { name: "Разборка и сборка механизмов оборудования", link: "" },
+                    { name: "Ремонт и восстановление деталей", link: "" },
+                    { name: "Регулировка и испытание механизмов оборудования", link: "" },
+                    { name: "Смазочные материалы и системы смазки. Пневмоинструмент", link: "" },
+                    { name: "Такелажные и стропальные работы. Электрогазосварка при ремонте", link: "" },
+                    { name: "Планово-предупредительный ремонт. Приёмка и сдача оборудования", link: "" },
+                    { name: "Технологические схемы ремонта и техническая документация", link: "" },
                 ]
             },
         ];       
