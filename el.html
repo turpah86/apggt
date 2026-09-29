@@ -196,8 +196,7 @@
             const currentStep = grades[stepKey] || 1;
             
             // ПРАВИЛЬНЫЙ ПЕРЕКЛЮЧАТЕЛЬ ДЛЯ РГО:
-            const discKeys = ['tech', 'special'];
-            const currentDiscKey = discKeys[currentSelectedDisc] || 'tech';
+            const currentDiscKey = currentSelectedDisc === 0 ? 'tech' : 'special';
 
         
             currentDisc.themes.forEach((theme, index) => {
@@ -478,7 +477,7 @@
             disableQuizProtection();
             // Определяем, какой предмет сейчас сдается ('ogr' или 'electro')
             const currentDisc = COURSE_MAP[currentSelectedDisc];
-            const currentDiscKey = currentSelectedDisc === 0 ? 'tech' : (currentSelectedDisc === 1 ? 'special');
+            const currentDiscKey = currentSelectedDisc === 0 ? 'tech' : 'special';
             
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
