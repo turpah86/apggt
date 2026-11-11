@@ -455,8 +455,7 @@
             const { error } = await _supabase.from('students').delete().eq('login', login);
             if (!error) loadStudents();
         }
-
-        // 3. ВЫГРУЗКА В EXCEL (CSV) С РАЗБИВКОЙ ПО СТОЛБЦАМ ПРЕДМЕТОВ
+        // 3. ВЫГРУЗКА В EXCEL (CSV) — ТОЛЬКО ЛОГИН, ИМЯ, ПОПЫТКИ И ОЦЕНКИ ПО ДИСЦИПЛИНАМ
         function exportToCSV() {
             if (allStudents.length === 0) return alert('Нет данных для выгрузки');
 
@@ -471,7 +470,6 @@
                 'rem_tech': 'Техн. ремонта'
             };
 
-            // 1. Собираем список всех предметов, которые есть у выгружаемых студентов
             const allSubjectCodes = new Set();
             const parsedStudents = allStudents.map(st => {
                 const grades = st.grades || {};
@@ -479,13 +477,14 @@
 
                 const ensure = (code) => {
                     allSubjectCodes.add(code);
-                    if (!subjMap[code]) subjMap[code] = { step: null, themes: [], final: null };
+                    if (!subjMap[code]) subjMap[code] = { themes: [], final: null };
                     return subjMap[code];
                 };
 
                 for (const [key, val] of Object.entries(grades)) {
                     if (key.endsWith('_step_progress')) {
-                        ensure(key.replace('_step_progress', '')).step = val;
+                        // Шаги пропускаем, в выгрузку не берем
+                        continue;
                     } else if (key.endsWith('_final')) {
                         ensure(key.replace('_final', '')).final = val;
                     } else if (key.includes('_razdel')) {
@@ -501,30 +500,23 @@
                     }
                 }
 
-                if (Object.keys(subjMap).length === 0 && st.current_step) {
-                    const defCode = (st.current_disc === 1) ? 'rem_tech' : 'rem_electro';
-                    ensure(defCode).step = st.current_step;
-                }
-
                 return { raw: st, subjMap };
             });
 
             const subjectCols = Array.from(allSubjectCodes);
 
-            // 2. Формируем шапку таблицы
-            const headers = ['Логин', 'Имя', 'Группа', 'Попытки экзамена'];
+            // Шапка без группы: Логин | Имя | Попытки | Дисциплины...
+            const headers = ['Логин', 'Имя', 'Попытки'];
             subjectCols.forEach(code => {
                 headers.push(DISC_NAMES[code] || code.toUpperCase());
             });
 
             let csv = '\uFEFF' + headers.join(';') + '\n';
 
-            // 3. Заполняем строки по каждому студенту
             parsedStudents.forEach(({ raw: st, subjMap }) => {
                 const row = [
                     st.login || '',
                     st['ИМЯ'] || '',
-                    st.group_name || '',
                     `${st.final_attempts || 0}/3`
                 ];
 
@@ -535,17 +527,16 @@
                         return;
                     }
                     const parts = [];
-                    if (info.step) parts.push(`Шаг: ${info.step}`);
                     if (info.themes.length > 0) {
                         info.themes.sort((a, b) => a.num - b.num);
-                        parts.push(info.themes.map(t => `Т${t.num}:${t.mark}`).join(', '));
+                        parts.push(info.themes.map(t => `Т${t.num}: ${t.mark}`).join(', '));
                     }
                     if (info.final) {
                         parts.push(`ЭКЗАМЕН: ${info.final}`);
                     } else if (st.final_grade) {
                         parts.push(`ЭКЗАМЕН: ${st.final_grade}`);
                     }
-                    row.push(`"${parts.join(' | ') || 'Нет данных'}"`);
+                    row.push(`"${parts.join(' | ') || '—'}"`);
                 });
 
                 csv += row.join(';') + '\n';
@@ -558,6 +549,7 @@
             link.download = `vedomost_${groupName}_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
         }
+
 
         // 4. РУБИЛЬНИК ТЕСТОВ И СРОКИ (course_config)
         async function loadCourseConfigs() {
