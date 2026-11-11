@@ -334,7 +334,7 @@
         async function startInlineQuiz(quizId) {
             currentQuizId = quizId;
 
-            // ПРОВЕРКА РУБИЛЬНИКА ИЗ АДМИНКИ
+            // 1. ПРОВЕРКА ОБЩЕГО РУБИЛЬНИКА ГРУППЫ
             const userGroup = localStorage.getItem('user_group');
             if (userGroup) {
                 const { data: cfg } = await _supabase
@@ -348,6 +348,22 @@
                     return;
                 }
             }
+
+            // 2. ПРОВЕРКА ПЕРСОНАЛЬНОГО ДОПУСКА СТУДЕНТА (ПО КОНСПЕКТУ)
+            const studentLogin = localStorage.getItem('student_login');
+            if (studentLogin) {
+                const { data: st } = await _supabase
+                    .from('students')
+                    .select('can_test')
+                    .eq('login', studentLogin)
+                    .maybeSingle();
+
+                if (st && st.can_test !== true) {
+                    alert("⛔ У вас нет индивидуального допуска к тесту. Покажите конспект лекции преподавателю!");
+                    return;
+                }
+            }
+
 
             const script = document.createElement('script');
             script.src = `quizzes/${quizId}.js`;
