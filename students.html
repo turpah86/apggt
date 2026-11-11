@@ -82,13 +82,28 @@
         
         errorEl.style.display = 'none';
     
-        // 1. Проверка фиксированных групп (огр, рго, admin) из config.js
-        if (typeof USERS !== 'undefined' && USERS[user] && USERS[user].password === pass) {
-            localStorage.setItem('user_group', user);
-            localStorage.setItem('access_' + USERS[user].redirect, 'true');
-            window.location.href = USERS[user].redirect;
+        // 1. Безопасный вход администратора через Supabase Auth
+        if (user === 'admin' || user === 'apzbm@mail.ru') {
+            btn.innerText = "Проверка прав... ⏳";
+            btn.disabled = true;
+
+            const { data, error: authErr } = await _supabase.auth.signInWithPassword({
+                email: 'apzbm@mail.ru',
+                password: pass
+            });
+
+            if (authErr || !data.session) {
+                errorEl.style.display = 'block';
+                errorEl.innerText = 'Неверный пароль администратора';
+                btn.innerText = "Войти";
+                btn.disabled = false;
+                return;
+            }
+
+            window.location.href = 'admin.html';
             return;
         }
+
     
         // Блокируем кнопку на время запроса, чтобы студент не кликал сто раз
         const originalBtnText = btn.innerText;
