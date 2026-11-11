@@ -10,7 +10,7 @@
     <script src="config.js"></script>
     <script src="navbar.js"></script>
     <style>
-        .admin-wrap { max-width: 1200px; width: 95%; margin: 100px auto 60px; }
+        .admin-wrap { max-width: 1550px; width: 98%; margin: 100px auto 60px; }
         .tab-btns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 25px; }
         .tab-btn {
             background: var(--glass); border: 1px solid var(--glass-border);
@@ -31,7 +31,7 @@
 
         .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
-        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--glass-border); }
+        th, td { padding: 10px 6px; text-align: left; border-bottom: 1px solid var(--glass-border); vertical-align: top; }
         th { color: var(--gold); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
         tr:hover { background: rgba(255, 255, 255, 0.03); }
 
@@ -76,6 +76,8 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 0.72rem;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .themes-list {
             display: flex;
