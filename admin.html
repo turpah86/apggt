@@ -378,6 +378,12 @@
                 const gradesStr = JSON.stringify(grades).replace(/"/g, "'");
                 csv += `${st.login};${st['ИМЯ'] || ''};${st.group_name || ''};"${finalsStr}";${st.final_attempts || 0};"${gradesStr}"\n`;
             });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `vedomost_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+        }
 
         // 4. РУБИЛЬНИК ТЕСТОВ И СРОКИ (course_config)
         async function loadCourseConfigs() {
