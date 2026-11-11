@@ -367,17 +367,18 @@
         // 3. ВЫГРУЗКА В EXCEL (CSV)
         function exportToCSV() {
             if (allStudents.length === 0) return alert('Нет данных для выгрузки');
-            let csv = '\uFEFFЛогин;Имя;Группа;Попытки экзамена;Оценки\n';
+            let csv = '\uFEFFЛогин;Имя;Группа;Итоговые экзамены;Попытки;Все оценки\n';
             allStudents.forEach(st => {
-                const gradesStr = JSON.stringify(st.grades || {}).replace(/"/g, "'");
-                csv += `${st.login};${st['ИМЯ'] || ''};${st.group_name || ''};${st.final_attempts || 0};"${gradesStr}"\n`;
+                const grades = st.grades || {};
+                const finalsList = Object.entries(grades)
+                    .filter(([k]) => k.endsWith('_final'))
+                    .map(([k, v]) => `${k.replace('_final', '')}: ${v}`);
+                if (st.final_grade) finalsList.push(`Итог: ${st.final_grade}`);
+                
+                const finalsStr = finalsList.join(', ') || 'Не сдан';
+                const gradesStr = JSON.stringify(grades).replace(/"/g, "'");
+                csv += `${st.login};${st['ИМЯ'] || ''};${st.group_name || ''};"${finalsStr}";${st.final_attempts || 0};"${gradesStr}"\n`;
             });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `vedomost_${new Date().toISOString().slice(0,10)}.csv`;
-            link.click();
-        }
 
         // 4. РУБИЛЬНИК ТЕСТОВ И СРОКИ (course_config)
         async function loadCourseConfigs() {
