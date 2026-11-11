@@ -109,9 +109,11 @@
                             <th>Пароль</th>
                             <th>Оценки и прогресс</th>
                             <th>Попытки экзамена</th>
+                            <th>Допуск (Конспект)</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
+
 
                     <tbody id="students-tbody">
                         <tr><td colspan="6" style="text-align: center; opacity: 0.5;">Загрузка данных из базы...</td></tr>
@@ -245,7 +247,13 @@
                         <td>${gradesHTML}</td>
                         <td>${st.final_attempts || 0} / 3</td>
                         <td>
+                            <button class="btn-mini ${st.can_test ? 'btn-add' : 'btn-del'}" onclick="toggleStudentTest('${st.login}', ${!st.can_test})">
+                                ${st.can_test ? '🟢 Допущен' : '🔴 Закрыто'}
+                            </button>
+                        </td>
+                        <td>
                             <button class="btn-mini btn-reset" onclick="resetAttempts('${st.login}')" title="Обнулить попытки экзамена">🔄 Сброс попыток</button>
+
                             <button class="btn-mini btn-add" onclick="advanceStudentStep('${st.login}')" title="Открыть следующую тему вручную">⏭️ +1 тема</button>
                             <button class="btn-mini btn-del" onclick="deleteStudent('${st.login}')" title="Удалить студента">🗑️</button>
                         </td>
@@ -261,6 +269,18 @@
                 .eq('login', login);
             if (!error) loadStudents();
         }
+
+        async function toggleStudentTest(login, newState) {
+            const { error } = await _supabase.from('students')
+                .update({ can_test: newState })
+                .eq('login', login);
+            if (error) {
+                alert('Ошибка изменения допуска: ' + error.message);
+                return;
+            }
+            loadStudents();
+        }
+
 
         async function advanceStudentStep(login) {
             const st = allStudents.find(s => s.login === login);
