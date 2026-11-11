@@ -280,8 +280,8 @@
                         <td style="min-width: 150px;">${finalsHTML}</td>
                         <td>${st.final_attempts || 0} / 3</td>
                         <td>
-                            <button class="btn-mini ${st.can_test ? 'btn-add' : 'btn-del'}" onclick="toggleStudentTest('${st.login}', ${!st.can_test})">
-                                ${st.can_test ? '🟢 Допущен' : '🔴 Закрыто'}
+                            <button class="btn-mini ${st.can_test !== false ? 'btn-add' : 'btn-del'}" onclick="toggleStudentTest('${st.login}', ${st.can_test === false})">
+                                ${st.can_test !== false ? '🟢 Допущен' : '🔴 Закрыто'}
                             </button>
                         </td>
                         <td>
