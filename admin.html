@@ -44,6 +44,45 @@
         .g-3 { border-color: #f1c40f; color: #f1c40f; }
         .g-2 { border-color: #e74c3c; color: #e74c3c; }
 
+        /* Столбики предметов в журнале */
+        .subjects-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .subject-col {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 8px 10px;
+            min-width: 145px;
+            flex: 1;
+        }
+        .subject-col-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+        .step-pill {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--gold);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+        }
+        .themes-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
         .btn-mini {
             padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer;
             font-size: 0.8rem; font-weight: 600; transition: 0.2s; margin: 2px;
@@ -228,11 +267,11 @@
             }
 
             const DISC_NAMES = {
-                'ogr': 'ОГР',
+                'ogr': 'Технология ОГР',
                 'electro': 'Электроснабжение',
                 'slesar': 'Слесарное дело',
-                'prm': 'ПРМ',
-                'tech': 'Общетех.',
+                'prm': 'Технология ПРМ',
+                'tech': 'Общетех. курс',
                 'special': 'Спецкурс',
                 'rem_electro': 'Электротехника',
                 'rem_tech': 'Техн. ремонта'
@@ -240,24 +279,77 @@
 
             tbody.innerHTML = filtered.map(st => {
                 const grades = st.grades || {};
-                let gradesHTML = '';
+                const subjectsMap = {}; // Группируем данные по каждому предмету
                 let finalsHTML = '';
 
+                // Вспомогательная функция для создания пустой карточки предмета
+                const ensureSubj = (code) => {
+                    if (!subjectsMap[code]) {
+                        subjectsMap[code] = { step: null, themes: [], final: null };
+                    }
+                    return subjectsMap[code];
+                };
+
                 for (const [key, val] of Object.entries(grades)) {
-                    if (key.endsWith('_final')) {
-                        // Выделяем итоговый экзамен в отдельную переменную
-                        const rawDisc = key.replace('_final', '');
-                        const discTitle = DISC_NAMES[rawDisc] || rawDisc.toUpperCase();
+                    if (key.endsWith('_step_progress')) {
+                        const code = key.replace('_step_progress', '');
+                        ensureSubj(code).step = val;
+                    } else if (key.endsWith('_final')) {
+                        const code = key.replace('_final', '');
+                        ensureSubj(code).final = val;
+                        const discTitle = DISC_NAMES[code] || code.toUpperCase();
                         finalsHTML += `
                             <div class="grade-badge g-${val}" style="font-size: 0.9rem; padding: 5px 10px; font-weight: bold; display: block; margin-bottom: 4px; background: rgba(0,0,0,0.4);">
                                 🎓 ${discTitle}: <span style="font-size: 1.05rem;">${val}</span>
                             </div>`;
-                    } else if (key.includes('step_progress')) {
-                        const subj = key.replace('_step_progress', '');
-                        gradesHTML += `<span class="grade-badge" style="color: var(--gold);">Шаг (${subj}): ${val}</span>`;
+                    } else if (key.includes('_razdel')) {
+                        const [code, numStr] = key.split('_razdel');
+                        ensureSubj(code).themes.push({ num: parseInt(numStr) || 0, mark: val });
                     } else {
-                        gradesHTML += `<span class="grade-badge g-${val}">${key}: <b>${val}</b></span>`;
+                        // Для ключей формата rem_electro_1 или rem_tech_2
+                        const lastUnderscore = key.lastIndexOf('_');
+                        if (lastUnderscore !== -1) {
+                            const code = key.slice(0, lastUnderscore);
+                            const num = parseInt(key.slice(lastUnderscore + 1)) || 0;
+                            ensureSubj(code).themes.push({ num, mark: val });
+                        }
                     }
+                }
+
+                // Для курсов (например, rem_course), где общий шаг лежит в колонке st.current_step
+                if (Object.keys(subjectsMap).length === 0 && st.current_step) {
+                    const defaultCode = (st.current_disc === 1) ? 'rem_tech' : 'rem_electro';
+                    ensureSubj(defaultCode).step = st.current_step;
+                }
+
+                // Собираем HTML столбиков предметов
+                let subjectsHTML = '';
+                const subjCodes = Object.keys(subjectsMap);
+
+                if (subjCodes.length > 0) {
+                    subjectsHTML = '<div class="subjects-grid">' + subjCodes.map(code => {
+                        const info = subjectsMap[code];
+                        const title = DISC_NAMES[code] || code.toUpperCase();
+                        // Сортируем темы по номеру (Т1, Т2, Т3...)
+                        info.themes.sort((a, b) => a.num - b.num);
+
+                        const stepBadge = info.step ? `<span class="step-pill">Шаг: ${info.step}</span>` : '';
+                        const themesBadges = info.themes.length > 0
+                            ? info.themes.map(t => `<span class="grade-badge g-${t.mark}" title="Тема ${t.num}">Т${t.num}: <b>${t.mark}</b></span>`).join('')
+                            : '<span style="opacity:0.4; font-size:0.75rem;">Тем пока нет</span>';
+
+                        return `
+                            <div class="subject-col">
+                                <div class="subject-col-header">
+                                    <span>${title}</span>
+                                    ${stepBadge}
+                                </div>
+                                <div class="themes-list">${themesBadges}</div>
+                            </div>
+                        `;
+                    }).join('') + '</div>';
+                } else {
+                    subjectsHTML = '<span style="opacity: 0.4;">Не приступал</span>';
                 }
 
                 if (st.final_grade) {
@@ -267,7 +359,6 @@
                         </div>`;
                 }
 
-                if (!gradesHTML) gradesHTML = '<span style="opacity: 0.4;">Нет оценок</span>';
                 if (!finalsHTML) finalsHTML = '<span style="opacity: 0.35; font-size: 0.8rem;">Не сдан</span>';
 
                 return `
@@ -276,7 +367,7 @@
                         <td>${st['ИМЯ'] || '<span style="opacity:0.4;">—</span>'}</td>
                         <td>${st.group_name || '-'}</td>
                         <td style="font-family: monospace; opacity: 0.8;">${st.password || '-'}</td>
-                        <td>${gradesHTML}</td>
+                        <td style="min-width: 320px;">${subjectsHTML}</td>
                         <td style="min-width: 150px;">${finalsHTML}</td>
                         <td>${st.final_attempts || 0} / 3</td>
                         <td>
