@@ -112,8 +112,9 @@
                             <th>Имя</th>
                             <th>Группа</th>
                             <th>Пароль</th>
-                            <th>Оценки и прогресс</th>
-                            <th>Попытки экзамена</th>
+                            <th>Текущие темы</th>
+                            <th>🏆 Итог (Экзамен)</th>
+                            <th>Попытки</th>
                             <th>Допуск (Конспект)</th>
                             <th>Действия</th>
                         </tr>
@@ -222,26 +223,52 @@
             );
 
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; opacity: 0.5;">Студенты не найдены</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; opacity: 0.5;">Студенты не найдены</td></tr>';
                 return;
             }
+
+            const DISC_NAMES = {
+                'ogr': 'ОГР',
+                'electro': 'Электроснабжение',
+                'slesar': 'Слесарное дело',
+                'prm': 'ПРМ',
+                'tech': 'Общетех.',
+                'special': 'Спецкурс',
+                'rem_electro': 'Электротехника',
+                'rem_tech': 'Техн. ремонта'
+            };
 
             tbody.innerHTML = filtered.map(st => {
                 const grades = st.grades || {};
                 let gradesHTML = '';
+                let finalsHTML = '';
 
                 for (const [key, val] of Object.entries(grades)) {
-                    if (key.includes('step_progress')) {
+                    if (key.endsWith('_final')) {
+                        // Выделяем итоговый экзамен в отдельную переменную
+                        const rawDisc = key.replace('_final', '');
+                        const discTitle = DISC_NAMES[rawDisc] || rawDisc.toUpperCase();
+                        finalsHTML += `
+                            <div class="grade-badge g-${val}" style="font-size: 0.9rem; padding: 5px 10px; font-weight: bold; display: block; margin-bottom: 4px; background: rgba(0,0,0,0.4);">
+                                🎓 ${discTitle}: <span style="font-size: 1.05rem;">${val}</span>
+                            </div>`;
+                    } else if (key.includes('step_progress')) {
                         const subj = key.replace('_step_progress', '');
                         gradesHTML += `<span class="grade-badge" style="color: var(--gold);">Шаг (${subj}): ${val}</span>`;
                     } else {
                         gradesHTML += `<span class="grade-badge g-${val}">${key}: <b>${val}</b></span>`;
                     }
                 }
+
                 if (st.final_grade) {
-                    gradesHTML += `<span class="grade-badge g-${st.final_grade}">Итог: <b>${st.final_grade}</b></span>`;
+                    finalsHTML += `
+                        <div class="grade-badge g-${st.final_grade}" style="font-size: 0.9rem; padding: 5px 10px; font-weight: bold; display: block; background: rgba(0,0,0,0.4);">
+                            🎓 Экзамен: ${st.final_grade}
+                        </div>`;
                 }
+
                 if (!gradesHTML) gradesHTML = '<span style="opacity: 0.4;">Нет оценок</span>';
+                if (!finalsHTML) finalsHTML = '<span style="opacity: 0.35; font-size: 0.8rem;">Не сдан</span>';
 
                 return `
                     <tr>
@@ -250,6 +277,7 @@
                         <td>${st.group_name || '-'}</td>
                         <td style="font-family: monospace; opacity: 0.8;">${st.password || '-'}</td>
                         <td>${gradesHTML}</td>
+                        <td style="min-width: 150px;">${finalsHTML}</td>
                         <td>${st.final_attempts || 0} / 3</td>
                         <td>
                             <button class="btn-mini ${st.can_test ? 'btn-add' : 'btn-del'}" onclick="toggleStudentTest('${st.login}', ${!st.can_test})">
