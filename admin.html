@@ -4,131 +4,181 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://w3.org viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛏️</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель управления</title>
+    <title>Панель преподавателя | ПАН</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://googleapis.com" rel="stylesheet">
+    <script src="supabase.js"></script>
+    <script src="config.js"></script>
     <script src="navbar.js"></script>
-    <script>
-        if (localStorage.getItem('access_admin.html') !== 'true') {
-            window.location.href = 'students.html';
-        }
-    </script>
     <style>
-        .admin-section { display: none; animation: fadeInUp 0.5s ease; }
-        .active { display: block; }
-        .tab-btns { 
-            margin-bottom: 30px; 
-            display: flex; 
-            gap: 15px; 
-            justify-content: center; 
-        }
-        
+        .admin-wrap { max-width: 1200px; width: 95%; margin: 100px auto 60px; }
+        .tab-btns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 25px; }
         .tab-btn {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            color: #fff; padding: 12px 22px; border-radius: 12px; cursor: pointer;
+            font-weight: 600; transition: 0.3s;
         }
+        .tab-btn:hover { border-color: var(--gold); }
+        .tab-btn.active-tab { background: var(--gold); color: #000; border-color: var(--gold); }
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
 
-        .tab-btn:hover {
-            border-color: var(--gold);
-            background: rgba(255, 255, 255, 0.05);
+        .controls-bar { display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        select, input, textarea {
+            background: rgba(15, 23, 42, 0.8); border: 1px solid var(--glass-border);
+            color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 0.95rem;
         }
+        select:focus, input:focus, textarea:focus { border-color: var(--gold); outline: none; }
 
-        .tab-btn.active-tab {
-            background: var(--gold);
-            color: var(--dark);
-            border-color: var(--gold);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
-        }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--glass-border); }
+        th { color: var(--gold); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+        tr:hover { background: rgba(255, 255, 255, 0.03); }
 
-        textarea { 
-            width: 100%; background: rgba(0,0,0,0.3); color: #2ed573; 
-            border: 1px solid var(--glass-border); padding: 15px; 
-            border-radius: 10px; font-family: monospace; font-size: 0.9rem; margin-top: 15px;
-            resize: vertical; outline: none;
+        .grade-badge {
+            display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.8rem;
+            margin: 2px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255,255,255,0.15);
         }
-        
-        .input-row { 
-            background: rgba(255,255,255,0.02); padding: 20px; 
-            border-radius: 15px; margin-bottom: 15px; border: 1px solid var(--glass-border);
-            text-align: left;
-        }
-        
-        input { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); 
-            color: white; padding: 12px; border-radius: 8px; margin: 5px 0;
-        }
+        .g-5 { border-color: #2ecc71; color: #2ecc71; }
+        .g-4 { border-color: #3498db; color: #3498db; }
+        .g-3 { border-color: #f1c40f; color: #f1c40f; }
+        .g-2 { border-color: #e74c3c; color: #e74c3c; }
 
-        input:focus { border-color: var(--gold); outline: none; }
-        
-        .correct-hint { font-size: 0.7rem; color: var(--gold); margin-top: 8px; display: block; opacity: 0.8; }
+        .btn-mini {
+            padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer;
+            font-size: 0.8rem; font-weight: 600; transition: 0.2s; margin: 2px;
+        }
+        .btn-reset { background: rgba(241, 196, 15, 0.2); color: #f1c40f; border: 1px solid #f1c40f; }
+        .btn-del { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+        .btn-add { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+
+        .switch-card {
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            gap: 15px; padding: 20px; margin-bottom: 15px; border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
+        }
+        .toggle-btn {
+            padding: 10px 20px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .toggle-on { background: #2ecc71; color: #000; box-shadow: 0 0 15px rgba(46, 204, 113, 0.4); }
+        .toggle-off { background: #e74c3c; color: #fff; box-shadow: 0 0 15px rgba(231, 76, 60, 0.4); }
     </style>
 </head>
 <body>
     <div class="background-overlay"></div>
-    <main class="main-centered" style="padding-top: 100px; flex-direction: column;">
-        
-        <!-- Переключатели вкладок -->
+
+    <div class="admin-wrap">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 style="color: var(--gold); font-size: 1.8rem;">Панель управления</h1>
+            <button onclick="logoutAdmin()" class="btn-secondary" style="margin: 0; padding: 8px 18px;">Выйти 🚪</button>
+        </div>
+
         <div class="tab-btns">
-            <button onclick="showTab('tab-users', this)" class="tab-btn active-tab">👥 Группы доступа</button>
-            <button onclick="showTab('tab-quiz', this)" class="tab-btn">📝 Конструктор тестов</button>
+            <button onclick="showTab('tab-journal', this)" class="tab-btn active-tab">📊 Журнал и студенты</button>
+            <button onclick="showTab('tab-access', this)" class="tab-btn">🚦 Рубильник тестов и сроки</button>
+            <button onclick="showTab('tab-add', this)" class="tab-btn">➕ Добавить студентов</button>
         </div>
 
-        <!-- ВКЛАДКА: ГРУППЫ -->
-        <div id="tab-users" class="admin-section active">
-            <div class="glass-card" style="max-width: 850px;">
-                <h2 class="group-title">Управление доступом</h2>
-                <div id="users-list">
-                    <div class="input-row user-item">
-                        <input type="text" class="u-name" placeholder="Группа (ОГР-23)" style="width: 30%;">
-                        <input type="text" class="u-pass" placeholder="Пароль" style="width: 30%;">
-                        <input type="text" class="u-link" placeholder="Файл (ogr23.html)" style="width: 35%;">
-                    </div>
+        <!-- ВКЛАДКА 1: ЖУРНАЛ УСПЕВАЕМОСТИ -->
+        <div id="tab-journal" class="admin-section active glass-card">
+            <div class="controls-bar">
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <label>Группа:</label>
+                    <select id="group-filter" onchange="loadStudents()">
+                        <option value="all">Все группы</option>
+                        <option value="ogr">ОГР (Открытые горные работы)</option>
+                        <option value="rgo">РГО (Ремонт горного оборудования)</option>
+                        <option value="rem">РЕМ (Слесари-ремонтники)</option>
+                        <option value="electroslesar">Электрослесари</option>
+                        <option value="prm">ПРМ (Подземные работы)</option>
+                        <option value="md">МД (Маркшейдерское дело)</option>
+                        <option value="grp">ГРП (Горнорабочие)</option>
+                    </select>
+                    <input type="text" id="search-input" placeholder="Поиск по логину..." oninput="renderStudentsTable()">
                 </div>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button onclick="addUserRow()" class="btn-secondary" style="flex: 1;">+ Группа</button>
-                    <button onclick="genUsers()" class="btn-primary" style="flex: 2;">💾 Скачать config.js</button>
-                </div>
-                <textarea id="out-users" rows="5" placeholder="Код для config.js появится здесь..." readonly></textarea>
+                <button onclick="exportToCSV()" class="btn-primary" style="margin: 0; padding: 10px 20px;">📥 Скачать ведомость (Excel)</button>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Логин</th>
+                            <th>Группа</th>
+                            <th>Пароль</th>
+                            <th>Оценки и прогресс</th>
+                            <th>Попытки экзамена</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-tbody">
+                        <tr><td colspan="6" style="text-align: center; opacity: 0.5;">Загрузка данных из базы...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-
-        <!-- ВКЛАДКА: ТЕСТЫ -->
-        <div id="tab-quiz" class="admin-section">
-            <div class="glass-card" style="max-width: 850px;">
-                <h2 class="group-title">Создание теста</h2>
-                <div id="quiz-list">
-                    <div class="input-row quiz-item">
-                        <input type="text" class="q-text" placeholder="Введите текст вопроса" style="width: 100%; border-bottom: 1px solid var(--gold);">
-                        <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <input type="text" class="ans" placeholder="Вариант 1 (ВЕРНЫЙ)">
-                            <input type="text" class="ans" placeholder="Вариант 2">
-                            <input type="text" class="ans" placeholder="Вариант 3">
-                            <input type="text" class="ans" placeholder="Вариант 4">
-                        </div>
-                        <span class="correct-hint">☝️ Первый вариант всегда верный. В самом тесте они перемешаются автоматически.</span>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button onclick="addQuizRow()" class="btn-secondary" style="flex: 1;">+ Вопрос</button>
-                    <button onclick="genQuiz()" class="btn-primary" style="flex: 2;">💾 Скачать quiz-data.js</button>
-                </div>
-                <textarea id="out-quiz" rows="5" placeholder="Код для quiz-data.js появится здесь..." readonly></textarea>
-            </div>
+        <!-- ВКЛАДКА 2: РУБИЛЬНИК ТЕСТОВ И СРОКИ -->
+        <div id="tab-access" class="admin-section glass-card">
+            <h2 style="color: var(--gold); margin-bottom: 10px;">Управление доступом групп</h2>
+            <p style="opacity: 0.7; margin-bottom: 25px; font-size: 0.9rem;">
+                Здесь можно мгновенно перекрыть или открыть сдачу тестов для всей группы (чтобы студенты не бежали вперед лекции), а также задать даты начала и конца курса.
+            </p>
+            <div id="groups-config-list">Загрузка настроек групп...</div>
         </div>
 
-    </main>
+        <!-- ВКЛАДКА 3: ДОБАВЛЕНИЕ СТУДЕНТОВ -->
+        <div id="tab-add" class="admin-section glass-card">
+            <h2 style="color: var(--gold); margin-bottom: 15px;">Регистрация новых студентов</h2>
+            <div style="display: flex; flex-direction: column; gap: 15px; max-width: 600px;">
+                <div>
+                    <label style="display: block; margin-bottom: 5px;">Выберите группу:</label>
+                    <select id="new-group" style="width: 100%;">
+                        <option value="ogr">ogr (Открытые горные работы)</option>
+                        <option value="rgo">rgo (Ремонт горного оборудования)</option>
+                        <option value="rem">rem (Слесари-ремонтники)</option>
+                        <option value="electroslesar">electroslesar (Электрослесари)</option>
+                        <option value="prm">prm (Подземные работы)</option>
+                        <option value="md">md (Маркшейдерское дело)</option>
+                        <option value="grp">grp (Горнорабочие)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px;">Список студентов (каждый с новой строки в формате: <b>логин пароль</b>):</label>
+                    <textarea id="bulk-students" rows="6" style="width: 100%;" placeholder="ivanov_ii 1234&#10;petrov_pp 5678&#10;sidorov_ss 9012"></textarea>
+                </div>
+                <button onclick="addBulkStudents()" class="btn-primary" style="margin: 0;">Добавить в базу Supabase</button>
+            </div>
+        </div>
+    </div>
 
     <script>
+        let allStudents = [];
+        const GROUP_NAMES = {
+            'ogr': 'ОГР (Открытые горные работы)',
+            'rgo': 'РГО (Ремонт горного оборудования)',
+            'rem': 'РЕМ (Слесари)',
+            'electroslesar': 'Электрослесари',
+            'prm': 'ПРМ (Подземные работы)',
+            'md': 'МД (Маркшейдерское дело)',
+            'grp': 'ГРП (Горнорабочие)'
+        };
+
+        // 1. ПРОВЕРКА АВТОРИЗАЦИИ АДМИНА ЧЕРЕЗ SUPABASE
+        async function checkAuth() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                window.location.href = 'students.html';
+                return;
+            }
+            loadStudents();
+            loadCourseConfigs();
+        }
+
+        async function logoutAdmin() {
+            await _supabase.auth.signOut();
+            window.location.href = 'students.html';
+        }
+
         function showTab(tabId, btn) {
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
@@ -136,59 +186,226 @@
             btn.classList.add('active-tab');
         }
 
-        function addUserRow() {
-            const container = document.getElementById('users-list');
-            const row = container.querySelector('.user-item').cloneNode(true);
-            row.querySelectorAll('input').forEach(i => i.value = '');
-            container.appendChild(row);
-        }
+        // 2. ЗАГРУЗКА И ОТРИСОВКА СТУДЕНТОВ
+        async function loadStudents() {
+            const groupFilter = document.getElementById('group-filter').value;
+            let query = _supabase.from('students').select('*').order('login', { ascending: true });
+            
+            if (groupFilter !== 'all') {
+                query = query.eq('group_name', groupFilter);
+            }
 
-        function addQuizRow() {
-            const container = document.getElementById('quiz-list');
-            const row = container.querySelector('.quiz-item').cloneNode(true);
-            row.querySelectorAll('input').forEach(i => i.value = '');
-            container.appendChild(row);
+            const { data, error } = await query;
+            if (error) {
+                alert('Ошибка загрузки студентов: ' + error.message);
+                return;
+            }
+            allStudents = data || [];
+            renderStudentsTable();
         }
+        function renderStudentsTable() {
+            const tbody = document.getElementById('students-tbody');
+            const search = document.getElementById('search-input').value.trim().toLowerCase();
+            
+            const filtered = allStudents.filter(st => 
+                (st.login || '').toLowerCase().includes(search)
+            );
 
-        function downloadJS(filename, text) {
-            const element = document.createElement('a');
-            element.setAttribute('href', 'data:text/javascript;charset=utf-8,' + encodeURIComponent(text));
-            element.setAttribute('download', filename);
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; opacity: 0.5;">Студенты не найдены</td></tr>';
+                return;
+            }
 
-        function genUsers() {
-            let data = {};
-            document.querySelectorAll('.user-item').forEach(item => {
-                const name = item.querySelector('.u-name').value.trim();
-                if(name) {
-                    data[name] = {
-                        password: item.querySelector('.u-pass').value.trim(),
-                        redirect: item.querySelector('.u-link').value.trim()
-                    };
+            tbody.innerHTML = filtered.map(st => {
+                const grades = st.grades || {};
+                let gradesHTML = '';
+
+                for (const [key, val] of Object.entries(grades)) {
+                    if (key.includes('step_progress')) {
+                        const subj = key.replace('_step_progress', '');
+                        gradesHTML += `<span class="grade-badge" style="color: var(--gold);">Шаг (${subj}): ${val}</span>`;
+                    } else {
+                        gradesHTML += `<span class="grade-badge g-${val}">${key}: <b>${val}</b></span>`;
+                    }
                 }
-            });
-            const res = "const USERS = " + JSON.stringify(data, null, 4) + ";";
-            document.getElementById('out-users').value = res;
-            if(confirm("Скачать новый config.js?")) downloadJS("config.js", res);
+                if (st.final_grade) {
+                    gradesHTML += `<span class="grade-badge g-${st.final_grade}">Итог: <b>${st.final_grade}</b></span>`;
+                }
+                if (!gradesHTML) gradesHTML = '<span style="opacity: 0.4;">Нет оценок</span>';
+
+                return `
+                    <tr>
+                        <td><b>${st.login}</b></td>
+                        <td>${st.group_name || '-'}</td>
+                        <td style="font-family: monospace; opacity: 0.8;">${st.password || '-'}</td>
+                        <td>${gradesHTML}</td>
+                        <td>${st.final_attempts || 0} / 3</td>
+                        <td>
+                            <button class="btn-mini btn-reset" onclick="resetAttempts('${st.login}')" title="Обнулить попытки экзамена">🔄 Сброс попыток</button>
+                            <button class="btn-mini btn-add" onclick="advanceStudentStep('${st.login}')" title="Открыть следующую тему вручную">⏭️ +1 тема</button>
+                            <button class="btn-mini btn-del" onclick="deleteStudent('${st.login}')" title="Удалить студента">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
-        function genQuiz() {
-            let data = [];
-            document.querySelectorAll('.quiz-item').forEach(item => {
-                const q = item.querySelector('.q-text').value.trim();
-                const ans = Array.from(item.querySelectorAll('.ans')).map(i => i.value.trim()).filter(v => v !== '');
-                if(q && ans.length > 0) {
-                    data.push({ q: q, o: ans, a: 0 });
-                }
-            });
-            const res = "const questions = " + JSON.stringify(data, null, 4) + ";";
-            document.getElementById('out-quiz').value = res;
-            if(confirm("Скачать новый quiz-data.js?")) downloadJS("quiz-data.js", res);
+        async function resetAttempts(login) {
+            if (!confirm(`Сбросить счетчик попыток экзамена для ${login}?`)) return;
+            const { error } = await _supabase.from('students')
+                .update({ final_attempts: 0, last_attempt_time: null })
+                .eq('login', login);
+            if (!error) loadStudents();
         }
+
+        async function advanceStudentStep(login) {
+            const st = allStudents.find(s => s.login === login);
+            if (!st) return;
+
+            const grades = st.grades || {};
+            const stepKeys = Object.keys(grades).filter(k => k.endsWith('_step_progress'));
+            
+            if (stepKeys.length > 0) {
+                const targetKey = prompt(`Введите ключ прогресса для повышения (доступные: ${stepKeys.join(', ')}):`, stepKeys[0]);
+                if (!targetKey) return;
+                grades[targetKey] = (grades[targetKey] || 1) + 1;
+                await _supabase.from('students').update({ grades }).eq('login', login);
+            } else {
+                const nextStep = (st.current_step || 1) + 1;
+                await _supabase.from('students').update({ current_step: nextStep }).eq('login', login);
+            }
+            alert(`Доступ к следующей теме для ${login} открыт!`);
+            loadStudents();
+        }
+
+        async function deleteStudent(login) {
+            if (!confirm(`Точно удалить студента ${login} и все его оценки?`)) return;
+            const { error } = await _supabase.from('students').delete().eq('login', login);
+            if (!error) loadStudents();
+        }
+
+        // 3. ВЫГРУЗКА В EXCEL (CSV)
+        function exportToCSV() {
+            if (allStudents.length === 0) return alert('Нет данных для выгрузки');
+            let csv = '\uFEFFЛогин;Группа;Попытки экзамена;Оценки\n';
+            allStudents.forEach(st => {
+                const gradesStr = JSON.stringify(st.grades || {}).replace(/"/g, "'");
+                csv += `${st.login};${st.group_name || ''};${st.final_attempts || 0};"${gradesStr}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `vedomost_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+        }
+
+        // 4. РУБИЛЬНИК ТЕСТОВ И СРОКИ (course_config)
+        async function loadCourseConfigs() {
+            const container = document.getElementById('groups-config-list');
+            const { data: configs } = await _supabase.from('course_config').select('*');
+            const configMap = {};
+            (configs || []).forEach(c => configMap[c.group_id] = c);
+
+            container.innerHTML = Object.entries(GROUP_NAMES).map(([id, title]) => {
+                const cfg = configMap[id] || { group_id: id, allow_tests: true, start_date: '', end_date: '' };
+                const isAllowed = cfg.allow_tests !== false;
+                const startVal = cfg.start_date ? cfg.start_date.slice(0, 16) : '';
+                const endVal = cfg.end_date ? cfg.end_date.slice(0, 16) : '';
+
+                return `
+                    <div class="switch-card">
+                        <div style="min-width: 240px;">
+                            <h3 style="color: var(--gold); margin-bottom: 4px;">${title}</h3>
+                            <span style="font-size: 0.8rem; opacity: 0.6;">ID группы: ${id}</span>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                            <div>
+                                <small style="display:block; opacity:0.6;">Старт:</small>
+                                <input type="datetime-local" id="start-${id}" value="${startVal}">
+                            </div>
+                            <div>
+                                <small style="display:block; opacity:0.6;">Дедлайн:</small>
+                                <input type="datetime-local" id="end-${id}" value="${endVal}">
+                            </div>
+                            <button class="btn-mini btn-add" style="padding: 10px 14px; margin-top: 14px;" onclick="saveGroupDates('${id}')">💾 Даты</button>
+                        </div>
+
+                        <div>
+                            <button class="toggle-btn ${isAllowed ? 'toggle-on' : 'toggle-off'}" onclick="toggleTests('${id}', ${!isAllowed})">
+                                ${isAllowed ? '🟢 ТЕСТЫ ОТКРЫТЫ' : '🔴 ТЕСТЫ ЗАКРЫТЫ'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function toggleTests(groupId, newState) {
+            const { error } = await _supabase.from('course_config')
+                .upsert({ group_id: groupId, allow_tests: newState }, { onConflict: 'group_id' });
+            if (error) {
+                alert('Ошибка переключения: ' + error.message);
+                return;
+            }
+            loadCourseConfigs();
+        }
+
+        async function saveGroupDates(groupId) {
+            const startRaw = document.getElementById(`start-${groupId}`).value;
+            const endRaw = document.getElementById(`end-${groupId}`).value;
+
+            const payload = {
+                group_id: groupId,
+                start_date: startRaw ? new Date(startRaw).toISOString() : null,
+                end_date: endRaw ? new Date(endRaw).toISOString() : null
+            };
+
+            const { error } = await _supabase.from('course_config').upsert(payload, { onConflict: 'group_id' });
+            if (error) {
+                alert('Ошибка сохранения дат: ' + error.message);
+            } else {
+                alert(`Сроки для группы ${groupId} сохранены!`);
+            }
+        }
+
+        // 5. МАССОВОЕ ДОБАВЛЕНИЕ СТУДЕНТОВ
+        async function addBulkStudents() {
+            const group = document.getElementById('new-group').value;
+            const text = document.getElementById('bulk-students').value.trim();
+            if (!text) return alert('Введите хотя бы одного студента');
+
+            const lines = text.split('\n');
+            const rows = [];
+
+            for (const line of lines) {
+                const parts = line.trim().split(/\s+/);
+                if (parts.length >= 2) {
+                    rows.push({
+                        login: parts[0].toLowerCase(),
+                        password: parts[1],
+                        group_name: group,
+                        grades: {},
+                        current_disc: 0,
+                        current_step: 1,
+                        final_attempts: 0
+                    });
+                }
+            }
+
+            if (rows.length === 0) return alert('Неверный формат. Пишите: логин пароль');
+
+            const { error } = await _supabase.from('students').insert(rows);
+            if (error) {
+                alert('Ошибка добавления (возможно, такой логин уже есть): ' + error.message);
+            } else {
+                alert(`Успешно добавлено студентов: ${rows.length}`);
+                document.getElementById('bulk-students').value = '';
+                loadStudents();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', checkAuth);
     </script>
 </body>
 </html>
