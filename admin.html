@@ -455,7 +455,8 @@
             const { error } = await _supabase.from('students').delete().eq('login', login);
             if (!error) loadStudents();
         }
-        // 3. ВЫГРУЗКА В EXCEL (CSV) — ТОЛЬКО ЛОГИН, ИМЯ, ПОПЫТКИ И ОЦЕНКИ ПО ДИСЦИПЛИНАМ
+        
+        // 3. ВЫГРУЗКА В EXCEL (.XLS) С ГОТОВОЙ ШИРИНОЙ СТОЛБЦОВ И РАМКАМИ
         function exportToCSV() {
             if (allStudents.length === 0) return alert('Нет данных для выгрузки');
 
@@ -483,7 +484,6 @@
 
                 for (const [key, val] of Object.entries(grades)) {
                     if (key.endsWith('_step_progress')) {
-                        // Шаги пропускаем, в выгрузку не берем
                         continue;
                     } else if (key.endsWith('_final')) {
                         ensure(key.replace('_final', '')).final = val;
@@ -505,25 +505,49 @@
 
             const subjectCols = Array.from(allSubjectCodes);
 
-            // Шапка без группы: Логин | Имя | Попытки | Дисциплины...
-            const headers = ['Логин', 'Имя', 'Попытки'];
-            subjectCols.forEach(code => {
-                headers.push(DISC_NAMES[code] || code.toUpperCase());
-            });
-
-            let csv = '\uFEFF' + headers.join(';') + '\n';
+            // Собираем HTML-таблицу с жестко заданной шириной колонок для Excel
+            let html = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://w3.org">
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        table { border-collapse: collapse; font-family: Calibri, Arial, sans-serif; font-size: 11pt; }
+                        th { background-color: #1e293b; color: #ffffff; font-weight: bold; border: 1px solid #000000; padding: 8px; text-align: center; }
+                        td { border: 1px solid #888888; padding: 6px 8px; vertical-align: middle; mso-number-format:"\\@"; }
+                        .wrap { white-space: normal; word-wrap: break-word; }
+                        .center { text-align: center; }
+                    </style>
+                </head>
+                <body>
+                    <table>
+                        <colgroup>
+                            <col width="120">
+                            <col width="200">
+                            <col width="90">
+                            ${subjectCols.map(() => '<col width="320">').join('')}
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Логин</th>
+                                <th>Имя</th>
+                                <th>Попытки</th>
+                                ${subjectCols.map(code => `<th>${DISC_NAMES[code] || code.toUpperCase()}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
 
             parsedStudents.forEach(({ raw: st, subjMap }) => {
-                const row = [
-                    st.login || '',
-                    st['ИМЯ'] || '',
-                    `${st.final_attempts || 0}/3`
-                ];
+                html += `<tr>
+                    <td><b>${st.login || ''}</b></td>
+                    <td>${st['ИМЯ'] || '—'}</td>
+                    <td class="center">${st.final_attempts || 0} / 3</td>
+                `;
 
                 subjectCols.forEach(code => {
                     const info = subjMap[code];
                     if (!info) {
-                        row.push('—');
+                        html += `<td class="center">—</td>`;
                         return;
                     }
                     const parts = [];
@@ -532,24 +556,25 @@
                         parts.push(info.themes.map(t => `Т${t.num}: ${t.mark}`).join(', '));
                     }
                     if (info.final) {
-                        parts.push(`ЭКЗАМЕН: ${info.final}`);
+                        parts.push(`<b>ЭКЗАМЕН: ${info.final}</b>`);
                     } else if (st.final_grade) {
-                        parts.push(`ЭКЗАМЕН: ${st.final_grade}`);
+                        parts.push(`<b>ЭКЗАМЕН: ${st.final_grade}</b>`);
                     }
-                    row.push(`"${parts.join(' | ') || '—'}"`);
+                    html += `<td class="wrap">${parts.join('<br>') || '—'}</td>`;
                 });
 
-                csv += row.join(';') + '\n';
+                html += `</tr>`;
             });
 
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            html += `</tbody></table></body></html>`;
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             const groupName = document.getElementById('group-filter').value;
-            link.download = `vedomost_${groupName}_${new Date().toISOString().slice(0,10)}.csv`;
+            link.download = `vedomost_${groupName}_${new Date().toISOString().slice(0,10)}.xls`;
             link.click();
         }
-
 
         // 4. РУБИЛЬНИК ТЕСТОВ И СРОКИ (course_config)
         async function loadCourseConfigs() {
