@@ -454,25 +454,106 @@
             if (!error) loadStudents();
         }
 
-        // 3. ВЫГРУЗКА В EXCEL (CSV)
+        // 3. ВЫГРУЗКА В EXCEL (CSV) С РАЗБИВКОЙ ПО СТОЛБЦАМ ПРЕДМЕТОВ
         function exportToCSV() {
             if (allStudents.length === 0) return alert('Нет данных для выгрузки');
-            let csv = '\uFEFFЛогин;Имя;Группа;Итоговые экзамены;Попытки;Все оценки\n';
-            allStudents.forEach(st => {
+
+            const DISC_NAMES = {
+                'ogr': 'Технология ОГР',
+                'electro': 'Электроснабжение',
+                'slesar': 'Слесарное дело',
+                'prm': 'Технология ПРМ',
+                'tech': 'Общетех. курс',
+                'special': 'Спецкурс',
+                'rem_electro': 'Электротехника',
+                'rem_tech': 'Техн. ремонта'
+            };
+
+            // 1. Собираем список всех предметов, которые есть у выгружаемых студентов
+            const allSubjectCodes = new Set();
+            const parsedStudents = allStudents.map(st => {
                 const grades = st.grades || {};
-                const finalsList = Object.entries(grades)
-                    .filter(([k]) => k.endsWith('_final'))
-                    .map(([k, v]) => `${k.replace('_final', '')}: ${v}`);
-                if (st.final_grade) finalsList.push(`Итог: ${st.final_grade}`);
-                
-                const finalsStr = finalsList.join(', ') || 'Не сдан';
-                const gradesStr = JSON.stringify(grades).replace(/"/g, "'");
-                csv += `${st.login};${st['ИМЯ'] || ''};${st.group_name || ''};"${finalsStr}";${st.final_attempts || 0};"${gradesStr}"\n`;
+                const subjMap = {};
+
+                const ensure = (code) => {
+                    allSubjectCodes.add(code);
+                    if (!subjMap[code]) subjMap[code] = { step: null, themes: [], final: null };
+                    return subjMap[code];
+                };
+
+                for (const [key, val] of Object.entries(grades)) {
+                    if (key.endsWith('_step_progress')) {
+                        ensure(key.replace('_step_progress', '')).step = val;
+                    } else if (key.endsWith('_final')) {
+                        ensure(key.replace('_final', '')).final = val;
+                    } else if (key.includes('_razdel')) {
+                        const [code, numStr] = key.split('_razdel');
+                        ensure(code).themes.push({ num: parseInt(numStr) || 0, mark: val });
+                    } else {
+                        const lastUnderscore = key.lastIndexOf('_');
+                        if (lastUnderscore !== -1) {
+                            const code = key.slice(0, lastUnderscore);
+                            const num = parseInt(key.slice(lastUnderscore + 1)) || 0;
+                            ensure(code).themes.push({ num, mark: val });
+                        }
+                    }
+                }
+
+                if (Object.keys(subjMap).length === 0 && st.current_step) {
+                    const defCode = (st.current_disc === 1) ? 'rem_tech' : 'rem_electro';
+                    ensure(defCode).step = st.current_step;
+                }
+
+                return { raw: st, subjMap };
             });
+
+            const subjectCols = Array.from(allSubjectCodes);
+
+            // 2. Формируем шапку таблицы
+            const headers = ['Логин', 'Имя', 'Группа', 'Попытки экзамена'];
+            subjectCols.forEach(code => {
+                headers.push(DISC_NAMES[code] || code.toUpperCase());
+            });
+
+            let csv = '\uFEFF' + headers.join(';') + '\n';
+
+            // 3. Заполняем строки по каждому студенту
+            parsedStudents.forEach(({ raw: st, subjMap }) => {
+                const row = [
+                    st.login || '',
+                    st['ИМЯ'] || '',
+                    st.group_name || '',
+                    `${st.final_attempts || 0}/3`
+                ];
+
+                subjectCols.forEach(code => {
+                    const info = subjMap[code];
+                    if (!info) {
+                        row.push('—');
+                        return;
+                    }
+                    const parts = [];
+                    if (info.step) parts.push(`Шаг: ${info.step}`);
+                    if (info.themes.length > 0) {
+                        info.themes.sort((a, b) => a.num - b.num);
+                        parts.push(info.themes.map(t => `Т${t.num}:${t.mark}`).join(', '));
+                    }
+                    if (info.final) {
+                        parts.push(`ЭКЗАМЕН: ${info.final}`);
+                    } else if (st.final_grade) {
+                        parts.push(`ЭКЗАМЕН: ${st.final_grade}`);
+                    }
+                    row.push(`"${parts.join(' | ') || 'Нет данных'}"`);
+                });
+
+                csv += row.join(';') + '\n';
+            });
+
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `vedomost_${new Date().toISOString().slice(0,10)}.csv`;
+            const groupName = document.getElementById('group-filter').value;
+            link.download = `vedomost_${groupName}_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
         }
 
