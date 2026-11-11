@@ -291,10 +291,10 @@
         // 3. ВЫГРУЗКА В EXCEL (CSV)
         function exportToCSV() {
             if (allStudents.length === 0) return alert('Нет данных для выгрузки');
-            let csv = '\uFEFFЛогин;Группа;Попытки экзамена;Оценки\n';
+            let csv = '\uFEFFЛогин;Имя;Группа;Попытки экзамена;Оценки\n';
             allStudents.forEach(st => {
                 const gradesStr = JSON.stringify(st.grades || {}).replace(/"/g, "'");
-                csv += `${st.login};${st.group_name || ''};${st.final_attempts || 0};"${gradesStr}"\n`;
+                csv += `${st.login};${st['ИМЯ'] || ''};${st.group_name || ''};${st.final_attempts || 0};"${gradesStr}"\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -385,9 +385,11 @@
             for (const line of lines) {
                 const parts = line.trim().split(/\s+/);
                 if (parts.length >= 2) {
+                    const studentName = parts.slice(2).join(' ');
                     rows.push({
                         login: parts[0].toLowerCase(),
                         password: parts[1],
+                        'ИМЯ': studentName || null,
                         group_name: group,
                         grades: {},
                         current_disc: 0,
