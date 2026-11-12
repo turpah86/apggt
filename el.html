@@ -489,45 +489,56 @@
         
         async function finishInlineQuiz() {
             disableQuizProtection();
-        
+            
+            // Извлекаем точный код дисциплины прямо из имени сданного теста
+            let currentDiscKey = '';
+            if (currentQuizId.includes('_razdel')) {
+                currentDiscKey = currentQuizId.split('_razdel')[0];
+            } else if (currentQuizId.endsWith('_final')) {
+                currentDiscKey = currentQuizId.replace('_final', '');
+            } else {
+                const lastIdx = currentQuizId.lastIndexOf('_');
+                currentDiscKey = lastIdx !== -1 ? currentQuizId.slice(0, lastIdx) : currentQuizId;
+            }
+            
             const percent = Math.round((quizScore / currentQuestions.length) * 100);
             let mark = percent >= 85 ? 5 : percent >= 70 ? 4 : percent >= 50 ? 3 : 2;
-         
+            
             if (mark >= 3) {
                 const login = localStorage.getItem('student_login');
-                document.getElementById('q-text').innerText = "Сохранение результата... ⏳";
-         
+                document.getElementById('q-text').innerText = "Сохранение результата...";
+            
                 const grades = globalStudent.grades || {};
-                const oldGrade = grades[currentQuizId] || 0;
-         
-                if (mark > oldGrade) {
+                
+                // 1. Записываем оценку только если она выше старой (или оценки еще не было)
+                const oldMark = grades[currentQuizId] || 0;
+                if (mark > oldMark) {
                     grades[currentQuizId] = mark;
                 }
-         
-                let nextStep = globalStudent.current_step || 1;
-                const currentDiscKey = currentSelectedDisc === 0 ? 'rem_electro' : 'rem_tech';
-         
-                if (currentQuizId === `${currentDiscKey}_${nextStep}`) {
+            
+                // 2. Обновляем шаг прогресса (поддерживает оба формата: _razdel1 и _1)
+                const progressKey = `${currentDiscKey}_step_progress`;
+                let nextStep = grades[progressKey] || 1;
+                
+                if (currentQuizId === `${currentDiscKey}_razdel${nextStep}` || currentQuizId === `${currentDiscKey}_${nextStep}`) {
                     nextStep = nextStep + 1;
                 }
-         
+                grades[progressKey] = nextStep;
+            
+                // 3. Отправляем в Supabase
                 const { error: updateError } = await _supabase
                     .from('students')
-                    .update({ 
-                        grades: grades,
-                        current_step: nextStep 
-                    })
+                    .update({ grades: grades })
                     .eq('login', login);
-         
+            
                 if (updateError) {
                     alert("Не удалось сохранить результат в базу из-за ошибки сети!");
                     location.reload();
                 } else {
-                    localStorage.setItem('student_step', nextStep);
                     alert(`Тест успешно сдан! Ваша оценка: ${mark}.`);
                     document.getElementById('quiz-overlay').style.display = 'none';
                     document.getElementById('bg-blur').style.display = 'none';
-                    location.reload(); 
+                    location.reload();
                 }
             } else {
                 alert(`Оценка: ${mark}. Тест не сдан. Старая оценка сохранена. Подучите материал!`);
