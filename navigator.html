@@ -27,28 +27,89 @@
     </div>
 
     <div class="glass-card">
-      <!-- 1 ЭТАЖ -->
-      <svg id="floor-1" viewBox="0 0 400 220">
-        <rect class="corridor" x="10" y="80" width="380" height="60" rx="6" />
-        <text x="200" y="114" class="corridor-label">Главный коридор • 1 этаж</text>
+      <!-- 1 ЭТАЖ (РЕАЛЬНАЯ СХЕМА ГГТ) -->
+      <svg id="floor-1" viewBox="0 0 800 540">
+        <!-- ЗАДНИЙ БЛОК (ВЕРХ): МАСТЕРСКИЕ И СПОРТЗАЛ -->
+        <rect id="room-svarka" class="room" x="140" y="15" width="210" height="75" rx="6" onclick="selectRoom('svarka')" />
+        <text x="245" y="57" class="room-label">Электросварочная мастерская</text>
 
-        <rect id="room-101" class="room" x="10" y="10" width="115" height="65" rx="8" onclick="selectRoom('101')" />
-        <text x="67" y="47" class="room-label">Каб. 101</text>
+        <rect id="room-slesar" class="room" x="140" y="95" width="210" height="85" rx="6" onclick="selectRoom('slesar')" />
+        <text x="245" y="142" class="room-label">Слесарная мастерская</text>
 
-        <rect id="room-102" class="room" x="135" y="10" width="130" height="65" rx="8" onclick="selectRoom('102')" />
-        <text x="200" y="47" class="room-label">Учебная часть</text>
+        <!-- Раздевалки и Спортзал -->
+        <rect id="room-razdevalki" class="room" x="415" y="15" width="85" height="150" rx="6" onclick="selectRoom('razdevalki')" />
+        <text x="457" y="95" class="room-label" font-size="11">Раздевалки</text>
 
-        <rect id="room-103" class="room" x="275" y="10" width="115" height="65" rx="8" onclick="selectRoom('103')" />
-        <text x="332" y="47" class="room-label">Столовая</text>
+        <rect id="room-sportzal" class="room" x="505" y="15" width="175" height="150" rx="8" onclick="selectRoom('sportzal')" />
+        <text x="592" y="95" class="room-label">Спортивный зал</text>
 
-        <rect x="160" y="145" width="80" height="42" rx="8" fill="rgba(255, 215, 0, 0.15)" stroke="#ffd700" stroke-width="1.5" />
-        <text x="200" y="170" class="room-label" style="fill: #ffd700;">ВХОД</text>
+        <!-- Переход к спортзалу и тренажерный зал -->
+        <rect class="corridor" x="360" y="15" width="50" height="270" rx="4" />
+        <rect id="room-trenazher" class="room" x="415" y="180" width="75" height="90" rx="6" onclick="selectRoom('trenazher')" />
+        <text x="452" y="228" class="room-label" font-size="11">Тренаж. зал</text>
 
+        <!-- ОСНОВНОЙ КОРПУС: ВЕРХНЯЯ ЛИНИЯ ОТ КОРИДОРА -->
+        <!-- Левое крыло: Токарная и Механообрабатывающая -->
+        <rect id="room-tokar" class="room" x="50" y="290" width="95" height="100" rx="6" onclick="selectRoom('tokar')" />
+        <text x="97" y="345" class="room-label" font-size="11">Токарная</text>
+
+        <rect id="room-mehan" class="room" x="185" y="290" width="165" height="100" rx="6" onclick="selectRoom('mehan')" />
+        <text x="267" y="345" class="room-label" font-size="11">Механообраб. маст.</text>
+
+        <!-- Центральная лестница -->
+        <rect x="360" y="290" width="80" height="100" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.3)" />
+        <text x="400" y="345" class="corridor-label">Лестница</text>
+
+        <!-- Правое крыло: Столовая -->
+        <rect id="room-stolovaya" class="room" x="460" y="290" width="210" height="100" rx="6" onclick="selectRoom('stolovaya')" />
+        <text x="565" y="345" class="room-label">Столовая (Обеденный зал)</text>
+
+        <!-- ГЛАВНЫЙ КОРИДОР 1 ЭТАЖА -->
+        <rect class="corridor" x="20" y="395" width="760" height="32" rx="4" />
+        <text x="400" y="415" class="corridor-label">Главный коридор • 1 этаж</text>
+
+        <!-- ОСНОВНОЙ КОРПУС: НИЖНЯЯ ЛИНИЯ ОТ КОРИДОРА -->
+        <!-- Левое крыло низ -->
+        <rect id="room-ot" class="room" x="20" y="432" width="85" height="85" rx="6" onclick="selectRoom('ot')" />
+        <text x="62" y="478" class="room-label" font-size="11">Охрана труда</text>
+
+        <rect id="room-fizika" class="room" x="110" y="432" width="90" height="85" rx="6" onclick="selectRoom('fizika')" />
+        <text x="155" y="478" class="room-label" font-size="11">Лаб. физики</text>
+
+        <rect id="room-wc1" class="room" x="205" y="432" width="45" height="55" rx="6" onclick="selectRoom('wc1')" />
+        <text x="227" y="464" class="room-label" font-size="11">С/У</text>
+
+        <rect id="room-komendant" class="room" x="255" y="432" width="75" height="55" rx="6" onclick="selectRoom('komendant')" />
+        <text x="292" y="464" class="room-label" font-size="10">Комендант</text>
+
+        <!-- Центр низ: Гардеробы и Главный вход -->
+        <rect id="room-garderob" class="room" x="335" y="432" width="130" height="55" rx="6" onclick="selectRoom('garderob')" />
+        <text x="400" y="464" class="room-label" font-size="11">Гардеробы</text>
+
+        <path d="M 355 487 L 445 487 L 435 525 L 365 525 Z" fill="rgba(255, 215, 0, 0.2)" stroke="#ffd700" stroke-width="2" />
+        <text x="400" y="511" class="room-label" style="fill: #ffd700;" font-size="12">ГЛАВНЫЙ ВХОД</text>
+
+        <!-- Правое крыло низ: Администрация, Медкабинет, Музей -->
+        <rect id="room-priem" class="room" x="470" y="432" width="75" height="55" rx="6" onclick="selectRoom('priem')" />
+        <text x="507" y="464" class="room-label" font-size="10">Приемн. ком.</text>
+
+        <rect id="room-med" class="room" x="550" y="432" width="65" height="55" rx="6" onclick="selectRoom('med')" />
+        <text x="582" y="464" class="room-label" font-size="10">Медкаб.</text>
+
+        <rect id="room-wc2" class="room" x="620" y="432" width="45" height="55" rx="6" onclick="selectRoom('wc2')" />
+        <text x="642" y="464" class="room-label" font-size="11">С/У</text>
+
+        <rect id="room-muzei" class="room" x="670" y="432" width="110" height="85" rx="6" onclick="selectRoom('muzei')" />
+        <text x="725" y="472" class="room-label" font-size="11">Минералог.</text>
+        <text x="725" y="486" class="room-label" font-size="11">музей</text>
+
+        <!-- Метка "Вы здесь" для QR-кода у главного входа (?here=vhod) -->
         <g id="pin-vhod" class="here-pin">
-          <circle cx="200" cy="126" r="7" fill="#ff4d4d" />
-          <text x="200" y="108" font-size="11" font-weight="bold" fill="#ff4d4d" text-anchor="middle">ВЫ ЗДЕСЬ</text>
+          <circle cx="400" cy="411" r="7" fill="#ff4d4d" />
+          <text x="400" y="390" font-size="12" font-weight="bold" fill="#ff4d4d" text-anchor="middle">ВЫ ЗДЕСЬ</text>
         </g>
       </svg>
+
 
       <!-- 2 ЭТАЖ -->
       <svg id="floor-2" viewBox="0 0 400 220" style="display:none;">
