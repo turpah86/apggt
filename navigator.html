@@ -90,8 +90,7 @@
         <text x="275" y="450" class="corridor-label">Левое крыло</text>
         <text x="645" y="450" class="corridor-label">Правое крыло</text>
 
-        <!-- ЛЕВЫЙ ТОРЦЕВОЙ УГОЛ (ПО ОБЕ СТОРОНЫ БОКОВОГО КОРИДОРА) -->
-        <!-- Слева от коридора (сверху вниз): ОТ и ТБ -> Столяр -> Учебный каб. охраны труда -->
+        <!-- ЛЕВЫЙ ТОРЦЕВОЙ УГОЛ (СЛЕВА ОТ БОКОВОГО КОРИДОРА) -->
         <rect id="room-ot" class="room" x="15" y="430" width="90" height="65" rx="6" onclick="selectRoom('ot')" />
         <text x="60" y="458" class="room-label" font-size="9">Каб. инж. ОТ и ТБ /</text>
         <text x="60" y="472" class="room-label" font-size="9">Пом. столяра</text>
@@ -100,18 +99,21 @@
         <text x="60" y="532" class="room-label" font-size="9">Учебный каб.</text>
         <text x="60" y="546" class="room-label" font-size="9">охраны труда</text>
 
-        <!-- Справа от бокового коридора: Лаборатория физики -->
-        <rect id="room-fizika" class="room" x="140" y="467" width="95" height="105" rx="6" onclick="selectRoom('fizika')" />
-        <text x="187" y="515" class="room-label" font-size="10">Лаборатория</text>
-        <text x="187" y="529" class="room-label" font-size="10">физики и астр.</text>
+        <!-- ЛЕВОЕ КРЫЛО: ВЕРХНИЙ РЯД ПОД КОРИДОРОМ (НАД ЛАБОРАТОРИЕЙ ФИЗИКИ) -->
+        <rect id="room-wc1" class="room" x="140" y="467" width="65" height="48" rx="6" onclick="selectRoom('wc1')" />
+        <text x="172" y="495" class="room-label" font-size="10">С/У (М/Ж)</text>
 
-        <!-- Далее по левому крылу к центру -->
-        <rect id="room-wc1" class="room" x="240" y="467" width="45" height="65" rx="6" onclick="selectRoom('wc1')" />
-        <text x="262" y="504" class="room-label" font-size="11">С/У</text>
+        <rect id="room-teh1" class="room" x="210" y="467" width="85" height="48" rx="6" onclick="selectRoom('teh1')" />
+        <text x="252" y="489" class="room-label" font-size="9">Гардероб /</text>
+        <text x="252" y="501" class="room-label" font-size="9">Тех. пом.</text>
 
-        <rect id="room-komendant" class="room" x="290" y="467" width="95" height="65" rx="6" onclick="selectRoom('komendant')" />
-        <text x="337" y="497" class="room-label" font-size="9">Комендант /</text>
-        <text x="337" y="510" class="room-label" font-size="9">Тех. службы</text>
+        <rect id="room-komendant" class="room" x="300" y="467" width="85" height="65" rx="6" onclick="selectRoom('komendant')" />
+        <text x="342" y="497" class="room-label" font-size="9">Комендант /</text>
+        <text x="342" y="510" class="room-label" font-size="9">Энергетик</text>
+
+        <!-- ЛЕВОЕ КРЫЛО: НИЖНИЙ РЯД (ПРЯМО ПОД С/У И ТЕХ. ПОМЕЩЕНИЯМИ) -->
+        <rect id="room-fizika" class="room" x="140" y="520" width="155" height="52" rx="6" onclick="selectRoom('fizika')" />
+        <text x="217" y="550" class="room-label" font-size="10">Лаборатория физики и астрономии</text>
 
         <!-- ЦЕНТР: ГАРДЕРОБЫ И ВХОД -->
         <rect id="room-garderob" class="room" x="390" y="467" width="140" height="65" rx="6" onclick="selectRoom('garderob')" />
