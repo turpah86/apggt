@@ -68,52 +68,83 @@
         <rect id="room-stolovaya" class="room" x="510" y="315" width="240" height="110" rx="6" onclick="selectRoom('stolovaya')" />
         <text x="630" y="375" class="room-label" font-size="13">Обеденный зал (Столовая)</text>
 
-        <!-- ГЛАВНЫЙ КОРИДОР -->
-        <rect class="corridor" x="20" y="430" width="880" height="32" rx="4" />
-        <text x="460" y="450" class="corridor-label">Главный коридор • 1 этаж</text>
+               <!-- ГЛАВНЫЙ КОРИДОР С БОКОВЫМИ ПОВОРОТАМИ (ФОРМА П) -->
+        <path class="corridor" d="
+          M 110 430 
+          L 415 430 
+          L 415 15 
+          L 480 15 
+          L 480 430 
+          L 815 430 
+          L 815 572 
+          L 790 572 
+          L 790 462 
+          L 135 462 
+          L 135 572 
+          L 110 572 
+          Z" />
+        
+        <!-- Ответвление коридора к сварке и слесарке -->
+        <path class="corridor" d="M 150 85 L 415 85 L 415 105 L 150 105 Z" />
 
-        <!-- НИЖНЯЯ СТОРОНА КОРИДОРА: ЛЕВОЕ КРЫЛО -->
-        <rect id="room-ot" class="room" x="20" y="467" width="95" height="105" rx="6" onclick="selectRoom('ot')" />
-        <text x="67" y="515" class="room-label" font-size="10">Охрана труда</text>
-        <text x="67" y="529" class="room-label" font-size="10">и ТБ / Столяр</text>
+        <text x="275" y="450" class="corridor-label">Левое крыло</text>
+        <text x="645" y="450" class="corridor-label">Правое крыло</text>
 
-        <rect id="room-fizika" class="room" x="120" y="467" width="95" height="105" rx="6" onclick="selectRoom('fizika')" />
-        <text x="167" y="515" class="room-label" font-size="10">Лаб. физики</text>
-        <text x="167" y="529" class="room-label" font-size="10">и астрономии</text>
+        <!-- ЛЕВЫЙ ТОРЦЕВОЙ УГОЛ (ПО ОБЕ СТОРОНЫ БОКОВОГО КОРИДОРА) -->
+        <!-- Слева от коридора (сверху вниз): ОТ и ТБ -> Столяр -> Учебный каб. охраны труда -->
+        <rect id="room-ot" class="room" x="15" y="430" width="90" height="65" rx="6" onclick="selectRoom('ot')" />
+        <text x="60" y="458" class="room-label" font-size="9">Каб. инж. ОТ и ТБ /</text>
+        <text x="60" y="472" class="room-label" font-size="9">Пом. столяра</text>
 
-        <rect id="room-wc1" class="room" x="220" y="467" width="50" height="65" rx="6" onclick="selectRoom('wc1')" />
-        <text x="245" y="504" class="room-label" font-size="11">С/У</text>
+        <rect id="room-ohrana" class="room" x="15" y="500" width="90" height="72" rx="6" onclick="selectRoom('ohrana')" />
+        <text x="60" y="532" class="room-label" font-size="9">Учебный каб.</text>
+        <text x="60" y="546" class="room-label" font-size="9">охраны труда</text>
 
-        <rect id="room-komendant" class="room" x="275" y="467" width="105" height="65" rx="6" onclick="selectRoom('komendant')" />
-        <text x="327" y="497" class="room-label" font-size="10">Комендант /</text>
-        <text x="327" y="511" class="room-label" font-size="10">Тех. службы</text>
+        <!-- Справа от бокового коридора: Лаборатория физики -->
+        <rect id="room-fizika" class="room" x="140" y="467" width="95" height="105" rx="6" onclick="selectRoom('fizika')" />
+        <text x="187" y="515" class="room-label" font-size="10">Лаборатория</text>
+        <text x="187" y="529" class="room-label" font-size="10">физики и астр.</text>
+
+        <!-- Далее по левому крылу к центру -->
+        <rect id="room-wc1" class="room" x="240" y="467" width="45" height="65" rx="6" onclick="selectRoom('wc1')" />
+        <text x="262" y="504" class="room-label" font-size="11">С/У</text>
+
+        <rect id="room-komendant" class="room" x="290" y="467" width="95" height="65" rx="6" onclick="selectRoom('komendant')" />
+        <text x="337" y="497" class="room-label" font-size="9">Комендант /</text>
+        <text x="337" y="510" class="room-label" font-size="9">Тех. службы</text>
 
         <!-- ЦЕНТР: ГАРДЕРОБЫ И ВХОД -->
-        <rect id="room-garderob" class="room" x="385" y="467" width="150" height="65" rx="6" onclick="selectRoom('garderob')" />
+        <rect id="room-garderob" class="room" x="390" y="467" width="140" height="65" rx="6" onclick="selectRoom('garderob')" />
         <text x="460" y="504" class="room-label" font-size="12">Гардеробы</text>
 
         <path d="M 410 532 L 510 532 L 498 575 L 422 575 Z" fill="rgba(255, 215, 0, 0.2)" stroke="#ffd700" stroke-width="2" />
         <text x="460" y="558" class="room-label" style="fill: #ffd700;" font-size="12">ГЛАВНЫЙ ВХОД</text>
 
-        <!-- НИЖНЯЯ СТОРОНА КОРИДОРА: ПРАВОЕ КРЫЛО -->
-        <rect id="room-priem" class="room" x="540" y="467" width="55" height="65" rx="6" onclick="selectRoom('priem')" />
-        <text x="567" y="497" class="room-label" font-size="9">Приемн.</text>
-        <text x="567" y="510" class="room-label" font-size="9">ком.</text>
+        <!-- ПРАВОЕ КРЫЛО ОТ ЦЕНТРА -->
+        <rect id="room-priem" class="room" x="535" y="467" width="50" height="65" rx="6" onclick="selectRoom('priem')" />
+        <text x="560" y="497" class="room-label" font-size="9">Приемн.</text>
+        <text x="560" y="510" class="room-label" font-size="9">ком.</text>
 
-        <rect id="room-ahch" class="room" x="600" y="467" width="65" height="65" rx="6" onclick="selectRoom('ahch')" />
-        <text x="632" y="497" class="room-label" font-size="9">АХЧ /</text>
-        <text x="632" y="510" class="room-label" font-size="9">Заоч. отд.</text>
+        <rect id="room-ahch" class="room" x="590" y="467" width="60" height="65" rx="6" onclick="selectRoom('ahch')" />
+        <text x="620" y="497" class="room-label" font-size="9">АХЧ /</text>
+        <text x="620" y="510" class="room-label" font-size="9">Заоч. отд.</text>
 
-        <rect id="room-med" class="room" x="670" y="467" width="75" height="65" rx="6" onclick="selectRoom('med')" />
-        <text x="707" y="497" class="room-label" font-size="9">Медкаб. /</text>
-        <text x="707" y="510" class="room-label" font-size="9">Стоматолог</text>
+        <rect id="room-med" class="room" x="655" y="467" width="75" height="65" rx="6" onclick="selectRoom('med')" />
+        <text x="692" y="497" class="room-label" font-size="9">Медкаб. /</text>
+        <text x="692" y="510" class="room-label" font-size="9">Стоматолог</text>
 
-        <rect id="room-wc2" class="room" x="750" y="467" width="45" height="65" rx="6" onclick="selectRoom('wc2')" />
-        <text x="772" y="504" class="room-label" font-size="11">С/У</text>
+        <rect id="room-wc2" class="room" x="735" y="467" width="50" height="65" rx="6" onclick="selectRoom('wc2')" />
+        <text x="760" y="504" class="room-label" font-size="11">С/У</text>
 
-        <rect id="room-muzei" class="room" x="800" y="467" width="100" height="105" rx="6" onclick="selectRoom('muzei')" />
-        <text x="850" y="515" class="room-label" font-size="10">Минералог.</text>
-        <text x="850" y="529" class="room-label" font-size="10">музей</text>
+        <!-- ПРАВЫЙ ТОРЦЕВОЙ УГОЛ (ПО ОБЕ СТОРОНЫ БОКОВОГО КОРИДОРА) -->
+        <rect id="room-muzei" class="room" x="685" y="537" width="100" height="65" rx="6" onclick="selectRoom('muzei')" />
+        <text x="735" y="566" class="room-label" font-size="10">Минералог.</text>
+        <text x="735" y="580" class="room-label" font-size="10">музей</text>
+
+        <rect id="room-dirmuzei" class="room" x="820" y="485" width="85" height="65" rx="6" onclick="selectRoom('dirmuzei')" />
+        <text x="862" y="514" class="room-label" font-size="9">Каб. директора</text>
+        <text x="862" y="528" class="room-label" font-size="9">музея</text>
+
 
         <!-- Метка "Вы здесь" (?here=vhod) -->
         <g id="pin-vhod" class="here-pin">
