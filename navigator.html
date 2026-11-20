@@ -230,7 +230,7 @@
   }
 
   function switchFloor(floorNum) {
-    const floors =;
+    const floors = [1, 2, 3];
     floors.forEach(num => {
       const svg = document.getElementById('floor-' + num);
       if (svg) svg.style.display = (num === floorNum) ? 'block' : 'none';
