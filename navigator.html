@@ -91,53 +91,52 @@
 
         <rect id="room-mehan" class="room" x="325" y="315" width="200" height="110" rx="6" onclick="selectRoom('mehan')" />
         <text x="425" y="375" class="room-label" font-size="12">Механообраб. мастерская</text>
-
         <!-- 2. Крайний левый торцевой блок (слева от бокового коридора) -->
-        <rect id="room-ot" class="room" x="15" y="430" width="95" height="38" rx="5" onclick="selectRoom('ot')" />
-        <text x="62" y="453" class="room-label" font-size="9">Каб. инж. ОТ и ТБ</text>
+        <rect id="room-ot" class="room" x="15" y="455" width="90" height="32" rx="4" onclick="selectRoom('ot')" />
+        <text x="60" y="475" class="room-label" font-size="8.5">Каб. инж. по ОТ и ТБ</text>
 
-        <rect id="room-stolyar" class="room" x="15" y="472" width="95" height="38" rx="5" onclick="selectRoom('stolyar')" />
-        <text x="62" y="495" class="room-label" font-size="9">Пом. столяра</text>
+        <rect id="room-stolyar" class="room" x="15" y="491" width="90" height="32" rx="4" onclick="selectRoom('stolyar')" />
+        <text x="60" y="511" class="room-label" font-size="8.5">Помещение столяра</text>
 
-        <!-- Нижняя граница y=514 + 71 = 585 (ровно вровень с лаборантской и физикой) -->
-        <rect id="room-ohrana" class="room" x="15" y="514" width="95" height="71" rx="6" onclick="selectRoom('ohrana')" />
-        <text x="62" y="546" class="room-label" font-size="9">Учебный кабинет</text>
-        <text x="62" y="559" class="room-label" font-size="9">охраны труда</text>
+        <rect id="room-ohrana" class="room" x="15" y="527" width="90" height="78" rx="5" onclick="selectRoom('ohrana')" />
+        <text x="60" y="563" class="room-label" font-size="9">Учебный кабинет</text>
+        <text x="60" y="576" class="room-label" font-size="9">охраны труда</text>
 
-        <!-- 3. ЛАБОРАНТСКАЯ (В УПОР ОТ ГЛАВНОГО КОРИДОРА y=467 ДО НИЗА y=585) -->
-        <rect id="room-laborant" class="room" x="145" y="467" width="28" height="118" rx="5" onclick="selectRoom('laborant')" />
-        <text x="159" y="528" class="room-label" font-size="7.5" transform="rotate(-90 159 528)">Лаборантская</text>
+        <!-- 3. ЛАБОРАНТСКАЯ (на всю высоту от коридора y=455 до низа y=605) -->
+        <rect id="room-laborant" class="room" x="140" y="455" width="26" height="150" rx="4" onclick="selectRoom('laborant')" />
+        <text x="153" y="532" class="room-label" font-size="7.5" transform="rotate(-90 153 532)">Лаборантская</text>
 
-        <!-- 4. ВЕРХНИЙ ЯРУС СПРАВА ОТ ЛАБОРАНТСКОЙ (С/У, ГАРДЕРОБ И ТЕХ. СЛУЖБЫ) -->
-        <rect id="room-wc1" class="room" x="177" y="467" width="34" height="46" rx="5" onclick="selectRoom('wc1')" />
-        <text x="194" y="494" class="room-label" font-size="9">С/У</text>
+        <!-- 4. ВЕРХНИЙ ЯРУС: С/У, С/У, ГАРДЕРОБ (высота 68px, до y=523) -->
+        <rect id="room-wc1" class="room" x="170" y="455" width="38" height="68" rx="4" onclick="selectRoom('wc1')" />
+        <text x="189" y="493" class="room-label" font-size="9">С/У</text>
 
-        <rect id="room-wc2-left" class="room" x="214" y="467" width="34" height="46" rx="5" onclick="selectRoom('wc2-left')" />
-        <text x="231" y="494" class="room-label" font-size="9">С/У</text>
+        <rect id="room-wc2-left" class="room" x="212" y="455" width="38" height="68" rx="4" onclick="selectRoom('wc2-left')" />
+        <text x="231" y="493" class="room-label" font-size="9">С/У</text>
 
-        <rect id="room-gard-left" class="room" x="251" y="467" width="52" height="46" rx="5" onclick="selectRoom('gard-left')" />
-        <text x="277" y="494" class="room-label" font-size="8">Гардероб</text>
+        <rect id="room-gard-left" class="room" x="254" y="455" width="54" height="68" rx="4" onclick="selectRoom('gard-left')" />
+        <text x="281" y="493" class="room-label" font-size="8.5">Гардероб</text>
 
-        <rect id="room-santeh-elektrik" class="room" x="307" y="467" width="84" height="58" rx="5" onclick="selectRoom('santeh-elektrik')" />
-        <text x="349" y="493" class="room-label" font-size="8">Пом. сантехника</text>
-        <text x="349" y="505" class="room-label" font-size="8">и электрика</text>
+        <!-- 5. НИЖНИЙ ЯРУС: ЛАБОРАТОРИЯ ФИЗИКИ (y=527..605, выступает чуть правее гардероба) -->
+        <rect id="room-fizika" class="room" x="170" y="527" width="165" height="78" rx="5" onclick="selectRoom('fizika')" />
+        <text x="252" y="563" class="room-label" font-size="10">Лаборатория</text>
+        <text x="252" y="577" class="room-label" font-size="10">физики и астрономии</text>
 
-        <rect id="room-energ" class="room" x="395" y="467" width="44" height="58" rx="5" onclick="selectRoom('energ')" />
-        <text x="417" y="493" class="room-label" font-size="8">Инж.</text>
-        <text x="417" y="504" class="room-label" font-size="7">энерг.</text>
+        <!-- 6. ТЕХ. ПОМЕЩЕНИЯ И КОМЕНДАНТ (вытянуты вниз до y=575, почти вровень с физикой!) -->
+        <rect id="room-santeh-elektrik" class="room" x="312" y="455" width="70" height="68" rx="4" onclick="selectRoom('santeh-elektrik')" />
+        <text x="347" y="486" class="room-label" font-size="8">Пом. сантехн.</text>
+        <text x="347" y="498" class="room-label" font-size="8">и электрика</text>
 
-        <rect id="room-tehpers" class="room" x="443" y="467" width="40" height="58" rx="5" onclick="selectRoom('tehpers')" />
-        <text x="463" y="493" class="room-label" font-size="8">Тех.</text>
-        <text x="463" y="504" class="room-label" font-size="7">перс.</text>
+        <rect id="room-energ" class="room" x="386" y="455" width="46" height="120" rx="4" onclick="selectRoom('energ')" />
+        <text x="409" y="512" class="room-label" font-size="8">Инж.</text>
+        <text x="409" y="524" class="room-label" font-size="7.5">энерг.</text>
 
-        <rect id="room-komendant" class="room" x="487" y="467" width="43" height="58" rx="5" onclick="selectRoom('komendant')" />
-        <text x="508" y="493" class="room-label" font-size="8">Комен-</text>
-        <text x="508" y="504" class="room-label" font-size="8">дант</text>
+        <rect id="room-tehpers" class="room" x="436" y="455" width="42" height="120" rx="4" onclick="selectRoom('tehpers')" />
+        <text x="457" y="512" class="room-label" font-size="8">Тех.</text>
+        <text x="457" y="524" class="room-label" font-size="7.5">перс.</text>
 
-        <!-- 5. ЛАБОРАТОРИЯ ФИЗИКИ (ПРЯМО ПОД С/У И ГАРДЕРОБОМ, НИЖНИЙ КРАЙ y=585) -->
-        <rect id="room-fizika" class="room" x="177" y="517" width="126" height="68" rx="6" onclick="selectRoom('fizika')" />
-        <text x="240" y="548" class="room-label" font-size="9">Лаборатория</text>
-        <text x="240" y="561" class="room-label" font-size="9">физики и астр.</text>
+        <rect id="room-komendant" class="room" x="482" y="455" width="45" height="120" rx="4" onclick="selectRoom('komendant')" />
+        <text x="504" y="512" class="room-label" font-size="8">Комен-</text>
+        <text x="504" y="524" class="room-label" font-size="8">дант</text>
 
 
         <!-- ========================================================= -->
