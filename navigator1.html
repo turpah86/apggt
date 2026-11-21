@@ -85,18 +85,25 @@
                         <rect id="B1-06" class="room" x="665" y="380" width="135" height="150" />
                         <text x="732" y="455" class="room-label">Тренажёрный зал</text>
 
-                        <!-- Расширенный ряд вдоль спортзала (x=665..800, ширина 135 — вровень с Тренажёрным залом) -->
+                        <!-- Ряд вдоль спортзала (x=665..800): Снарядная + Г-образные Раздевалки с разделёнными Душ/С/У посередине -->
                         <rect id="B1-09" class="room service" x="665" y="62" width="135" height="72" />
                         <text x="732" y="98" class="room-label">Снарядная</text>
 
-                        <rect id="B1-10" class="room service" x="665" y="134" width="135" height="72" />
-                        <text x="732" y="170" class="room-label">Раздевалка 1</text>
+                        <!-- Г-образная Раздевалка 1 (верхняя) -->
+                        <path id="B1-10" class="room service" d="M 665 134 H 800 V 242 H 732 V 185 H 665 Z" />
+                        <text x="745" y="165" class="room-label">Раздевалка 1</text>
 
-                        <rect id="B1-11" class="room service" x="665" y="206" width="135" height="72" />
-                        <text x="732" y="242" class="room-label">Душевые / С/У</text>
+                        <!-- Душ / Санузел 1 и Душ / Санузел 2 посередине (разделены между собой!) -->
+                        <rect id="B1-11a" class="room service" x="665" y="185" width="67" height="57" />
+                        <text x="698" y="213" class="room-label" style="font-size:8.5px;">Душ / С/У 1</text>
 
-                        <rect id="B1-12" class="room service" x="665" y="278" width="135" height="72" />
-                        <text x="732" y="314" class="room-label">Раздевалка 2</text>
+                        <rect id="B1-11b" class="room service" x="665" y="242" width="67" height="57" />
+                        <text x="698" y="270" class="room-label" style="font-size:8.5px;">Душ / С/У 2</text>
+
+                        <!-- Г-образная Раздевалка 2 (нижняя) -->
+                        <path id="B1-12" class="room service" d="M 732 242 H 800 V 350 H 665 V 299 H 732 Z" />
+                        <text x="745" y="322" class="room-label">Раздевалка 2</text>
+
 
                         <!-- ==================== ПРАВОЕ КРЫЛО: СПОРТИВНЫЙ ЗАЛ (x=800..1218) ==================== -->
                         <rect id="B1-13" class="room service" x="800" y="62" width="418" height="318" />
