@@ -76,21 +76,24 @@
                         <path id="L1-14" class="room service" d="M 337 350 H 370 V 470 H 320 V 392 H 337 Z" />
                         <text x="345" y="425" class="room-label">Санузел 2</text>
 
-                        <!-- РЯД СЛУЖЕБНЫХ КОМНАТ ВДОЛЬ ГЛАВНОГО КОРИДОРА -->
-                        <rect id="L1-15a" class="room service" x="370" y="350" width="64" height="120" />
-                        <text x="402" y="410" class="room-label" transform="rotate(-90 402,410)">Хоз. пом.</text>
+                        <!-- РЯД СЛУЖЕБНЫХ КОМНАТ ВДОЛЬ ГЛАВНОГО КОРИДОРА (6 комнат) -->
+                        <rect id="L1-15a" class="room service" x="370" y="350" width="53" height="120" />
+                        <text x="396" y="410" class="room-label" transform="rotate(-90 396,410)">Хоз. пом.</text>
 
-                        <rect id="L1-15b" class="room service" x="434" y="350" width="64" height="120" />
-                        <text x="466" y="410" class="room-label" style="font-size:9px;" transform="rotate(-90 466,410)">Сантехник / Электрик</text>
+                        <rect id="L1-15b" class="room service" x="423" y="350" width="53" height="120" />
+                        <text x="449" y="410" class="room-label" style="font-size:8.5px;" transform="rotate(-90 449,410)">Сантехник / Электрик</text>
 
-                        <rect id="L1-15c" class="room service" x="498" y="350" width="64" height="120" />
-                        <text x="530" y="410" class="room-label" transform="rotate(-90 530,410)">Архив</text>
+                        <rect id="L1-15c" class="room service" x="476" y="350" width="53" height="120" />
+                        <text x="502" y="410" class="room-label" transform="rotate(-90 502,410)">Архив</text>
 
-                        <rect id="L1-15d" class="room service" x="562" y="350" width="63" height="120" />
-                        <text x="593" y="410" class="room-label" transform="rotate(-90 593,410)">Инженер</text>
+                        <rect id="L1-15d" class="room service" x="529" y="350" width="53" height="120" />
+                        <text x="555" y="410" class="room-label" transform="rotate(-90 555,410)">Инженер</text>
 
-                        <rect id="L1-15e" class="room service" x="625" y="350" width="63" height="120" />
-                        <text x="656" y="410" class="room-label" transform="rotate(-90 656,410)">Комендант</text>
+                        <rect id="L1-15e" class="room service" x="582" y="350" width="53" height="120" />
+                        <text x="608" y="410" class="room-label" transform="rotate(-90 608,410)">Комендант</text>
+
+                        <rect id="L1-15f" class="room service" x="635" y="350" width="53" height="120" />
+                        <text x="661" y="410" class="room-label" transform="rotate(-90 661,410)">Хоз. блок</text>
 
                         <!-- ЮЖНЫЙ ТОРЕЦ -->
                         <rect id="L1-16" class="room" x="72" y="470" width="153" height="188" />
@@ -111,11 +114,14 @@
                             <line x1="281" y1="350" x2="295" y2="350" />
                             <line x1="314" y1="350" x2="326" y2="350" />
                             <line x1="345" y1="350" x2="359" y2="350" />
-                            <line x1="395" y1="350" x2="409" y2="350" />
-                            <line x1="459" y1="350" x2="473" y2="350" />
-                            <line x1="523" y1="350" x2="537" y2="350" />
-                            <line x1="586" y1="350" x2="600" y2="350" />
-                            <line x1="649" y1="350" x2="663" y2="350" />
+                            <!-- Входы в 6 служебных комнат -->
+                            <line x1="390" y1="350" x2="402" y2="350" />
+                            <line x1="443" y1="350" x2="455" y2="350" />
+                            <line x1="496" y1="350" x2="508" y2="350" />
+                            <line x1="549" y1="350" x2="561" y2="350" />
+                            <line x1="602" y1="350" x2="614" y2="350" />
+                            <line x1="655" y1="350" x2="667" y2="350" />
+                            <!-- Входы из вертикального коридора -->
                             <line x1="225" y1="372" x2="225" y2="388" />
                             <line x1="225" y1="432" x2="225" y2="448" />
                             <line x1="225" y1="485" x2="225" y2="505" />
@@ -161,6 +167,7 @@
             'L1-15c': { title: 'Архив', desc: 'Архивное помещение вдоль главного коридора.' },
             'L1-15d': { title: 'Инженер', desc: 'Кабинет инженера вдоль главного коридора.' },
             'L1-15e': { title: 'Комендант', desc: 'Комната коменданта вдоль главного коридора.' },
+            'L1-15f': { title: 'Хоз. блок', desc: 'Хозяйственное помещение после комнаты коменданта.' },
             'L1-16': { title: 'Мастерская МОГР', desc: 'Учебная мастерская в южном торце левого крыла.' },
             'L1-17': { title: 'Лаборантская (при М-113)', desc: 'Вход из кабинета М-113 (Цифровое горное дело).' },
             'L1-19': { title: 'М-113 — Цифровое горное дело', desc: 'Специализированная лаборатория в южном торце левого крыла 1 этажа.' }
