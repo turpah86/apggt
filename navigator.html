@@ -47,22 +47,18 @@
                         <line x1="650" y1="265" x2="708" y2="265" stroke="rgba(255,255,255,0.15)" />
                         <text x="679" y="186" class="zone-title" text-anchor="middle" transform="rotate(-90 679,186)">Лестница</text>
 
-                        <!-- ВЕРХНИЙ БЛОК -->
-                        <!-- Столовая (основной зал, огибает щитовую и подсобную) -->
-                        <path id="R1-01" class="room service" d="M 92 62 H 462 V 310 H 212 V 230 H 92 Z" />
-                        <text x="295" y="175" class="room-label">Столовая</text>
+                        <!-- ВЕРХНИЙ БЛОК: Столовая, Щитовая, Подсобная (удлиненные до каб. фельдшера) и Пищеблок -->
+                        <path id="R1-01" class="room service" d="M 92 62 H 462 V 310 H 304 V 230 H 92 Z" />
+                        <text x="295" y="160" class="room-label">Столовая</text>
 
-                        <!-- Щитовая и Подсобная (в левом нижнем углу вдоль главного коридора) -->
-                        <rect id="R1-01a" class="room service" x="92" y="230" width="60" height="80" />
-                        <text x="122" y="270" class="room-label" style="font-size:9px;">Щитовая</text>
+                        <rect id="R1-01a" class="room service" x="92" y="230" width="106" height="80" />
+                        <text x="145" y="270" class="room-label">Щитовая</text>
 
-                        <rect id="R1-01b" class="room service" x="152" y="230" width="60" height="80" />
-                        <text x="182" y="270" class="room-label" style="font-size:9px;">Подсобная</text>
+                        <rect id="R1-01b" class="room service" x="198" y="230" width="106" height="80" />
+                        <text x="251" y="270" class="room-label">Подсобная</text>
 
-                        <!-- Пищеблок -->
                         <rect id="R1-03" class="room service" x="462" y="62" width="188" height="248" />
                         <text x="556" y="186" class="room-label">Пищеблок</text>
-
 
                         <!-- НИЖНИЙ БЛОК: Ряд из 6 комнат вдоль главного коридора -->
                         <rect id="R1-15a" class="room" x="92" y="350" width="53" height="120" />
@@ -105,7 +101,6 @@
                         <rect id="R1-19" class="room service" x="312" y="470" width="396" height="188" />
                         <text x="510" y="564" class="room-label">Минералогический музей</text>
 
-                        <!-- ДВЕРНЫЕ ПРОЕМЫ -->
                         <!-- ВСЕ ДВЕРНЫЕ ПРОЕМЫ -->
                         <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
                             <!-- Дверь в правое крыло на стыке с центральным корпусом -->
@@ -113,8 +108,8 @@
                             <!-- Вход на лестницу -->
                             <line x1="668" y1="310" x2="688" y2="310" />
                             <!-- Входы в Щитовую, Подсобную, Столовую и Пищеблок -->
-                            <line x1="115" y1="310" x2="129" y2="310" />
-                            <line x1="175" y1="310" x2="189" y2="310" />
+                            <line x1="138" y1="310" x2="152" y2="310" />
+                            <line x1="244" y1="310" x2="258" y2="310" />
                             <line x1="400" y1="310" x2="425" y2="310" />
                             <line x1="545" y1="310" x2="570" y2="310" />
                             <!-- Входы в 6 помещений вдоль коридора -->
