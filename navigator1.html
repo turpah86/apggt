@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пермяков А.Н. | Навигатор — 1 этаж (Центральная часть)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="navigator.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="index.html" style="color: var(--gold); font-weight: 800; text-decoration: none; font-size: 1.2rem;">ПЕРМЯКОВ А.Н.</a>
+            <div class="nav-links">
+                <a href="index.html">Главная</a>
+                <a href="navigator.html">Навигатор</a>
+                <a href="navigator1.html" style="color: var(--gold);">Центр (черновик)</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="map-page">
+        <a href="index.html" class="back-btn">← Назад на главную</a>
+
+        <div class="glass-card">
+            <span class="badge">ЧЕРТЕЖ: 1 ЭТАЖ • ЦЕНТРАЛЬНАЯ ЧАСТЬ</span>
+            <h1 style="margin-bottom: 10px; font-size: 2rem;">Центральная часть (1 этаж)</h1>
+            <p style="color: var(--text-dim); margin-bottom: 25px;">Нажмите на любое помещение, чтобы увидеть его технический ID.</p>
+
+            <div class="map-workspace">
+                <div class="svg-container">
+                    <svg id="floor-1-center" viewBox="0 0 760 720">
+                        <path class="building-shell" d="M 330 60 H 110 V 260 M 110 300 V 500 H 250 M 510 500 H 650 V 300 M 650 260 V 60 H 430" />
+
+                        <path d="M 270 500 A 110 95 0 0 0 490 500" fill="rgba(255, 215, 0, 0.06)" stroke="rgba(255, 215, 0, 0.45)" stroke-width="2.5" />
+                        <text x="380" y="572" class="zone-title" text-anchor="middle">Главный вход</text>
+
+                        <rect class="corridor" x="75" y="260" width="610" height="40" />
+
+                        <text x="70" y="276" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="end">← В левое</text>
+                        <text x="70" y="289" style="font-size: 9px; fill: var(--text-dim);" text-anchor="end">крыло</text>
+
+                        <text x="690" y="276" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="start">В правое →</text>
+                        <text x="690" y="289" style="font-size: 9px; fill: var(--text-dim);" text-anchor="start">крыло</text>
+
+                        <rect class="corridor" x="330" y="35" width="100" height="225" />
+                        <text x="380" y="25" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ К спортзалу и тренажерке</text>
+
+                        <rect class="corridor" x="240" y="62" width="90" height="198" />
+                        <line x1="240" y1="100" x2="330" y2="100" stroke="rgba(255,255,255,0.15)" />
+                        <line x1="240" y1="140" x2="330" y2="140" stroke="rgba(255,255,255,0.15)" />
+                        <line x1="240" y1="180" x2="330" y2="180" stroke="rgba(255,255,255,0.15)" />
+                        <line x1="240" y1="220" x2="330" y2="220" stroke="rgba(255,255,255,0.15)" />
+                        <text x="285" y="160" class="zone-title" text-anchor="middle" transform="rotate(-90 285,160)">Центр. лестница</text>
+
+                        <rect id="C1-01" class="room service" x="112" y="62" width="128" height="198" />
+                        <text x="176" y="161" class="room-label">Помещение (левое)</text>
+
+                        <rect id="C1-02" class="room service" x="430" y="62" width="218" height="198" />
+                        <text x="539" y="161" class="room-label">Помещение (правое)</text>
+
+                        <rect id="C1-03" class="room service" x="310" y="445" width="140" height="55" />
+                        <text x="380" y="472" class="room-label">Входной тамбур</text>
+
+                        <rect id="C1-04" class="room service" x="250" y="300" width="260" height="145" />
+                        <text x="380" y="372" class="room-label">Главный вестибюль</text>
+
+                        <rect id="C1-05" class="room" x="112" y="300" width="138" height="115" />
+                        <text x="181" y="357" class="room-label">Гардероб 1</text>
+
+                        <rect id="C1-06" class="room service" x="112" y="415" width="138" height="83" />
+                        <text x="181" y="456" class="room-label">Вахта / Охрана</text>
+
+                        <rect id="C1-07" class="room" x="510" y="300" width="138" height="115" />
+                        <text x="579" y="357" class="room-label">Гардероб 2</text>
+
+                        <rect id="C1-08" class="room" x="510" y="415" width="138" height="83" />
+                        <text x="579" y="456" class="room-label">Кабинет (у входа)</text>
+
+                        <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
+                            <line x1="355" y1="500" x2="405" y2="500" />
+                            <line x1="355" y1="445" x2="405" y2="445" />
+                            <line x1="165" y1="260" x2="188" y2="260" />
+                            <line x1="525" y1="260" x2="550" y2="260" />
+                            <line x1="250" y1="350" x2="250" y2="375" />
+                            <line x1="250" y1="425" x2="250" y2="442" />
+                            <line x1="510" y1="350" x2="510" y2="375" />
+                            <line x1="510" y1="425" x2="510" y2="442" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="room-info-box">
+                    <span class="badge" id="roomCodeBadge">КОД БЛОКА: —</span>
+                    <h2 id="roomTitle">Кликните по схеме</h2>
+                    <p id="roomDesc">Проверьте расположение стен, дверей и помещений центральной части 1 этажа.</p>
+
+                    <div class="map-legend">
+                        <div class="legend-row"><span class="legend-dot" style="background: rgba(30, 41, 59, 0.85);"></span> Учебные кабинеты и мастерские</div>
+                        <div class="legend-row"><span class="legend-dot" style="background: rgba(255, 215, 0, 0.15); border-color: var(--gold);"></span> Подсобные, склады, санузлы</div>
+                        <div class="legend-row"><span class="legend-dot" style="background: var(--gold);"></span> Выбранное помещение</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="glass-footer">
+        <div class="footer-container">
+            <div class="footer-bottom" style="margin-top: 0; border: none; padding-top: 0;">
+                © 2026 PERMYAKOV DESIGN | ИНТЕРАКТИВНАЯ КАРТА ГБПОУ РС(Я) «ГГТ»
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const centerWing1 = {
+            'C1-01': { title: 'Помещение (левое)', desc: '1 этаж, центральная часть' },
+            'C1-02': { title: 'Помещение (правое)', desc: '1 этаж, центральная часть' },
+            'C1-03': { title: 'Входной тамбур', desc: '1 этаж, центральная часть' },
+            'C1-04': { title: 'Главный вестибюль', desc: '1 этаж, центральная часть' },
+            'C1-05': { title: 'Гардероб 1', desc: '1 этаж, центральная часть' },
+            'C1-06': { title: 'Вахта / Охрана', desc: '1 этаж, центральная часть' },
+            'C1-07': { title: 'Гардероб 2', desc: '1 этаж, центральная часть' },
+            'C1-08': { title: 'Кабинет (у входа)', desc: '1 этаж, центральная часть' }
+        };
+
+        document.querySelectorAll('.room').forEach(room => {
+            room.addEventListener('click', () => {
+                document.querySelectorAll('.room').forEach(r => r.classList.remove('selected'));
+                room.classList.add('selected');
+                const info = centerWing1[room.id];
+                if (info) {
+                    document.getElementById('roomCodeBadge').textContent = `БЛОК: ${room.id}`;
+                    document.getElementById('roomTitle').textContent = info.title;
+                    document.getElementById('roomDesc').textContent = info.desc;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
