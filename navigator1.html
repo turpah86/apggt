@@ -32,62 +32,62 @@
             <div class="map-workspace">
                 <div class="svg-container">
                     <svg id="floor-1-center" viewBox="0 0 760 720">
-                        <path class="building-shell" d="M 330 60 H 110 V 260 M 110 300 V 500 H 250 M 510 500 H 650 V 300 M 650 260 V 60 H 430" />
+                        <!-- Внешний контур стен центральной части (открыты проходы влево, вправо и два прохода вверх к спортзалу) -->
+                        <path class="building-shell" d="M 110 260 V 60 H 190 M 260 60 H 500 M 570 60 H 650 V 260 M 650 300 V 500 H 510 M 250 500 H 110 V 300" />
 
-                        <path d="M 270 500 A 110 95 0 0 0 490 500" fill="rgba(255, 215, 0, 0.06)" stroke="rgba(255, 215, 0, 0.45)" stroke-width="2.5" />
+                        <!-- Полукруглый главный вход снизу -->
+                        <path d="M 250 500 A 130 95 0 0 0 510 500" fill="rgba(255, 215, 0, 0.06)" stroke="rgba(255, 215, 0, 0.45)" stroke-width="2.5" />
                         <text x="380" y="572" class="zone-title" text-anchor="middle">Главный вход</text>
 
-                        <rect class="corridor" x="75" y="260" width="610" height="40" />
+                        <!-- Указатели выходов в левое/правое крылья и два прохода наверх -->
+                        <text x="75" y="276" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="end">← В левое</text>
+                        <text x="75" y="289" style="font-size: 9px; fill: var(--text-dim);" text-anchor="end">крыло</text>
 
-                        <text x="70" y="276" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="end">← В левое</text>
-                        <text x="70" y="289" style="font-size: 9px; fill: var(--text-dim);" text-anchor="end">крыло</text>
+                        <text x="685" y="276" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="start">В правое →</text>
+                        <text x="685" y="289" style="font-size: 9px; fill: var(--text-dim);" text-anchor="start">крыло</text>
 
-                        <text x="690" y="276" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="start">В правое →</text>
-                        <text x="690" y="289" style="font-size: 9px; fill: var(--text-dim);" text-anchor="start">крыло</text>
+                        <text x="225" y="45" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ К спортзалу</text>
+                        <text x="535" y="45" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ К тренажерке</text>
 
-                        <rect class="corridor" x="330" y="35" width="100" height="225" />
-                        <text x="380" y="25" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ К спортзалу и тренажерке</text>
+                        <!-- Единый Главный вестибюль (объединен с верхней частью и боковыми проходами) -->
+                        <path id="C1-04" class="room service" d="M 112 260 V 62 H 648 V 260 H 680 V 300 H 510 V 445 H 250 V 300 H 80 V 260 Z" />
+                        <text x="380" y="365" class="room-label">Главный вестибюль</text>
 
-                        <rect class="corridor" x="240" y="62" width="90" height="198" />
-                        <line x1="240" y1="100" x2="330" y2="100" stroke="rgba(255,255,255,0.15)" />
-                        <line x1="240" y1="140" x2="330" y2="140" stroke="rgba(255,255,255,0.15)" />
-                        <line x1="240" y1="180" x2="330" y2="180" stroke="rgba(255,255,255,0.15)" />
-                        <line x1="240" y1="220" x2="330" y2="220" stroke="rgba(255,255,255,0.15)" />
-                        <text x="285" y="160" class="zone-title" text-anchor="middle" transform="rotate(-90 285,160)">Центр. лестница</text>
+                        <!-- Центральный подъем (лестница по центру) -->
+                        <rect class="corridor" x="320" y="62" width="120" height="175" style="fill: #0f172a; stroke: rgba(255, 215, 0, 0.45); stroke-width: 1.5;" />
+                        <line x1="320" y1="95" x2="440" y2="95" stroke="rgba(255,255,255,0.2)" />
+                        <line x1="320" y1="130" x2="440" y2="130" stroke="rgba(255,255,255,0.2)" />
+                        <line x1="320" y1="165" x2="440" y2="165" stroke="rgba(255,255,255,0.2)" />
+                        <line x1="320" y1="200" x2="440" y2="200" stroke="rgba(255,255,255,0.2)" />
+                        <text x="380" y="150" class="zone-title" text-anchor="middle">Центральный</text>
+                        <text x="380" y="165" class="zone-title" text-anchor="middle">подъём</text>
 
-                        <rect id="C1-01" class="room service" x="112" y="62" width="128" height="198" />
-                        <text x="176" y="161" class="room-label">Помещение (левое)</text>
-
-                        <rect id="C1-02" class="room service" x="430" y="62" width="218" height="198" />
-                        <text x="539" y="161" class="room-label">Помещение (правое)</text>
-
-                        <rect id="C1-03" class="room service" x="310" y="445" width="140" height="55" />
+                        <!-- Входной тамбур (на всю ширину от Вахты до Гардероба 2) -->
+                        <rect id="C1-03" class="room service" x="250" y="445" width="260" height="55" />
                         <text x="380" y="472" class="room-label">Входной тамбур</text>
 
-                        <rect id="C1-04" class="room service" x="250" y="300" width="260" height="145" />
-                        <text x="380" y="372" class="room-label">Главный вестибюль</text>
-
+                        <!-- Левая сторона вестибюля: Гардероб 1 и Вахта / Охрана -->
                         <rect id="C1-05" class="room" x="112" y="300" width="138" height="115" />
                         <text x="181" y="357" class="room-label">Гардероб 1</text>
 
                         <rect id="C1-06" class="room service" x="112" y="415" width="138" height="83" />
                         <text x="181" y="456" class="room-label">Вахта / Охрана</text>
 
-                        <rect id="C1-07" class="room" x="510" y="300" width="138" height="115" />
-                        <text x="579" y="357" class="room-label">Гардероб 2</text>
+                        <!-- Правая сторона вестибюля: Объединенный Гардероб 2 -->
+                        <rect id="C1-07" class="room" x="510" y="300" width="138" height="198" />
+                        <text x="579" y="399" class="room-label">Гардероб 2</text>
 
-                        <rect id="C1-08" class="room" x="510" y="415" width="138" height="83" />
-                        <text x="579" y="456" class="room-label">Кабинет (у входа)</text>
-
+                        <!-- ДВЕРНЫЕ ПРОЕМЫ -->
                         <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
-                            <line x1="355" y1="500" x2="405" y2="500" />
-                            <line x1="355" y1="445" x2="405" y2="445" />
-                            <line x1="165" y1="260" x2="188" y2="260" />
-                            <line x1="525" y1="260" x2="550" y2="260" />
-                            <line x1="250" y1="350" x2="250" y2="375" />
-                            <line x1="250" y1="425" x2="250" y2="442" />
-                            <line x1="510" y1="350" x2="510" y2="375" />
-                            <line x1="510" y1="425" x2="510" y2="442" />
+                            <!-- 4 двери входного тамбура (2 с улицы снизу + 2 на входе в вестибюль) -->
+                            <line x1="305" y1="500" x2="345" y2="500" />
+                            <line x1="415" y1="500" x2="455" y2="500" />
+                            <line x1="305" y1="445" x2="345" y2="445" />
+                            <line x1="415" y1="445" x2="455" y2="445" />
+                            <!-- Входы в Гардероб 1, Вахту и Гардероб 2 -->
+                            <line x1="250" y1="345" x2="250" y2="375" />
+                            <line x1="250" y1="422" x2="250" y2="440" />
+                            <line x1="510" y1="365" x2="510" y2="395" />
                         </g>
                     </svg>
                 </div>
@@ -116,14 +116,11 @@
 
     <script>
         const centerWing1 = {
-            'C1-01': { title: 'Помещение (левое)', desc: '1 этаж, центральная часть' },
-            'C1-02': { title: 'Помещение (правое)', desc: '1 этаж, центральная часть' },
             'C1-03': { title: 'Входной тамбур', desc: '1 этаж, центральная часть' },
             'C1-04': { title: 'Главный вестибюль', desc: '1 этаж, центральная часть' },
             'C1-05': { title: 'Гардероб 1', desc: '1 этаж, центральная часть' },
             'C1-06': { title: 'Вахта / Охрана', desc: '1 этаж, центральная часть' },
-            'C1-07': { title: 'Гардероб 2', desc: '1 этаж, центральная часть' },
-            'C1-08': { title: 'Кабинет (у входа)', desc: '1 этаж, центральная часть' }
+            'C1-07': { title: 'Гардероб 2', desc: '1 этаж, центральная часть' }
         };
 
         document.querySelectorAll('.room').forEach(room => {
