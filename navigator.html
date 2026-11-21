@@ -37,10 +37,8 @@
                         <button class="zoom-btn reset" id="zoomReset" title="Показать весь этаж">Весь этаж</button>
                     </div>
 
-                    <svg id="floor-1-full" viewBox="0 0 1920 1240">
-                    <svg id="floor-1-full" viewBox="0 0 1920 1560">
-                    <svg id="floor-1-full" viewBox="0 0 1920 1240">
-                    <svg id="floor-1-full" viewBox="0 0 1920 1240">
+                    <svg id="floor-1-full" viewBox="0 0 1920 1240" preserveAspectRatio="xMidYMid meet">
+
                         <g id="mapPanZoomGroup">
                             <!-- ЕДИНЫЙ ВНЕШНИЙ КОНТУР (Задний блок 390..1550, Главный корпус 170..1750, стык 790..1130) -->
                             <path class="building-shell" d="M 390 60 H 1550 V 380 H 1130 V 600 H 1750 V 1200 H 1450 V 1010 H 1130 V 1090 H 1060 M 860 1090 H 790 V 1010 H 470 V 1200 H 170 V 600 H 790 V 380 H 390 V 60" />
@@ -407,32 +405,40 @@
         };
 
         const viewport = document.getElementById('mapViewport');
+        const svgEl = document.getElementById('floor-1-full');
         const group = document.getElementById('mapPanZoomGroup');
         let scale = 1, pointX = 0, pointY = 0, startX = 0, startY = 0;
         let isPanning = false, hasMoved = false;
         let initialPinchDistance = null;
         let initialScale = 1;
 
+        function getSvgScaleRatio() {
+            const rect = svgEl.getBoundingClientRect();
+            return rect.width ? (1920 / rect.width) : 1;
+        }
+
         function updateTransform() {
             group.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
         }
 
-        // --- Управление мышью (ПК) ---
+        // --- Мышь (ПК) ---
         viewport.addEventListener('mousedown', (e) => {
-            if (e.button !== 0) return;
+            if (e.button !== 0 || e.target.closest('.zoom-controls')) return;
             isPanning = true;
             hasMoved = false;
-            startX = e.clientX - pointX;
-            startY = e.clientY - pointY;
+            startX = e.clientX;
+            startY = e.clientY;
         });
 
         window.addEventListener('mousemove', (e) => {
             if (!isPanning) return;
-            const newX = e.clientX - startX;
-            const newY = e.clientY - startY;
-            if (Math.abs(newX - pointX) > 4 || Math.abs(newY - pointY) > 4) hasMoved = true;
-            pointX = newX;
-            pointY = newY;
+            const dx = (e.clientX - startX) * getSvgScaleRatio();
+            const dy = (e.clientY - startY) * getSvgScaleRatio();
+            if (Math.abs(e.clientX - startX) > 3 || Math.abs(e.clientY - startY) > 3) hasMoved = true;
+            pointX += dx;
+            pointY += dy;
+            startX = e.clientX;
+            startY = e.clientY;
             updateTransform();
         });
 
@@ -440,60 +446,64 @@
 
         viewport.addEventListener('wheel', (e) => {
             e.preventDefault();
-            const rect = viewport.getBoundingClientRect();
-            const xs = (e.clientX - rect.left - pointX) / scale;
-            const ys = (e.clientY - rect.top - pointY) / scale;
-            const factor = e.deltaY < 0 ? 1.15 : 0.87;
-            const newScale = Math.min(Math.max(scale * factor, 0.5), 6);
-            pointX = (e.clientX - rect.left) - xs * newScale;
-            pointY = (e.clientY - rect.top) - ys * newScale;
+            const rect = svgEl.getBoundingClientRect();
+            const ratio = getSvgScaleRatio();
+            const xs = ((e.clientX - rect.left) * ratio - pointX) / scale;
+            const ys = ((e.clientY - rect.top) * ratio - pointY) / scale;
+            const factor = e.deltaY < 0 ? 1.18 : 0.85;
+            const newScale = Math.min(Math.max(scale * factor, 0.7), 6);
+            pointX = (e.clientX - rect.left) * ratio - xs * newScale;
+            pointY = (e.clientY - rect.top) * ratio - ys * newScale;
             scale = newScale;
             updateTransform();
         }, { passive: false });
 
-        // --- Сенсорное управление (Смартфоны: 1 палец — сдвиг, 2 пальца — зум) ---
-        function getTouchDistance(touches) {
-            return Math.hypot(
-                touches[0].clientX - touches[1].clientX,
-                touches[0].clientY - touches[1].clientY
-            );
+        // --- Сенсор (Смартфоны: 1-в-1 за пальцем + щипок) ---
+        function getTouchDist(t) {
+            return Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
         }
 
         viewport.addEventListener('touchstart', (e) => {
+            if (e.target.closest('.zoom-controls')) return;
             if (e.touches.length === 1) {
                 isPanning = true;
                 hasMoved = false;
-                startX = e.touches[0].clientX - pointX;
-                startY = e.touches[0].clientY - pointY;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
             } else if (e.touches.length === 2) {
                 isPanning = false;
                 hasMoved = true;
-                initialPinchDistance = getTouchDistance(e.touches);
+                initialPinchDistance = getTouchDist(e.touches);
                 initialScale = scale;
             }
         }, { passive: true });
 
         viewport.addEventListener('touchmove', (e) => {
+            if (e.target.closest('.zoom-controls')) return;
             e.preventDefault();
+            const ratio = getSvgScaleRatio();
+
             if (e.touches.length === 1 && isPanning) {
-                const newX = e.touches[0].clientX - startX;
-                const newY = e.touches[0].clientY - startY;
-                if (Math.abs(newX - pointX) > 5 || Math.abs(newY - pointY) > 5) hasMoved = true;
-                pointX = newX;
-                pointY = newY;
+                const dx = (e.touches[0].clientX - startX) * ratio;
+                const dy = (e.touches[0].clientY - startY) * ratio;
+                if (Math.abs(e.touches[0].clientX - startX) > 4 || Math.abs(e.touches[0].clientY - startY) > 4) hasMoved = true;
+                pointX += dx;
+                pointY += dy;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
                 updateTransform();
             } else if (e.touches.length === 2 && initialPinchDistance) {
-                const currentDistance = getTouchDistance(e.touches);
-                const rect = viewport.getBoundingClientRect();
-                const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
-                const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+                const currentDist = getTouchDist(e.touches);
+                const rect = svgEl.getBoundingClientRect();
+                const cx = ((e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left) * ratio;
+                const cy = ((e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top) * ratio;
 
-                const xs = (centerX - pointX) / scale;
-                const ys = (centerY - pointY) / scale;
+                const xs = (cx - pointX) / scale;
+                const ys = (cy - pointY) / scale;
 
-                const newScale = Math.min(Math.max(initialScale * (currentDistance / initialPinchDistance), 0.5), 6);
-                pointX = centerX - xs * newScale;
-                pointY = centerY - ys * newScale;
+                const newScale = Math.min(Math.max(initialScale * (currentDist / initialPinchDistance), 0.7), 6);
+                pointX = cx - xs * newScale;
+                pointY = cy - ys * newScale;
                 scale = newScale;
                 updateTransform();
             }
@@ -504,12 +514,12 @@
             initialPinchDistance = null;
         });
 
-        // --- Кнопки масштаба ---
-        document.getElementById('zoomIn').addEventListener('click', () => { scale = Math.min(scale * 1.25, 6); updateTransform(); });
-        document.getElementById('zoomOut').addEventListener('click', () => { scale = Math.max(scale / 1.25, 0.5); updateTransform(); });
+        // --- Кнопки зума ---
+        document.getElementById('zoomIn').addEventListener('click', () => { scale = Math.min(scale * 1.3, 6); updateTransform(); });
+        document.getElementById('zoomOut').addEventListener('click', () => { scale = Math.max(scale / 1.3, 0.7); updateTransform(); });
         document.getElementById('zoomReset').addEventListener('click', () => { scale = 1; pointX = 0; pointY = 0; updateTransform(); });
 
-        // --- Выбор помещения ---
+        // --- Клик/тап по помещению ---
         document.querySelectorAll('.room').forEach(el => {
             el.addEventListener('click', () => {
                 if (hasMoved) return;
