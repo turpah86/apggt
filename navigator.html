@@ -1,362 +1,301 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Навигатор ГГТ | Гид первокурсника</title>
-  <link rel="stylesheet" href="navigator.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пермяков А.Н. | Навигатор по техникуму</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="navigator.css">
 </head>
 <body>
+    <div class="background-overlay"></div>
 
-<div class="background-overlay"></div>
+    <!-- Шапка сайта -->
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="index.html" style="color: var(--gold); font-weight: 800; text-decoration: none; font-size: 1.2rem;">ПЕРМЯКОВ А.Н.</a>
+            <div class="nav-links">
+                <a href="index.html">Главная</a>
+                <a href="navigator.html" style="color: var(--gold);">Навигатор</a>
+                <a href="index.html#achievements">Достижения</a>
+            </div>
+        </div>
+    </nav>
 
-<header class="top-bar">
-  <div class="top-bar-title">Навигатор <span>ГГТ</span></div>
-  <span class="badge-gold">п. Хандыга</span>
-</header>
+    <main class="map-page">
+        <a href="index.html" class="back-btn">← Назад на главную</a>
 
-<div class="container">
-  <!-- ВКЛАДКА 1: КАРТА -->
-  <div id="tab-map" class="tab-content active">
-    <input type="text" id="searchInput" class="search-input" placeholder="Поиск аудитории (например: 101, Библиотека)...">
+        <div class="glass-card">
+            <span class="badge">НАВИГАЦИЯ ПО КОРПУСУ</span>
+            <h1 style="margin-bottom: 10px; font-size: 2rem;">Интерактивная схема техникума</h1>
+            <p style="color: var(--text-dim); margin-bottom: 25px;">ГБПОУ РС(Я) «Горно-геологический техникум» (п. Хандыга, ул. Кычкина, 4)</p>
 
-    <div class="floors">
-      <button class="floor-btn active" onclick="switchFloor(1)">1 этаж</button>
-      <button class="floor-btn" onclick="switchFloor(2)">2 этаж</button>
-      <button class="floor-btn" onclick="switchFloor(3)">3 этаж</button>
-    </div>
+            <div class="map-controls">
+                <div class="floor-tabs">
+                    <button class="floor-btn active" onclick="switchFloor(1)">1 этаж</button>
+                    <button class="floor-btn" onclick="switchFloor(2)">2 этаж</button>
+                    <button class="floor-btn" onclick="switchFloor(3)">3 этаж</button>
+                </div>
+                <div class="map-search">
+                    <input type="text" id="searchInput" placeholder="Поиск по номеру или названию..." oninput="searchRoom(this.value)">
+                </div>
+            </div>
 
-    <div class="glass-card">
-      <!-- 1 ЭТАЖ (ПОЛНЫЙ ДЕТАЛЬНЫЙ ПЛАН ГГТ) -->
-      <svg id="floor-1" viewBox="0 0 1100 640">
-        <!-- ЕДИНЫЙ П-ОБРАЗНЫЙ КОРИДОР -->
-        <path class="corridor" d="
-          M 115 430 
-          L 535 430 
-          L 535 15 
-          L 600 15 
-          L 600 430 
-          L 995 430 
-          L 995 585 
-          L 970 585 
-          L 970 462 
-          L 140 462 
-          L 140 585 
-          L 115 585 
-          Z" />
-        
-        <!-- Ответвление коридора к сварке и слесарке -->
-        <path class="corridor" d="M 270 85 L 535 85 L 535 105 L 270 105 Z" />
+            <div class="map-workspace">
+                <div class="svg-container">
+                    <!-- ==================== 1 ЭТАЖ ==================== -->
+                    <svg id="floor-1" viewBox="0 0 1000 720">
+                        <path class="building-shell" d="M 300 40 H 920 V 250 H 780 V 420 H 840 V 640 H 640 V 560 H 360 V 640 H 120 V 420 H 220 V 250 H 300 Z" />
+                        <path d="M 380 560 A 70 60 0 0 0 520 560" fill="rgba(255,215,0,0.08)" stroke="rgba(255,215,0,0.5)" stroke-width="2" />
+                        <text x="450" y="605" class="zone-title" text-anchor="middle">Главный вход</text>
 
-        <text x="335" y="450" class="corridor-label">Главный коридор • Левое крыло</text>
-        <text x="785" y="450" class="corridor-label">Правое крыло</text>
+                        <rect class="corridor" x="220" y="385" width="560" height="35" />
+                        <rect class="corridor" x="300" y="135" width="320" height="25" />
 
-        <!-- ========================================================= -->
-        <!-- ЗАДНИЙ БЛОК (ВЕРХ): СВАРКА, СЛЕСАРКА, СПОРТЗАЛ            -->
-        <!-- ========================================================= -->
-        <rect id="room-svarka" class="room" x="270" y="15" width="255" height="65" rx="6" onclick="selectRoom('svarka')" />
-        <text x="397" y="52" class="room-label" font-size="12">Электросварочная мастерская</text>
+                        <!-- Задний блок -->
+                        <rect id="f1-sport" class="room service" x="620" y="45" width="295" height="200" />
+                        <text x="767" y="145" class="room-label">Спортзал</text>
 
-        <rect id="room-slesar" class="room" x="270" y="110" width="255" height="75" rx="6" onclick="selectRoom('slesar')" />
-        <text x="397" y="152" class="room-label" font-size="12">Мастерская слесарная</text>
+                        <rect id="f1-electro" class="room" x="380" y="160" width="140" height="85" />
+                        <text x="450" y="202" class="room-label">Электромонтаж. мастерская</text>
 
-        <rect id="room-razdevalki" class="room" x="610" y="15" width="95" height="170" rx="6" onclick="selectRoom('razdevalki')" />
-        <text x="657" y="95" class="room-label" font-size="11">Раздевалки</text>
-        <text x="657" y="110" class="room-label" font-size="10">и снарядная</text>
+                        <rect id="f1-slesar" class="room" x="305" y="160" width="75" height="85" />
+                        <text x="342" y="202" class="room-label">Слесарная</text>
 
-        <rect id="room-sportzal" class="room" x="710" y="15" width="215" height="170" rx="8" onclick="selectRoom('sportzal')" />
-        <text x="817" y="105" class="room-label" font-size="14">Спортивный зал</text>
+                        <rect id="f1-lab-mat" class="room" x="305" y="45" width="150" height="90" />
+                        <text x="380" y="90" class="room-label">Лаб. материаловедения</text>
 
-        <!-- Переход: Узел ввода и Тренажерный зал -->
-        <rect id="room-uzel" class="room" x="450" y="195" width="75" height="105" rx="6" onclick="selectRoom('uzel')" />
-        <text x="487" y="250" class="room-label" font-size="10">Узел ввода</text>
+                        <rect id="f1-tren" class="room service" x="530" y="250" width="90" height="110" />
+                        <text x="575" y="305" class="room-label">Тренажерка</text>
 
-        <rect id="room-trenazher" class="room" x="610" y="195" width="95" height="105" rx="6" onclick="selectRoom('trenazher')" />
-        <text x="657" y="250" class="room-label" font-size="11">Тренаж. зал</text>
+                        <!-- Левое крыло -->
+                        <rect id="f1-tokar" class="room" x="125" y="255" width="95" height="125" />
+                        <text x="172" y="317" class="room-label">Токарная мастерская</text>
 
-        <!-- ========================================================= -->
-        <!-- ЛЕВОЕ КРЫЛО (ДЕТАЛЬНАЯ ПРОРИСОВКА КАЖДОГО ПОМЕЩЕНИЯ)     -->
-        <!-- ========================================================= -->
+                        <rect id="f1-stolyar" class="room" x="125" y="425" width="85" height="85" />
+                        <text x="167" y="467" class="room-label">Каб. столяра</text>
 
-        <!-- 1. Верхняя часть левого крыла (Мастерские и склады) -->
-        <rect id="room-tokar" class="room" x="75" y="315" width="175" height="110" rx="6" onclick="selectRoom('tokar')" />
-        <text x="162" y="375" class="room-label" font-size="12">Токарная мастерская</text>
+                        <rect id="f1-cab-od1" class="room" x="125" y="515" width="105" height="120" />
+                        <text x="177" y="575" class="room-label">Учебный кабинет 1</text>
 
-        <rect id="room-instr" class="room" x="255" y="315" width="65" height="45" rx="5" onclick="selectRoom('instr')" />
-        <text x="287" y="341" class="room-label" font-size="8">Инструм.</text>
+                        <rect id="f1-lab-phys1" class="room" x="235" y="515" width="120" height="120" />
+                        <text x="295" y="575" class="room-label">Лаб. физики и астрономии</text>
 
-        <rect id="room-hozsklad" class="room" x="255" y="365" width="65" height="60" rx="5" onclick="selectRoom('hozsklad')" />
-        <text x="287" y="393" class="room-label" font-size="9">Хоз.</text>
-        <text x="287" y="405" class="room-label" font-size="9">склад</text>
+                        <!-- Центр -->
+                        <rect id="f1-vestibule" class="room service" x="365" y="430" width="170" height="125" />
+                        <text x="450" y="492" class="room-label">Вестибюль и гардероб</text>
 
-        <rect id="room-mehan" class="room" x="325" y="315" width="200" height="110" rx="6" onclick="selectRoom('mehan')" />
-        <text x="425" y="375" class="room-label" font-size="12">Механообраб. мастерская</text>
-        <!-- 2. Крайний левый торцевой блок (слева от бокового коридора) -->
-        <rect id="room-ot" class="room" x="15" y="455" width="90" height="32" rx="4" onclick="selectRoom('ot')" />
-        <text x="60" y="475" class="room-label" font-size="8.5">Каб. инж. по ОТ и ТБ</text>
+                        <rect id="f1-dining" class="room service" x="380" y="260" width="145" height="115" />
+                        <text x="452" y="317" class="room-label">Обеденный зал (150 мест)</text>
 
-        <rect id="room-stolyar" class="room" x="15" y="491" width="90" height="32" rx="4" onclick="selectRoom('stolyar')" />
-        <text x="60" y="511" class="room-label" font-size="8.5">Помещение столяра</text>
+                        <rect id="f1-med" class="room" x="540" y="425" width="95" height="85" />
+                        <text x="587" y="467" class="room-label">Медпункт / Кабинеты</text>
 
-        <rect id="room-ohrana" class="room" x="15" y="527" width="90" height="78" rx="5" onclick="selectRoom('ohrana')" />
-        <text x="60" y="563" class="room-label" font-size="9">Учебный кабинет</text>
-        <text x="60" y="576" class="room-label" font-size="9">охраны труда</text>
+                        <text x="740" y="575" class="room-label">Минералогический музей</text>
 
-        <!-- 3. ЛАБОРАНТСКАЯ (на всю высоту от коридора y=455 до низа y=605) -->
-        <rect id="room-laborant" class="room" x="140" y="455" width="26" height="150" rx="4" onclick="selectRoom('laborant')" />
-        <text x="153" y="532" class="room-label" font-size="7.5" transform="rotate(-90 153 532)">Лаборантская</text>
+                        <text x="777" y="467" class="room-label">Кабинет (правое крыло)</text>
 
-        <!-- 4. ВЕРХНИЙ ЯРУС: С/У, С/У, ГАРДЕРОБ (высота 68px, до y=523) -->
-        <rect id="room-wc1" class="room" x="170" y="455" width="38" height="68" rx="4" onclick="selectRoom('wc1')" />
-        <text x="189" y="493" class="room-label" font-size="9">С/У</text>
+                        <text x="710" y="317" class="room-label">Кухня / Подсобные</text>
+                    <svg id="floor-2" viewBox="0 0 1000 720" style="display:none;">
+                        <path class="building-shell" d="M 300 40 H 920 V 250 H 780 V 420 H 840 V 640 H 640 V 560 H 360 V 640 H 120 V 420 H 220 V 250 H 300 Z" />
+                        <rect class="corridor" x="220" y="385" width="560" height="35" />
+                        <rect class="corridor" x="300" y="135" width="320" height="25" />
 
-        <rect id="room-wc2-left" class="room" x="212" y="455" width="38" height="68" rx="4" onclick="selectRoom('wc2-left')" />
-        <text x="231" y="493" class="room-label" font-size="9">С/У</text>
+                        <text x="767" y="145" class="zone-title" text-anchor="middle">Второй свет спортзала</text>
 
-        <rect id="room-gard-left" class="room" x="254" y="455" width="54" height="68" rx="4" onclick="selectRoom('gard-left')" />
-        <text x="281" y="493" class="room-label" font-size="8.5">Гардероб</text>
+                        <text x="380" y="90" class="room-label">Лаб. электротехники</text>
 
-        <!-- 5. НИЖНИЙ ЯРУС: ЛАБОРАТОРИЯ ФИЗИКИ (y=527..605, выступает чуть правее гардероба) -->
-        <rect id="room-fizika" class="room" x="170" y="527" width="165" height="78" rx="5" onclick="selectRoom('fizika')" />
-        <text x="252" y="563" class="room-label" font-size="10">Лаборатория</text>
-        <text x="252" y="577" class="room-label" font-size="10">физики и астрономии</text>
+                        <text x="385" y="202" class="room-label">Учебный кабинет (тех.)</text>
 
-        <!-- 6. ТЕХ. ПОМЕЩЕНИЯ И КОМЕНДАНТ (вытянуты вниз до y=575, почти вровень с физикой!) -->
-        <rect id="room-santeh-elektrik" class="room" x="312" y="455" width="70" height="68" rx="4" onclick="selectRoom('santeh-elektrik')" />
-        <text x="347" y="486" class="room-label" font-size="8">Пом. сантехн.</text>
-        <text x="347" y="498" class="room-label" font-size="8">и электрика</text>
+                        <text x="542" y="202" class="room-label">Учебный кабинет</text>
 
-        <rect id="room-energ" class="room" x="386" y="455" width="46" height="120" rx="4" onclick="selectRoom('energ')" />
-        <text x="409" y="512" class="room-label" font-size="8">Инж.</text>
-        <text x="409" y="524" class="room-label" font-size="7.5">энерг.</text>
+                        <text x="405" y="317" class="room-label">Актовый зал и эстрада</text>
 
-        <rect id="room-tehpers" class="room" x="436" y="455" width="42" height="120" rx="4" onclick="selectRoom('tehpers')" />
-        <text x="457" y="512" class="room-label" font-size="8">Тех.</text>
-        <text x="457" y="524" class="room-label" font-size="7.5">перс.</text>
+                        <text x="215" y="317" class="room-label">Лаб. материаловедения</text>
 
-        <rect id="room-komendant" class="room" x="482" y="455" width="45" height="120" rx="4" onclick="selectRoom('komendant')" />
-        <text x="504" y="512" class="room-label" font-size="8">Комен-</text>
-        <text x="504" y="524" class="room-label" font-size="8">дант</text>
+                        <text x="180" y="467" class="room-label">Студ. организация</text>
 
+                        <text x="180" y="575" class="room-label">Учебный кабинет ОД</text>
 
-        <!-- ========================================================= -->
-        <!-- ЦЕНТР: ЛЕСТНИЦА, ГАРДЕРОБЫ И ГЛАВНЫЙ ВХОД                 -->
-        <!-- ========================================================= -->
-        <rect x="542" y="315" width="51" height="110" rx="4" fill="rgba(255,215,0,0.08)" stroke="rgba(255,215,0,0.4)" />
-        <text x="567" y="375" class="corridor-label" style="fill:#ffd700;" font-size="10">Лестн.</text>
+                        <text x="297" y="575" class="room-label">Учебный кабинет ОД</text>
 
-        <rect id="room-garderob" class="room" x="534" y="467" width="130" height="65" rx="6" onclick="selectRoom('garderob')" />
-        <text x="599" y="504" class="room-label" font-size="12">Гардеробы</text>
+                        <text x="492" y="467" class="room-label">Каб. директора</text>
 
-        <path d="M 550 532 L 648 532 L 636 575 L 562 575 Z" fill="rgba(255, 215, 0, 0.2)" stroke="#ffd700" stroke-width="2" />
-        <text x="599" y="558" class="room-label" style="fill: #ffd700;" font-size="11">ГЛАВНЫЙ ВХОД</text>
+                        <text x="422" y="467" class="room-label">Приемная</text>
 
-        <!-- ========================================================= -->
-        <!-- ПРАВОЕ КРЫЛО (СТОЛОВАЯ, АДМИНИСТРАЦИЯ, МЕДБЛОК, МУЗЕЙ)    -->
-        <!-- ========================================================= -->
-        <rect id="room-stolovaya" class="room" x="610" y="315" width="260" height="110" rx="6" onclick="selectRoom('stolovaya')" />
-        <text x="740" y="375" class="room-label" font-size="13">Обеденный зал (Столовая)</text>
+                        <text x="352" y="467" class="room-label">Зам. директора</text>
 
-        <rect id="room-priem" class="room" x="669" y="467" width="55" height="65" rx="6" onclick="selectRoom('priem')" />
-        <text x="696" y="497" class="room-label" font-size="9">Приемн.</text>
-        <text x="696" y="510" class="room-label" font-size="9">ком.</text>
+                        <text x="450" y="547" class="room-label">Конференц-зал</text>
 
-        <rect id="room-ahch" class="room" x="729" y="467" width="65" height="65" rx="6" onclick="selectRoom('ahch')" />
-        <text x="761" y="497" class="room-label" font-size="9">АХЧ /</text>
-        <text x="761" y="510" class="room-label" font-size="9">Заоч. отд.</text>
+                        <text x="557" y="317" class="room-label">Читальный зал</text>
 
-        <rect id="room-med" class="room" x="799" y="467" width="95" height="65" rx="6" onclick="selectRoom('med')" />
-        <text x="846" y="497" class="room-label" font-size="9">Медкаб. /</text>
-        <text x="846" y="510" class="room-label" font-size="9">Стоматолог</text>
+                        <text x="650" y="317" class="room-label">Хранилище</text>
 
-        <rect id="room-wc2" class="room" x="899" y="467" width="65" height="65" rx="6" onclick="selectRoom('wc2')" />
-        <text x="931" y="504" class="room-label" font-size="11">С/У (М/Ж)</text>
+                        <text x="587" y="467" class="room-label">Бухгалтерия / Кадры</text>
 
-        <rect id="room-muzei" class="room" x="855" y="537" width="110" height="65" rx="6" onclick="selectRoom('muzei')" />
-        <text x="910" y="566" class="room-label" font-size="10">Минералог.</text>
-        <text x="910" y="580" class="room-label" font-size="10">музей</text>
+                        <text x="760" y="317" class="room-label">Мультимедиа / Зав.</text>
 
-        <rect id="room-dirmuzei" class="room" x="1000" y="485" width="85" height="65" rx="6" onclick="selectRoom('dirmuzei')" />
-        <text x="1042" y="514" class="room-label" font-size="9">Каб. директора</text>
+                        <text x="777" y="467" class="room-label">Преподавательская</text>
 
-        <!-- Метка "Вы здесь" (?here=vhod) -->
-        <g id="pin-vhod" class="here-pin">
-          <circle cx="460" cy="446" r="7" fill="#ff4d4d" />
-          <text x="460" y="424" font-size="12" font-weight="bold" fill="#ff4d4d" text-anchor="middle">ВЫ ЗДЕСЬ</text>
-        </g>
-      </svg>
-      <!-- 2 ЭТАЖ -->
-      <svg id="floor-2" viewBox="0 0 400 220" style="display:none;">
-        <rect class="corridor" x="10" y="80" width="380" height="60" rx="6" />
-        <text x="200" y="114" class="corridor-label">Коридор • 2 этаж</text>
+                        <text x="690" y="575" class="room-label">Учебный кабинет</text>
 
-        <rect id="room-201" class="room" x="10" y="10" width="185" height="65" rx="8" onclick="selectRoom('201')" />
-        <text x="102" y="47" class="room-label">Каб. 201 (Спецдисциплины)</text>
+                        <text x="790" y="575" class="room-label">Учебный кабинет</text>
+                        <text x="405" y="317" class="zone-title" text-anchor="middle">Второй свет акт. зала</text>
 
-        <rect id="room-202" class="room" x="205" y="10" width="185" height="65" rx="8" onclick="selectRoom('202')" />
-        <text x="297" y="47" class="room-label">Библиотека</text>
-      </svg>
+                        <text x="215" y="317" class="room-label">Лаб. геодезии</text>
 
-      <!-- 3 ЭТАЖ -->
-      <svg id="floor-3" viewBox="0 0 400 220" style="display:none;">
-        <rect class="corridor" x="10" y="80" width="380" height="60" rx="6" />
-        <text x="200" y="114" class="corridor-label">Коридор • 3 этаж</text>
+                        <text x="180" y="467" class="room-label">Профком / Лаборант</text>
 
-        <rect id="room-301" class="room" x="10" y="10" width="380" height="65" rx="8" onclick="selectRoom('301')" />
-        <text x="200" y="47" class="room-label">Каб. 301 • Компьютерный класс</text>
-      </svg>
-    </div>
+                        <text x="180" y="575" class="room-label">Учебный кабинет ОД</text>
 
-    <div id="infoCard" class="glass-card info-card">
-      <div id="infoTitle" class="info-title"></div>
-      <p id="infoDesc" class="info-desc"></p>
-    </div>
-  </div>
+                        <text x="297" y="575" class="room-label">Лаб. физики и астрономии</text>
 
-  <!-- ВКЛАДКА 2: ЧЕК-ЛИСТ -->
-  <div id="tab-checklist" class="tab-content">
-    <div class="glass-card">
-      <h3 class="card-heading">Чек-лист адаптации студента</h3>
-      <label class="checklist-item"><input type="checkbox" onchange="toggleTask(this, 't1')"><span>Познакомиться с куратором и старостой группы</span></label>
-      <label class="checklist-item"><input type="checkbox" onchange="toggleTask(this, 't2')"><span>Оформить студенческий билет и пропуск</span></label>
-      <label class="checklist-item"><input type="checkbox" onchange="toggleTask(this, 't3')"><span>Получить учебники в библиотеке (2 этаж)</span></label>
-      <label class="checklist-item"><input type="checkbox" onchange="toggleTask(this, 't4')"><span>Узнать расписание звонков и график столовой</span></label>
-      <label class="checklist-item"><input type="checkbox" onchange="toggleTask(this, 't5')"><span>Записаться в спортивную секцию или студсовет</span></label>
-    </div>
-  </div>
+                        <text x="410" y="467" class="room-label">Учебный кабинет</text>
 
-  <!-- ВКЛАДКА 3: ПАМЯТКА -->
-  <div id="tab-guide" class="tab-content">
-    <div class="glass-card">
-      <h3 class="card-heading">Где взять справку об обучении?</h3>
-      <p class="info-desc">Обратитесь в учебную часть на 1 этаже. Справка подготавливается в течение 1–2 рабочих дней.</p>
-    </div>
-    <div class="glass-card">
-      <h3 class="card-heading">Профильные направления ГГТ</h3>
-      <p class="info-desc">Основные направления подготовки специалистов:</p>
-      <div class="tags-wrap">
-        <span class="tag-pill">Открытые горные работы</span>
-        <span class="tag-pill">Ремонтник горного оборудования</span>
-        <span class="tag-pill">Электроснабжение предприятий</span>
-      </div>
-    </div>
-    <div class="glass-card">
-      <h3 class="card-heading">Адрес и контакты</h3>
-      <p class="info-desc">📍 п. Хандыга, ул. Кычкина, 4<br>📧 ggt_khandyga@gov14.ru</p>
-    </div>
-  </div>
-</div>
+                        <text x="495" y="467" class="room-label">Преподавательская</text>
 
-<nav class="bottom-nav">
-  <button class="nav-btn active" onclick="switchTab('map', this)">
-    <span class="nav-icon">🗺️</span>
-    <span>Карта</span>
-  </button>
-  <button class="nav-btn" onclick="switchTab('checklist', this)">
-    <span class="nav-icon">✅</span>
-    <span>Чек-лист</span>
-  </button>
-  <button class="nav-btn" onclick="switchTab('guide', this)">
-    <span class="nav-icon">💡</span>
-    <span>Памятка</span>
-  </button>
-</nav>
+                        <text x="450" y="547" class="room-label">Рекреация</text>
 
-<script>
-  const roomsData = {
-    "garderob": { floor: 1, title: "Гардеробы (1 этаж)", desc: "Расположены слева и справа сразу у главного входа." },
-    "priem": { floor: 1, title: "Кабинет приемной комиссии", desc: "Правое крыло 1 этажа, первая дверь сразу после гардероба." },
-    "ahch": { floor: 1, title: "Зам. директора по АХЧ и Заочное отделение", desc: "Правое крыло 1 этажа (следующие два кабинета после приемной комиссии)." },
-    "med": { floor: 1, title: "Медицинский блок (Стоматолог, Процедурная, Медкабинет)", desc: "Правое крыло 1 этажа перед санузлами. Включает кабинет врача-стоматолога, процедурную и медицинский кабинет." },
-    "muzei": { floor: 1, title: "Минералогический музей и кабинет директора музея", desc: "Дальний правый угол 1 этажа (за санузлами)." },
-    "stolovaya": { floor: 1, title: "Обеденный зал (Столовая)", desc: "Правое крыло 1 этажа (напротив административных и медицинских кабинетов)." },
-    "komendant": { floor: 1, title: "Комендант здания и технические службы", desc: "Левое крыло 1 этажа: комендант здания, комната тех. персонала, инженер по эксплуатации и энергетике, электрик и сантехник." },
-    "fizika": { floor: 1, title: "Лаборатория физики и астрономии", desc: "Левое крыло 1 этажа (сразу за санузлами, с лаборантской)." },
-    "ot": { floor: 1, title: "Учебный кабинет охраны труда / Инженер по ОТ и ТБ", desc: "Дальний левый угол 1 этажа (здесь же находится помещение столяра)." },
-    "tokar": { floor: 1, title: "Токарная мастерская", desc: "Левое крыло 1 этажа (напротив лаборатории физики и санузлов)." },
-    "mehan": { floor: 1, title: "Механообрабатывающая мастерская", desc: "Левое крыло 1 этажа, ближе к центральной лестнице (рядом инструментальная и хоз. склад)." },
-    "uzel": { floor: 1, title: "Узел ввода", desc: "Техническое помещение в переходе к заднему корпусу (слева)." },
-    "trenazher": { floor: 1, title: "Тренажерный зал", desc: "В переходе между главным корпусом и спортивным залом (справа)." },
-    "sportzal": { floor: 1, title: "Спортивный зал", desc: "Задний корпус, правая сторона. Вход через раздевалки." },
-    "razdevalki": { floor: 1, title: "Раздевалки и снарядная", desc: "Перед входом в спортивный зал (две раздевалки и снарядная)." },
-    "svarka": { floor: 1, title: "Электросварочная мастерская", desc: "Задний корпус, левая сторона (вход через переход мимо слесарной мастерской)." },
-    "slesar": { floor: 1, title: "Мастерская слесарная", desc: "Задний корпус, левая сторона." },
-    "wc1": { floor: 1, title: "Санузлы (левое крыло)", desc: "Между техническими службами и лабораторией физики." },
-    "wc2": { floor: 1, title: "Санузлы (правое крыло)", desc: "Между медицинским кабинетом и минералогическим музеем." }
-  };
+                        <text x="565" y="317" class="room-label">Вычислительный центр</text>
 
+                        <text x="680" y="317" class="room-label">Лаб. химии и биологии</text>
 
-  function switchTab(tabName, btn) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById('tab-' + tabName).classList.add('active');
-    btn.classList.add('active');
-  }
+                        <text x="587" y="467" class="room-label">Методический кабинет</text>
 
-  function switchFloor(floorNum) {
-    const floors = [1, 2, 3];
-    floors.forEach(num => {
-      const svg = document.getElementById('floor-' + num);
-      if (svg) svg.style.display = (num === floorNum) ? 'block' : 'none';
-    });
-    document.querySelectorAll('.floor-btn').forEach((btn, idx) => {
-      btn.classList.toggle('active', idx + 1 === floorNum);
-    });
-  }
+                        <text x="780" y="317" class="room-label">Лаборантская</text>
 
-  function selectRoom(roomId) {
-    document.querySelectorAll('.room').forEach(el => el.classList.remove('highlighted'));
-    const data = roomsData[roomId];
-    if (!data) return;
+                        <text x="777" y="467" class="room-label">Кабинет (правое крыло)</text>
 
-    switchFloor(data.floor);
-    const roomEl = document.getElementById('room-' + roomId);
-    if (roomEl) roomEl.classList.add('highlighted');
+                        <text x="690" y="575" class="room-label">Учебный кабинет ОД</text>
 
-    document.getElementById('infoTitle').textContent = data.title;
-    document.getElementById('infoDesc').textContent = data.desc;
-    document.getElementById('infoCard').classList.add('visible');
-  }
+                        <text x="790" y="575" class="room-label">Учебный кабинет ОД</text>
+                    </svg>
+                </div>
 
-  document.getElementById('searchInput').addEventListener('input', function(e) {
-    const q = e.target.value.toLowerCase().trim();
-    if (!q) return;
-    for (const [id, info] of Object.entries(roomsData)) {
-      if (id.includes(q) || info.title.toLowerCase().includes(q)) {
-        selectRoom(id);
-        break;
-      }
-    }
-  });
+                <div class="room-info-box">
+                    <span class="badge" id="roomFloorBadge">1 ЭТАЖ</span>
+                    <h2 id="roomTitle">Выберите помещение</h2>
+                    <p id="roomDesc">Нажмите на любой кабинет, лабораторию или зал на схеме, чтобы увидеть подробную информацию.</p>
 
-  function toggleTask(checkbox, key) {
-    localStorage.setItem('ggt_task_' + key, checkbox.checked);
-    checkbox.parentElement.classList.toggle('done', checkbox.checked);
-  }
+                    <div class="map-legend">
+                        <div class="legend-row"><span class="legend-dot" style="background: rgba(30, 41, 59, 0.85);"></span> Учебные кабинеты и мастерские</div>
+                        <div class="legend-row"><span class="legend-dot" style="background: rgba(255, 215, 0, 0.15); border-color: var(--gold);"></span> Залы, музей, администрация</div>
+                        <div class="legend-row"><span class="legend-dot" style="background: var(--gold);"></span> Выбранный объект</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-  window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.checklist-item input').forEach((cb, i) => {
-      const saved = localStorage.getItem('ggt_task_t' + (i + 1)) === 'true';
-      cb.checked = saved;
-      cb.parentElement.classList.toggle('done', saved);
-    });
+    <footer class="glass-footer">
+        <div class="footer-container">
+            <div class="footer-bottom" style="margin-top: 0; border: none; padding-top: 0;">
+                © 2026 PERMYAKOV DESIGN | ИНТЕРАКТИВНАЯ КАРТА ГБПОУ РС(Я) «ГГТ»
+            </div>
+        </div>
+    </footer>
 
-    const params = new URLSearchParams(window.location.search);
-    const here = params.get('here');
-    const room = params.get('room');
-    const floor = params.get('floor');
+    <script>
+        const roomsData = {
+            // 1 ЭТАЖ
+            'f1-sport': { floor: 1, title: 'Спортивный зал', desc: 'Большой спортивный зал в пристрое (оси 14–21).' },
+            'f1-electro': { floor: 1, title: 'Электромонтажная мастерская', desc: 'Учебная мастерская в заднем корпусе.' },
+            'f1-slesar': { floor: 1, title: 'Слесарная мастерская', desc: 'Учебная мастерская в заднем корпусе.' },
+            'f1-lab-mat': { floor: 1, title: 'Лаборатория материаловедения', desc: 'Лаборатория в заднем корпусе.' },
+            'f1-tren': { floor: 1, title: 'Тренажерный зал', desc: 'Зона тренажеров и раздевалок перед спортзалом.' },
+            'f1-tokar': { floor: 1, title: 'Токарная мастерская', desc: 'Левое крыло 1 этажа.' },
+            'f1-stolyar': { floor: 1, title: 'Кабинет столяра', desc: 'Левое крыло 1 этажа.' },
+            'f1-cab-od1': { floor: 1, title: 'Учебный кабинет (1 этаж)', desc: 'Левое крыло, южная сторона.' },
+            'f1-lab-phys1': { floor: 1, title: 'Лаборатория физики и астрономии', desc: 'Левое крыло, южная сторона.' },
+            'f1-vestibule': { floor: 1, title: 'Главный вестибюль и гардероб', desc: 'Центральный вход в техникум, вахта и гардероб.' },
+            'f1-dining': { floor: 1, title: 'Столовая (Обеденный зал)', desc: 'Рассчитана на 150 посадочных мест.' },
+            'f1-med': { floor: 1, title: 'Медпункт / Служебные кабинеты', desc: 'Центральное крыло 1 этажа.' },
+            'f1-museum': { floor: 1, title: 'Минералогический музей', desc: 'Правое крыло, южная сторона.' },
+            'f1-right-1': { floor: 1, title: 'Кабинет правого крыла', desc: 'Помещение 1 этажа в правом крыле.' },
+            'f1-right-2': { floor: 1, title: 'Пищеблок / Подсобные помещения', desc: 'Зона кухни при столовой.' },
 
-    if (here) {
-      const pin = document.getElementById('pin-' + here);
-      if (pin) pin.classList.add('visible');
-    }
-    if (room && roomsData[room]) {
-      selectRoom(room);
-    } else if (floor) {
-      switchFloor(Number(floor));
-    }
-  });
-</script>
+            // 2 ЭТАЖ
+            'f2-lab-mat': { floor: 2, title: 'Лаборатория электротехники', desc: 'Задний корпус, 2 этаж.' },
+            'f2-cab-rear1': { floor: 2, title: 'Учебный кабинет (задний корпус)', desc: 'Специализированная аудитория 2 этажа.' },
+            'f2-cab-rear2': { floor: 2, title: 'Учебный кабинет (задний корпус)', desc: 'Аудитория 2 этажа.' },
+            'f2-akt': { floor: 2, title: 'Актовый зал', desc: 'Зал со сценой (эстрадой) для мероприятий.' },
+            'f2-lab-m2': { floor: 2, title: 'Лаборатория материаловедения', desc: 'Левое крыло 2 этажа.' },
+            'f2-stud': { floor: 2, title: 'Студенческая организация', desc: 'Левое крыло 2 этажа.' },
+            'f2-cab-od21': { floor: 2, title: 'Учебный кабинет ОД', desc: 'Левое крыло, южная сторона.' },
+            'f2-cab-od22': { floor: 2, title: 'Учебный кабинет ОД', desc: 'Левое крыло, южная сторона.' },
+            'f2-director': { floor: 2, title: 'Кабинет директора', desc: 'Административный блок 2 этажа.' },
+            'f2-priem': { floor: 2, title: 'Приемная директора', desc: 'Административный блок 2 этажа.' },
+            'f2-zam': { floor: 2, title: 'Заместители директора', desc: 'Кабинеты зам. директора по УПР, УМР и УВР.' },
+            'f2-conf': { floor: 2, title: 'Конференц-зал', desc: 'Центральный блок над главным входом.' },
+            'f2-lib-read': { floor: 2, title: 'Библиотека (Читальный зал)', desc: 'Центральная часть 2 этажа.' },
+            'f2-lib-store': { floor: 2, title: 'Книгохранилище', desc: 'Помещение при библиотеке.' },
+            'f2-buh': { floor: 2, title: 'Бухгалтерия', desc: 'Центральное крыло 2 этажа.' },
+            'f2-right-top': { floor: 2, title: 'Мультимедиа кабинет', desc: 'Правое крыло 2 этажа.' },
+            'f2-prep': { floor: 2, title: 'Преподавательская', desc: 'Правое крыло 2 этажа.' },
+            'f2-cab-od23': { floor: 2, title: 'Учебный кабинет (правое крыло)', desc: 'Южная сторона правого крыла.' },
+            'f2-cab-od24': { floor: 2, title: 'Учебный кабинет (правое крыло)', desc: 'Южная сторона правого крыла.' },
 
+            // 3 ЭТАЖ
+            'f3-geod': { floor: 3, title: 'Лаборатория геодезии', desc: 'Левое крыло 3 этажа.' },
+            'f3-prof': { floor: 3, title: 'Профком', desc: 'Левое крыло 3 этажа.' },
+            'f3-cab-od31': { floor: 3, title: 'Учебный кабинет ОД', desc: 'Левое крыло, южная сторона.' },
+            'f3-phys3': { floor: 3, title: 'Лаборатория физики и астрономии', desc: 'Левое крыло, южная сторона.' },
+            'f3-cab-od32': { floor: 3, title: 'Учебный кабинет ОД', desc: 'Центральный блок 3 этажа.' },
+            'f3-prepod3': { floor: 3, title: 'Преподавательская (3 этаж)', desc: 'Центральный блок 3 этажа.' },
+            'f3-recreation': { floor: 3, title: 'Рекреация 3 этажа', desc: 'Зона отдыха над конференц-залом.' },
+            'f3-vc': { floor: 3, title: 'Вычислительный центр', desc: 'Компьютерные классы в центральной части 3 этажа.' },
+            'f3-chem': { floor: 3, title: 'Лаборатория химии и биологии', desc: 'Центрально-правая часть 3 этажа.' },
+            'f3-metod': { floor: 3, title: 'Методический кабинет', desc: 'Центральный блок 3 этажа.' },
+            'f3-right-top': { floor: 3, title: 'Лаборантская', desc: 'Правое крыло 3 этажа.' },
+            'f3-right-mid': { floor: 3, title: 'Кабинет (3 этаж)', desc: 'Правое крыло 3 этажа.' },
+            'f3-cab-od33': { floor: 3, title: 'Учебный кабинет ОД', desc: 'Правое крыло, южная сторона.' },
+            'f3-cab-od34': { floor: 3, title: 'Учебный кабинет ОД', desc: 'Правое крыло, южная сторона.' }
+        };
+
+        let currentFloor = 1;
+
+        function switchFloor(floor) {
+            currentFloor = floor;
+            document.querySelectorAll('.floor-btn').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx + 1 === floor);
+            });
+            [1, 2, 3].forEach(f => {
+                document.getElementById(`floor-${f}`).style.display = (f === floor) ? 'block' : 'none';
+            });
+        }
+
+        function selectRoom(id) {
+            const data = roomsData[id];
+            if (!data) return;
+
+            if (data.floor !== currentFloor) {
+                switchFloor(data.floor);
+            }
+
+            document.querySelectorAll('.room').forEach(r => r.classList.remove('selected'));
+            const el = document.getElementById(id);
+            if (el) el.classList.add('selected');
+
+            document.getElementById('roomFloorBadge').textContent = `${data.floor} ЭТАЖ`;
+            document.getElementById('roomTitle').textContent = data.title;
+            document.getElementById('roomDesc').textContent = data.desc;
+        }
+
+        document.querySelectorAll('.room').forEach(room => {
+            room.addEventListener('click', () => selectRoom(room.id));
+        });
+
+        function searchRoom(query) {
+            const q = query.trim().toLowerCase();
+            if (!q) return;
+
+            for (const [id, data] of Object.entries(roomsData)) {
+                if (data.title.toLowerCase().includes(q) || data.desc.toLowerCase().includes(q)) {
+                    selectRoom(id);
+                    break;
+                }
+            }
+        }
+    </script>
 </body>
 </html>
