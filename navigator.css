@@ -1,155 +1,167 @@
-:root {
-  --gold: #ffd700;
-  --gold-hover: #ffecb3;
-  --glass: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --text-main: #ffffff;
-  --text-dim: rgba(255, 255, 255, 0.7);
+/* Стили для страницы интерактивной карты (navigator.html) */
+.map-page {
+    padding-top: 130px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 60px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Roboto, sans-serif;
+.map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
 }
 
-body {
-  background: #0f172a;
-  color: var(--text-main);
-  line-height: 1.6;
-  overflow-x: hidden;
-  padding-bottom: 85px;
+.floor-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.background-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
-  z-index: -1;
-}
-
-/* Верхняя панель */
-.top-bar {
-  background: rgba(13, 17, 23, 0.85);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid var(--glass-border);
-  padding: 14px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.top-bar-title { font-weight: 700; font-size: 1.1rem; }
-.top-bar-title span { color: var(--gold); }
-
-.badge-gold {
-  background: var(--gold);
-  color: #000;
-  padding: 3px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Стеклянные карточки */
-.glass-card {
-  width: 100%;
-  background: var(--glass);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 20px;
-  margin-bottom: 18px;
-}
-
-/* Поиск и кнопки этажей */
-.search-input {
-  width: 100%;
-  padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--glass-border);
-  border-radius: 14px;
-  color: var(--text-main);
-  font-size: 1rem;
-  outline: none;
-  transition: 0.3s;
-  margin-bottom: 14px;
-}
-.search-input::placeholder { color: var(--text-dim); }
-.search-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.15); }
-
-.floors { display: flex; gap: 10px; margin-bottom: 16px; }
 .floor-btn {
-  flex: 1; padding: 10px; border-radius: 12px;
-  border: 1px solid var(--glass-border);
-  background: var(--glass); color: var(--text-main);
-  font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.3s;
-}
-.floor-btn:hover { border-color: var(--gold); color: var(--gold); }
-.floor-btn.active {
-  background: var(--gold); color: #000; border-color: var(--gold);
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.25);
+    padding: 10px 22px;
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main, #ffffff);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* SVG Карта */
-svg { width: 100%; height: auto; display: block; }
-.corridor { fill: rgba(255, 255, 255, 0.03); stroke: rgba(255, 255, 255, 0.15); stroke-width: 1.5; }
-.room { fill: rgba(30, 41, 59, 0.9); stroke: rgba(255, 255, 255, 0.25); stroke-width: 1.5; cursor: pointer; transition: 0.25s; }
-.room:hover { stroke: var(--gold); fill: rgba(255, 215, 0, 0.15); }
-.room.highlighted { fill: rgba(255, 215, 0, 0.28); stroke: var(--gold); stroke-width: 2.5; }
-.room-label { font-size: 13px; font-weight: 600; fill: #ffffff; pointer-events: none; text-anchor: middle; }
-.corridor-label { font-size: 12px; fill: rgba(255, 255, 255, 0.45); pointer-events: none; text-anchor: middle; }
-.here-pin { display: none; }
-.here-pin.visible { display: block; }
+.floor-btn:hover {
+    border-color: var(--gold, #ffd700);
+    color: var(--gold, #ffd700);
+}
+
+.floor-btn.active {
+    background: var(--gold, #ffd700);
+    color: #000000;
+    border-color: var(--gold, #ffd700);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.map-search {
+    flex: 1;
+    max-width: 340px;
+    min-width: 240px;
+}
+
+.map-search input {
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    background: rgba(15, 23, 42, 0.7);
+    color: #ffffff;
+    font-size: 0.95rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.map-search input:focus {
+    border-color: var(--gold, #ffd700);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
+}
+
+.map-workspace {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 25px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .map-workspace { grid-template-columns: 1fr; }
+    .map-page { padding-top: 190px; }
+}
+
+.svg-container {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border-radius: 18px;
+    padding: 15px;
+    overflow-x: auto;
+}
+
+.svg-container svg {
+    width: 100%;
+    min-width: 600px;
+    height: auto;
+    display: block;
+    user-select: none;
+}
+
+/* Стили помещений в темной золотой гамме */
+.building-shell { fill: #0f172a; stroke: rgba(255, 215, 0, 0.45); stroke-width: 2.5; }
+.corridor { fill: rgba(255, 255, 255, 0.03); stroke: rgba(255, 255, 255, 0.1); stroke-width: 1; }
+
+.room {
+    fill: rgba(30, 41, 59, 0.85);
+    stroke: rgba(255, 255, 255, 0.25);
+    stroke-width: 1.2;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.room.service { fill: rgba(255, 215, 0, 0.08); stroke: rgba(255, 215, 0, 0.3); }
+.room:hover { fill: rgba(255, 215, 0, 0.25); stroke: var(--gold, #ffd700); }
+.room.selected { fill: var(--gold, #ffd700); stroke: #ffffff; stroke-width: 2; }
+
+.room-label {
+    font-size: 10px;
+    font-weight: 600;
+    fill: #e2e8f0;
+    pointer-events: none;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+.room.selected + .room-label { fill: #000000; font-weight: 800; }
+
+.zone-title {
+    font-size: 11px;
+    fill: rgba(255, 255, 255, 0.35);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
 
 /* Карточка информации о кабинете */
-.info-card { display: none; border-color: rgba(255, 215, 0, 0.4); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
-.info-card.visible { display: block; animation: fadeIn 0.25s ease; }
-.info-title { color: var(--gold); font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
-.info-desc { color: var(--text-dim); font-size: 0.95rem; }
-
-/* Чек-лист и памятка */
-.card-heading { color: var(--gold); font-size: 1.15rem; margin-bottom: 14px; }
-.checklist-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--glass-border); cursor: pointer; font-size: 0.95rem; }
-.checklist-item:last-child { border-bottom: none; }
-.checklist-item input { width: 20px; height: 20px; accent-color: var(--gold); }
-.checklist-item.done span { text-decoration: line-through; color: rgba(255, 255, 255, 0.35); }
-
-.tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.tag-pill { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); padding: 6px 14px; border-radius: 50px; font-size: 0.85rem; color: var(--gold); }
-
-/* Нижнее меню */
-.bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: rgba(13, 17, 23, 0.92);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--glass-border);
-  display: flex; height: 68px; z-index: 1000;
+.room-info-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border-radius: 18px;
+    padding: 24px;
 }
-.nav-btn {
-  flex: 1; background: none; border: none; color: var(--text-dim);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 4px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.25s;
+
+.room-info-box h2 {
+    color: var(--gold, #ffd700);
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
 }
-.nav-btn.active { color: var(--gold); }
-.nav-icon { font-size: 1.25rem; }
+
+.room-info-box p {
+    color: var(--text-dim, rgba(255, 255, 255, 0.7));
+    font-size: 0.95rem;
+}
+
+.map-legend {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    font-size: 0.8rem;
+    color: var(--text-dim, rgba(255, 255, 255, 0.7));
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.legend-row { display: flex; align-items: center; gap: 10px; }
+.legend-dot { width: 14px; height: 14px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); }
