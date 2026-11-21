@@ -33,7 +33,7 @@
                 <div class="svg-container">
                     <svg id="floor-1-back" viewBox="0 0 1280 680">
                         <!-- ВНЕШНИЙ КОНТУР ПЕРЕВЁРНУТОЙ БУКВЫ "Т" ПО ОСИ 5-21 -->
-                        <path class="building-shell" d="M 60 60 H 1220 V 380 H 800 V 600 H 740 M 695 600 H 535 M 490 600 H 440 V 380 H 60 V 60" />
+                        <path class="building-shell" d="M 60 60 H 1220 V 380 H 740 V 600 H 630 M 565 600 H 490 V 380 H 60 V 60" />
 
                         <!-- Указатели двух входов снизу из Главного вестибюля -->
                         <text x="512" y="625" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ Вход из центра</text>
@@ -44,40 +44,35 @@
                         <rect class="corridor" x="62" y="195" width="603" height="38" />
                         <text x="275" y="214" class="zone-title" text-anchor="middle">Коридор</text>
 
-                        <!-- Левый вертикальный проход в ножке "Т" -->
-                        <rect class="corridor" x="490" y="233" width="45" height="367" />
+                        <!-- Коридор в виде перевёрнутой буквы "Т" (от входа из центра) -->
+                        <path class="corridor" d="M 565 600 V 435 H 490 V 380 H 740 V 435 H 630 V 600 Z" />
 
-                        <!-- Правый вертикальный проход в ножке "Т" -->
-                        <rect class="corridor" x="695" y="233" width="45" height="367" />
-
-                        <!-- Переходной коридор вдоль раздевалок (ось 14) -->
+                        <!-- Верхний стык от центрального коридора к санузлам и раздевалкам -->
+                        <rect class="corridor" x="490" y="233" width="45" height="147" />
                         <rect class="corridor" x="665" y="62" width="30" height="318" />
 
                         <!-- ==================== ЛЕВАЯ ЧАСТЬ (ОСИ 5-10): МАСТЕРСКИЕ ==================== -->
-                        <!-- Над коридором -->
                         <rect id="B1-01" class="room service" x="62" y="62" width="68" height="133" />
                         <text x="96" y="128" class="room-label" transform="rotate(-90 96,128)">Кладовая / Тамбур</text>
 
                         <rect id="B1-02" class="room" x="130" y="62" width="360" height="133" />
                         <text x="310" y="128" class="room-label">Электромонтажная мастерская</text>
 
-                        <!-- Вертикальный коридор-тамбур напротив B1-01 (такой же ширины: x=62..130) -->
                         <rect class="corridor" x="62" y="233" width="68" height="145" />
                         <text x="96" y="305" class="zone-title" text-anchor="middle" transform="rotate(-90 96,305)">Тамбур</text>
 
-                        <!-- Уменьшенный БЛОК: B1-03 (Слесарная мастерская) -->
                         <rect id="B1-03" class="room" x="130" y="233" width="167" height="145" />
                         <text x="213" y="305" class="room-label">Слесарная мастерская</text>
 
                         <rect id="B1-04" class="room" x="297" y="233" width="193" height="145" />
                         <text x="393" y="305" class="room-label">Учебная мастерская</text>
 
-                        <!-- ==================== НОЖКА БУКВЫ "Т" (ОСИ 11-15 / М-П) ==================== -->
-                        <rect id="B1-05" class="room service" x="535" y="380" width="65" height="218" />
-                        <text x="567" y="489" class="room-label" transform="rotate(-90 567,489)">Венткамера</text>
+                        <!-- ==================== НОЖКА БУКВЫ "Т": ВЕНТКАМЕРА СЛЕВА, ТРЕНАЖЕРКА СПРАВА ==================== -->
+                        <rect id="B1-05" class="room service" x="490" y="435" width="75" height="163" />
+                        <text x="527" y="516" class="room-label" transform="rotate(-90 527,516)">Венткамера</text>
 
-                        <rect id="B1-06" class="room" x="600" y="380" width="95" height="218" />
-                        <text x="647" y="489" class="room-label" transform="rotate(-90 647,489)">Тренажёрный зал</text>
+                        <rect id="B1-06" class="room" x="630" y="435" width="110" height="163" />
+                        <text x="685" y="516" class="room-label" transform="rotate(-90 685,516)">Тренажёрный зал</text>
 
                         <!-- ==================== ЦЕНТРАЛЬНЫЙ УЗЕЛ (ОСИ 10-16 / П-У) ==================== -->
                         <!-- Лестница (ось 10-11) -->
