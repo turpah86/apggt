@@ -31,83 +31,77 @@
 
             <div class="map-workspace">
                 <div class="svg-container">
-                    <svg id="floor-1-back" viewBox="0 0 1240 620">
-                        <!-- ВНЕШНИЙ КОНТУР ЗАДНЕГО БЛОКА (с двумя открытыми проходами снизу из главного вестибюля) -->
-                        <path class="building-shell" d="M 60 60 H 1180 V 520 H 680 M 610 520 H 470 M 400 520 H 60 V 60" />
+                    <svg id="floor-1-back" viewBox="0 0 1240 660">
+                        <!-- ВНЕШНИЙ КОНТУР В ВИДЕ ПЕРЕВЁРНУТОЙ БУКВЫ "Т" -->
+                        <path class="building-shell" d="M 60 60 H 1180 V 350 H 780 V 580 H 675 M 615 580 H 535 M 475 580 H 410 V 350 H 60 V 60" />
 
-                        <!-- Указатели входов снизу из Главного вестибюля -->
-                        <text x="435" y="545" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ Вход из вестибюля</text>
-                        <text x="645" y="545" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ Вход из вестибюля</text>
+                        <!-- Указатели двух входов снизу из Главного вестибюля (в основании ножки "Т") -->
+                        <text x="505" y="605" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ Вход</text>
+                        <text x="645" y="605" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ Вход</text>
 
-                        <!-- ==================== КОРИДОРЫ И ХОЛЛ ПЕРЕХОДА ==================== -->
-                        <!-- Горизонтальный коридор лабораторной части -->
-                        <rect class="corridor" x="62" y="250" width="448" height="40" />
-                        <text x="285" y="270" class="zone-title" text-anchor="middle">Коридор лабораторного блока</text>
+                        <!-- ==================== КОРИДОРЫ БУКВЫ "Т" ==================== -->
+                        <!-- Горизонтальный коридор по верхней перекладине -->
+                        <rect class="corridor" x="62" y="195" width="783" height="40" />
+                        <text x="450" y="215" class="zone-title" text-anchor="middle">Главный коридор лабораторного корпуса</text>
 
-                        <!-- Вертикальный холл перехода от главного корпуса -->
-                        <rect class="corridor" x="400" y="290" width="280" height="230" />
-                        <text x="540" y="405" class="zone-title" text-anchor="middle">Переход из главного корпуса</text>
+                        <!-- Два вертикальных прохода в ножке "Т" (слева и справа от центральных помещений ножки) -->
+                        <rect class="corridor" x="475" y="235" width="60" height="345" />
+                        <rect class="corridor" x="615" y="235" width="60" height="345" />
 
-                        <!-- ==================== ЛЕВАЯ ЧАСТЬ: ЛАБОРАТОРНЫЙ КОРПУС ==================== -->
-                        <!-- Лестница в левом верхнем углу -->
-                        <rect class="corridor" x="62" y="62" width="58" height="188" />
-                        <line x1="62" y1="100" x2="120" y2="100" stroke="rgba(255,255,255,0.15)" />
-                        <line x1="62" y1="138" x2="120" y2="138" stroke="rgba(255,255,255,0.15)" />
-                        <line x1="62" y1="176" x2="120" y2="176" stroke="rgba(255,255,255,0.15)" />
-                        <line x1="62" y1="214" x2="120" y2="214" stroke="rgba(255,255,255,0.15)" />
-                        <text x="91" y="156" class="zone-title" text-anchor="middle" transform="rotate(-90 91,156)">Лестница</text>
+                        <!-- ==================== ЛЕВОЕ КРЫЛО ПЕРЕКЛАДИНЫ "Т" ==================== -->
+                        <!-- Лестница -->
+                        <rect class="corridor" x="62" y="62" width="58" height="133" />
+                        <line x1="62" y1="95" x2="120" y2="95" stroke="rgba(255,255,255,0.15)" />
+                        <line x1="62" y1="128" x2="120" y2="128" stroke="rgba(255,255,255,0.15)" />
+                        <line x1="62" y1="161" x2="120" y2="161" stroke="rgba(255,255,255,0.15)" />
+                        <text x="91" y="128" class="zone-title" text-anchor="middle" transform="rotate(-90 91,128)">Лестница</text>
 
-                        <!-- Верхний ряд над коридором -->
-                        <rect id="B1-01" class="room" x="120" y="62" width="240" height="188" />
-                        <text x="240" y="156" class="room-label">Лаборатория материаловедения</text>
+                        <!-- Над коридором слева -->
+                        <rect id="B1-01" class="room" x="120" y="62" width="240" height="133" />
+                        <text x="240" y="128" class="room-label">Лаборатория материаловедения</text>
 
-                        <rect id="B1-02" class="room service" x="360" y="62" width="150" height="188" />
-                        <text x="435" y="156" class="room-label">Лаборантская / Кабинет</text>
+                        <rect id="B1-02" class="room service" x="360" y="62" width="175" height="133" />
+                        <text x="447" y="128" class="room-label">Лаборантская / Кабинет</text>
 
-                        <!-- Нижний ряд под коридором -->
-                        <rect id="B1-03" class="room" x="62" y="290" width="155" height="228" />
-                        <text x="139" y="404" class="room-label">Слесарная мастерская</text>
+                        <!-- Под коридором слева -->
+                        <rect id="B1-03" class="room" x="62" y="235" width="205" height="113" />
+                        <text x="164" y="291" class="room-label">Слесарная мастерская</text>
 
-                        <rect id="B1-04" class="room" x="217" y="290" width="183" height="228" />
-                        <text x="308" y="404" class="room-label">Электромонтажная мастерская</text>
+                        <rect id="B1-04" class="room" x="267" y="235" width="208" height="113" />
+                        <text x="371" y="291" class="room-label">Электромонтажная мастерская</text>
 
-                        <!-- ==================== ЦЕНТРАЛЬНО-ПРАВАЯ ЧАСТЬ: ТРЕНАЖЕРКА И РАЗДЕВАЛКИ ==================== -->
-                        <!-- Тренажерный зал (сверху в центре) -->
-                        <rect id="B1-05" class="room" x="510" y="62" width="250" height="228" />
-                        <text x="635" y="176" class="room-label">Тренажерный зал</text>
+                        <!-- ==================== ЦЕНТР И НОЖКА БУКВЫ "Т" ==================== -->
+                        <!-- Сверху над переходом -->
+                        <rect id="B1-05" class="room" x="535" y="62" width="230" height="133" />
+                        <text x="650" y="128" class="room-label">Тренажёрный зал</text>
 
-                        <!-- Раздевалки, душевые и тренерская (справа от холла перехода) -->
-                        <rect id="B1-06" class="room service" x="680" y="290" width="80" height="115" />
-                        <text x="720" y="347" class="room-label" transform="rotate(-90 720,347)">Раздевалка 1</text>
+                        <!-- Посередине ножки "Т" (между двумя проходами) -->
+                        <rect id="B1-06" class="room service" x="535" y="235" width="80" height="170" />
+                        <text x="575" y="320" class="room-label" transform="rotate(-90 575,320)">Раздевалка 1</text>
 
-                        <rect id="B1-07" class="room service" x="680" y="405" width="80" height="113" />
-                        <text x="720" y="461" class="room-label" transform="rotate(-90 720,461)">Раздевалка 2</text>
+                        <rect id="B1-07" class="room service" x="535" y="405" width="80" height="173" />
+                        <text x="575" y="491" class="room-label" transform="rotate(-90 575,491)">Раздевалка 2</text>
 
-                        <!-- ==================== ПРАВАЯ ЧАСТЬ: СПОРТЗАЛ ==================== -->
-                        <rect id="B1-08" class="room service" x="760" y="62" width="85" height="456" />
-                        <text x="802" y="290" class="room-label" transform="rotate(-90 802,290)">Тренерская / Инвентарная</text>
+                        <!-- Справа в ножке "Т" -->
+                        <rect id="B1-08" class="room service" x="675" y="235" width="103" height="343" />
+                        <text x="726" y="406" class="room-label" transform="rotate(-90 726,406)">Тренерская / Инвентарная</text>
 
-                        <rect id="B1-09" class="room service" x="845" y="62" width="333" height="456" />
-                        <text x="1011" y="290" class="room-label" style="font-size: 14px;">Спортивный зал</text>
+                        <!-- ==================== ПРАВОЕ КРЫЛО ПЕРЕКЛАДИНЫ "Т": СПОРТЗАЛ ==================== -->
+                        <rect id="B1-09" class="room service" x="765" y="62" width="413" height="286" />
+                        <text x="971" y="205" class="room-label" style="font-size: 14px;">Спортивный зал</text>
 
                         <!-- ДВЕРНЫЕ ПРОЕМЫ -->
                         <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
-                            <!-- Лестница -->
-                            <line x1="82" y1="250" x2="102" y2="250" />
-                            <!-- Лаборатория материаловедения и Кабинет -->
-                            <line x1="225" y1="250" x2="250" y2="250" />
-                            <line x1="425" y1="250" x2="445" y2="250" />
-                            <!-- Слесарная и Электромонтажная мастерские -->
-                            <line x1="130" y1="290" x2="150" y2="290" />
-                            <line x1="295" y1="290" x2="320" y2="290" />
-                            <!-- Тренажерный зал -->
-                            <line x1="560" y1="290" x2="585" y2="290" />
-                            <!-- Раздевалки (вход из холла перехода) -->
-                            <line x1="680" y1="340" x2="680" y2="360" />
-                            <line x1="680" y1="450" x2="680" y2="470" />
-                            <!-- Входы в Спортзал и Тренерскую -->
-                            <line x1="760" y1="340" x2="760" y2="360" />
-                            <line x1="845" y1="280" x2="845" y2="310" />
+                            <line x1="82" y1="195" x2="102" y2="195" />
+                            <line x1="225" y1="195" x2="250" y2="195" />
+                            <line x1="435" y1="195" x2="455" y2="195" />
+                            <line x1="635" y1="195" x2="660" y2="195" />
+                            <line x1="150" y1="235" x2="175" y2="235" />
+                            <line x1="360" y1="235" x2="385" y2="235" />
+                            <line x1="535" y1="310" x2="535" y2="330" />
+                            <line x1="615" y1="480" x2="615" y2="500" />
+                            <line x1="675" y1="340" x2="675" y2="365" />
+                            <line x1="765" y1="205" x2="765" y2="225" />
                         </g>
                     </svg>
                 </div>
