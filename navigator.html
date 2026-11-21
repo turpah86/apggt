@@ -84,21 +84,18 @@
                         <rect id="L1-11" class="room" x="72" y="410" width="153" height="60" />
                         <text x="148" y="440" class="room-label">Каб. столяра</text>
 
-                        <!-- УЗЕЛ САНУЗЛОВ -->
-                        <rect id="L1-13" class="room service" x="270" y="350" width="42" height="60" />
-                        <text x="291" y="380" class="room-label">Ум. 1</text>
+                        <!-- УЗЕЛ САНУЗЛОВ (вход сверху из главного коридора!) -->
+                        <rect id="L1-13" class="room service" x="270" y="350" width="48" height="45" />
+                        <text x="294" y="372" class="room-label">Ум. 1</text>
 
-                        <rect id="L1-14" class="room service" x="270" y="410" width="42" height="60" />
-                        <text x="291" y="440" class="room-label">Ум. 2</text>
+                        <rect id="L1-14b" class="room service" x="270" y="395" width="48" height="75" />
+                        <text x="294" y="432" class="room-label">С/У 1</text>
 
-                        <rect id="L1-14a" class="room service" x="312" y="350" width="58" height="35" />
-                        <text x="341" y="368" class="room-label" style="font-size:8px;">Инв.</text>
+                        <rect id="L1-14" class="room service" x="318" y="350" width="52" height="45" />
+                        <text x="344" y="372" class="room-label">Ум. 2</text>
 
-                        <rect id="L1-14b" class="room service" x="312" y="385" width="58" height="42" />
-                        <text x="341" y="406" class="room-label">С/У 1</text>
-
-                        <rect id="L1-14c" class="room service" x="312" y="427" width="58" height="43" />
-                        <text x="341" y="448" class="room-label">С/У 2</text>
+                        <rect id="L1-14c" class="room service" x="318" y="395" width="52" height="75" />
+                        <text x="344" y="432" class="room-label">С/У 2</text>
 
                         <!-- Гардероб -->
                         <rect id="L1-15" class="room" x="370" y="350" width="98" height="120" />
@@ -116,21 +113,23 @@
 
                         <!-- ДВЕРНЫЕ ПРОЕМЫ -->
                         <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
+                            <!-- Входы сверху из главного коридора -->
                             <line x1="115" y1="310" x2="128" y2="310" />
                             <line x1="250" y1="310" x2="275" y2="310" />
                             <line x1="340" y1="310" x2="355" y2="310" />
                             <line x1="410" y1="310" x2="430" y2="310" />
                             <line x1="560" y1="310" x2="585" y2="310" />
-                            <line x1="335" y1="350" x2="350" y2="350" />
-                            <line x1="410" y1="350" x2="430" y2="350" />
-                            <line x1="225" y1="372" x2="225" y2="388" />
-                            <line x1="225" y1="432" x2="225" y2="448" />
-                            <line x1="270" y1="372" x2="270" y2="388" />
-                            <line x1="270" y1="432" x2="270" y2="448" />
-                            <line x1="225" y1="485" x2="225" y2="505" />
-                            <line x1="270" y1="485" x2="270" y2="505" />
-                            <line x1="225" y1="560" x2="225" y2="580" />
-                            <line x1="270" y1="560" x2="270" y2="580" />
+                            <!-- Входы снизу из главного коридора (санузлы и гардероб!) -->
+                            <line x1="286" y1="350" x2="302" y2="350" /> <!-- Вход в С/У 1 сверху -->
+                            <line x1="336" y1="350" x2="352" y2="350" /> <!-- Вход в С/У 2 сверху -->
+                            <line x1="410" y1="350" x2="430" y2="350" /> <!-- Гардероб -->
+                            <!-- Входы из вертикального коридора -->
+                            <line x1="225" y1="372" x2="225" y2="388" /> <!-- Каб. мастеров -->
+                            <line x1="225" y1="432" x2="225" y2="448" /> <!-- Каб. столяра -->
+                            <line x1="225" y1="485" x2="225" y2="505" /> <!-- Учебный кабинет ОД -->
+                            <line x1="270" y1="485" x2="270" y2="505" /> <!-- Лаб. физики -->
+                            <line x1="225" y1="560" x2="225" y2="580" /> <!-- Лаборантская (слева) -->
+                            <line x1="270" y1="560" x2="270" y2="580" /> <!-- Лаборантская (справа) -->
                         </g>
                     </svg>
                 </div>
