@@ -32,18 +32,18 @@
             <div class="map-workspace">
                 <div class="svg-container">
                     <svg id="floor-1-right" viewBox="0 0 780 720">
-                        <!-- Внешний контур стен правого крыла (вход слева из центра) -->
+                        <!-- Внешний контур стен правого крыла (зеркально левому) -->
                         <path class="building-shell" d="M 90 310 V 60 H 710 V 660 H 310 V 470 H 90 V 350" />
 
                         <!-- Главный горизонтальный коридор -->
                         <rect class="corridor" x="62" y="310" width="646" height="40" />
-                        <text x="380" y="330" class="zone-title" text-anchor="middle">Главный коридор</text>
+                        <text x="400" y="330" class="zone-title" text-anchor="middle">Главный коридор</text>
 
-                        <!-- Указатель входа слева из центрального корпуса -->
+                        <!-- Указатель входа слева из центра -->
                         <text x="58" y="326" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="end">Вход →</text>
                         <text x="58" y="339" style="font-size: 9px; fill: var(--text-dim);" text-anchor="end">из центра</text>
 
-                        <!-- ПРАВАЯ ЛЕСТНИЦА (в торце крыла) -->
+                        <!-- ПРАВАЯ ЛЕСТНИЦА -->
                         <rect class="corridor" x="650" y="62" width="58" height="248" />
                         <line x1="650" y1="115" x2="708" y2="115" stroke="rgba(255,255,255,0.15)" />
                         <line x1="650" y1="165" x2="708" y2="165" stroke="rgba(255,255,255,0.15)" />
@@ -51,52 +51,87 @@
                         <line x1="650" y1="265" x2="708" y2="265" stroke="rgba(255,255,255,0.15)" />
                         <text x="679" y="186" class="zone-title" text-anchor="middle" transform="rotate(-90 679,186)">Лестница</text>
 
-                        <!-- ВЕРХНИЙ БЛОК (над коридором — зона пищеблока / помещений) -->
+                        <!-- ВЕРХНИЙ БЛОК: Столовая и Пищеблок -->
                         <rect id="R1-01" class="room service" x="92" y="62" width="370" height="248" />
                         <text x="277" y="186" class="room-label">Столовая</text>
 
                         <rect id="R1-03" class="room service" x="462" y="62" width="188" height="248" />
-                        <text x="556" y="186" class="room-label">Пищеблок / Кухня </text>
+                        <text x="556" y="186" class="room-label">Пищеблок</text>
 
-                        <!-- НИЖНИЙ БЛОК ВДОЛЬ КОРИДОРА -->
-                        <rect id="R1-04" class="room" x="92" y="350" width="110" height="120" />
-                        <text x="147" y="410" class="room-label">Медпункт</text>
+                        <!-- НИЖНИЙ БЛОК (Зеркально левому крылу) -->
+                        <!-- Ряд из 6 помещений вдоль главного коридора -->
+                        <rect id="R1-15a" class="room" x="92" y="350" width="53" height="120" />
+                        <text x="118" y="410" class="room-label" transform="rotate(-90 118,410)">Пом. 1</text>
 
-                        <rect id="R1-05" class="room service" x="202" y="350" width="108" height="120" />
-                        <text x="256" y="410" class="room-label">Санузлы</text>
+                        <rect id="R1-15b" class="room" x="145" y="350" width="53" height="120" />
+                        <text x="171" y="410" class="room-label" transform="rotate(-90 171,410)">Пом. 2</text>
 
-                        <!-- Вертикальный коридор в южную часть правого крыла -->
-                        <rect class="corridor" x="510" y="350" width="45" height="150" />
+                        <rect id="R1-15c" class="room" x="198" y="350" width="53" height="120" />
+                        <text x="224" y="410" class="room-label" transform="rotate(-90 224,410)">Пом. 3</text>
 
-                        <rect id="R1-06" class="room" x="310" y="350" width="200" height="120" />
-                        <text x="410" y="410" class="room-label">Кабинет 1</text>
+                        <rect id="R1-15d" class="room" x="251" y="350" width="53" height="120" />
+                        <text x="277" y="410" class="room-label" transform="rotate(-90 277,410)">Пом. 4</text>
 
-                        <rect id="R1-07" class="room" x="555" y="350" width="153" height="120" />
-                        <text x="631" y="410" class="room-label">Кабинет 2</text>
+                        <rect id="R1-15e" class="room" x="304" y="350" width="53" height="120" />
+                        <text x="330" y="410" class="room-label" transform="rotate(-90 330,410)">Пом. 5</text>
 
-                        <!-- ЮЖНЫЙ ТОРЕЦ ПРАВОГО КРЫЛА -->
-                        <rect id="R1-08" class="room service" x="312" y="470" width="198" height="188" />
+                        <rect id="R1-15f" class="room" x="357" y="350" width="53" height="120" />
+                        <text x="383" y="410" class="room-label" transform="rotate(-90 383,410)">Пом. 6</text>
+
+                        <!-- Узел санузлов (вход сверху из главного коридора) -->
+                        <path id="R1-13" class="room service" d="M 410 350 H 443 V 392 H 460 V 470 H 410 Z" />
+                        <text x="435" y="425" class="room-label">Санузел 1</text>
+
+                        <rect id="R1-13a" class="room service" x="443" y="350" width="34" height="42" />
+                        <text x="460" y="371" class="room-label" style="font-size:8px;">Хоз.</text>
+
+                        <path id="R1-14" class="room service" d="M 477 350 H 510 V 470 H 460 V 392 H 477 Z" />
+                        <text x="485" y="425" class="room-label">Санузел 2</text>
+
+                        <!-- Вертикальный коридор -->
+                        <rect class="corridor" x="510" y="350" width="45" height="175" />
+
+                        <!-- Два кабинета в правом торце (один под другим) -->
+                        <rect id="R1-10" class="room" x="555" y="350" width="153" height="60" />
+                        <text x="631" y="380" class="room-label">Кабинет 1</text>
+
+                        <rect id="R1-11" class="room" x="555" y="410" width="153" height="60" />
+                        <text x="631" y="440" class="room-label">Кабинет 2</text>
+
+                        <!-- ЮЖНЫЙ ТОРЕЦ -->
+                        <rect id="R1-19" class="room service" x="312" y="470" width="198" height="188" />
                         <text x="411" y="564" class="room-label">Минералогический музей</text>
 
-                        <rect id="R1-09" class="room" x="510" y="500" width="198" height="158" />
-                        <text x="609" y="579" class="room-label">Учебный кабинет (южный)</text>
+                        <rect id="R1-17" class="room service" x="510" y="525" width="45" height="133" />
+                        <text x="532" y="591" class="room-label" transform="rotate(-90 532,591)">Лаборантская</text>
+
+                        <rect id="R1-16" class="room" x="555" y="470" width="153" height="188" />
+                        <text x="631" y="564" class="room-label">Учебный кабинет</text>
 
                         <!-- ДВЕРНЫЕ ПРОЕМЫ -->
                         <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
-                            <!-- Вход на правую лестницу -->
+                            <!-- Лестница, Столовая (2 входа) и Пищеблок -->
                             <line x1="668" y1="310" x2="688" y2="310" />
-                            <!-- Входы в столовую: 1-й слева от центра, 2-й напротив Кабинета 1 -->
                             <line x1="105" y1="310" x2="128" y2="310" />
                             <line x1="400" y1="310" x2="425" y2="310" />
-                            <!-- Вход в пищеблок -->
                             <line x1="545" y1="310" x2="570" y2="310" />
-                            <!-- Входы в нижние помещения -->
-                            <line x1="135" y1="350" x2="155" y2="350" />
-                            <line x1="245" y1="350" x2="265" y2="350" />
-                            <line x1="400" y1="350" x2="420" y2="350" />
-                            <line x1="555" y1="400" x2="555" y2="420" />
-                            <line x1="510" y1="480" x2="510" y2="498" />
-                            <line x1="535" y1="500" x2="555" y2="500" />
+                            <!-- Входы сверху в 6 комнат -->
+                            <line x1="112" y1="350" x2="124" y2="350" />
+                            <line x1="165" y1="350" x2="177" y2="350" />
+                            <line x1="218" y1="350" x2="230" y2="350" />
+                            <line x1="271" y1="350" x2="283" y2="350" />
+                            <line x1="324" y1="350" x2="336" y2="350" />
+                            <line x1="377" y1="350" x2="389" y2="350" />
+                            <!-- Входы сверху в Санузел 1, Хоз. и Санузел 2 -->
+                            <line x1="421" y1="350" x2="435" y2="350" />
+                            <line x1="454" y1="350" x2="466" y2="350" />
+                            <line x1="485" y1="350" x2="499" y2="350" />
+                            <!-- Входы из вертикального коридора -->
+                            <line x1="555" y1="372" x2="555" y2="388" />
+                            <line x1="555" y1="432" x2="555" y2="448" />
+                            <line x1="510" y1="485" x2="510" y2="505" />
+                            <line x1="555" y1="485" x2="555" y2="505" />
+                            <line x1="510" y1="560" x2="510" y2="580" />
                         </g>
                     </svg>
                 </div>
@@ -127,12 +162,20 @@
         const rightWing1 = {
             'R1-01': { title: 'Столовая', desc: '1 этаж, правое крыло' },
             'R1-03': { title: 'Пищеблок', desc: '1 этаж, правое крыло' },
-            'R1-04': { title: 'Медпункт', desc: '1 этаж, правое крыло' },
-            'R1-05': { title: 'Санузлы', desc: '1 этаж, правое крыло' },
-            'R1-06': { title: 'Кабинет 1', desc: '1 этаж, правое крыло' },
-            'R1-07': { title: 'Кабинет 2', desc: '1 этаж, правое крыло' },
-            'R1-08': { title: 'Минералогический музей', desc: '1 этаж, правое крыло' },
-            'R1-09': { title: 'Учебный кабинет (южный)', desc: '1 этаж, правое крыло' }
+            'R1-15a': { title: 'Помещение 1', desc: '1 этаж, правое крыло' },
+            'R1-15b': { title: 'Помещение 2', desc: '1 этаж, правое крыло' },
+            'R1-15c': { title: 'Помещение 3', desc: '1 этаж, правое крыло' },
+            'R1-15d': { title: 'Помещение 4', desc: '1 этаж, правое крыло' },
+            'R1-15e': { title: 'Помещение 5', desc: '1 этаж, правое крыло' },
+            'R1-15f': { title: 'Помещение 6', desc: '1 этаж, правое крыло' },
+            'R1-13': { title: 'Санузел 1', desc: '1 этаж, правое крыло' },
+            'R1-13a': { title: 'Хоз. блок / Инвентарная', desc: '1 этаж, правое крыло' },
+            'R1-14': { title: 'Санузел 2', desc: '1 этаж, правое крыло' },
+            'R1-10': { title: 'Кабинет 1', desc: '1 этаж, правое крыло' },
+            'R1-11': { title: 'Кабинет 2', desc: '1 этаж, правое крыло' },
+            'R1-19': { title: 'Минералогический музей', desc: '1 этаж, правое крыло' },
+            'R1-17': { title: 'Лаборантская', desc: '1 этаж, правое крыло' },
+            'R1-16': { title: 'Учебный кабинет', desc: '1 этаж, правое крыло' }
         };
 
         document.querySelectorAll('.room').forEach(room => {
