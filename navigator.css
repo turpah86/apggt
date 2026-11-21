@@ -165,9 +165,13 @@
     }
 
     .svg-container {
-        height: 56vh;
-        min-height: 360px;
-        padding: 8px;
+        height: 52vh;
+        min-height: 320px;
+        padding: 6px;
+    }
+
+    .svg-container svg {
+        height: 100%;
     }
 
     .zoom-controls {
@@ -196,4 +200,3 @@
         font-size: 1.2rem;
     }
 }
-
