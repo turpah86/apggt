@@ -33,7 +33,8 @@
                 <div class="svg-container">
                     <svg id="floor-1-main" viewBox="0 0 1900 700" style="min-width: 1100px;">
                         <!-- ОБЩИЙ ВНЕШНИЙ КОНТУР ГЛАВНОГО КОРПУСА (1 ЭТАЖ) -->
-                        <path class="building-shell" d="M 70 60 H 690 V 110 H 730 M 800 110 H 1120 M 1190 110 H 1230 V 60 H 1850 V 660 H 1550 V 470 H 1230 V 350 V 550 H 1090 M 830 550 H 690 V 350 V 470 H 370 V 660 H 70 Z" />
+                        <path class="building-shell" d="M 70 60 H 730 M 800 60 H 1120 M 1190 60 H 1850 V 660 H 1550 V 470 H 1230 V 350 V 550 H 1090 M 830 550 H 690 V 350 V 470 H 370 V 660 H 70 Z" />
+
 
                         <!-- ==================== ЛЕВОЕ КРЫЛО (X: 70..690) ==================== -->
                         <rect class="corridor" x="72" y="310" width="618" height="40" />
@@ -99,32 +100,32 @@
                         <text x="320" y="556" class="room-label">М-113</text>
                         <text x="320" y="572" class="room-label" style="font-size: 8.5px; fill: var(--gold);">Цифровое горное дело</text>
 
-                        <!-- ==================== ЦЕНТРАЛЬНАЯ ЧАСТЬ (X: 690..1230) ==================== -->
+                        <!-- ==================== ЦЕНТРАЛЬНАЯ ЧАСТЬ (выровнена по высоте y=60) ==================== -->
                         <path d="M 830 550 A 130 95 0 0 0 1090 550" fill="rgba(255, 215, 0, 0.06)" stroke="rgba(255, 215, 0, 0.45)" stroke-width="2.5" />
                         <text x="960" y="622" class="zone-title" text-anchor="middle">Главный вход</text>
 
-                        <text x="765" y="95" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ В лабораторный корпус</text>
-                        <text x="1155" y="95" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ В лабораторный корпус</text>
+                        <text x="765" y="45" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ В лабораторный корпус</text>
+                        <text x="1155" y="45" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ В лабораторный корпус</text>
 
-                        <path id="C1-04" class="room service" d="M 690 310 V 112 H 1230 V 310 V 350 H 1090 V 495 H 830 V 350 H 690 Z" />
+                        <path id="C1-04" class="room service" d="M 690 310 V 62 H 1230 V 310 V 350 H 1090 V 495 H 830 V 350 H 690 Z" />
                         <text x="960" y="415" class="room-label">Главный вестибюль</text>
 
-                        <!-- П-образный центральный подъём -->
+                        <!-- П-образный центральный подъём (до самого верха y=62) -->
                         <g>
-                            <path d="M 830 285 V 112 H 1090 V 285 H 1025 V 175 H 895 V 285 Z" fill="#0f172a" stroke="rgba(255, 215, 0, 0.55)" stroke-width="2" />
-                            <line x1="830" y1="255" x2="895" y2="255" stroke="rgba(255,255,255,0.22)" />
-                            <line x1="830" y1="228" x2="895" y2="228" stroke="rgba(255,255,255,0.22)" />
-                            <line x1="830" y1="201" x2="895" y2="201" stroke="rgba(255,255,255,0.22)" />
-                            <line x1="830" y1="175" x2="895" y2="175" stroke="rgba(255,255,255,0.22)" />
-                            <text x="862" y="225" class="zone-title" text-anchor="middle" transform="rotate(-90 862,225)">Лестница ↑</text>
+                            <path d="M 830 285 V 62 H 1090 V 285 H 1025 V 135 H 895 V 285 Z" fill="#0f172a" stroke="rgba(255, 215, 0, 0.55)" stroke-width="2" />
+                            <line x1="830" y1="250" x2="895" y2="250" stroke="rgba(255,255,255,0.22)" />
+                            <line x1="830" y1="215" x2="895" y2="215" stroke="rgba(255,255,255,0.22)" />
+                            <line x1="830" y1="180" x2="895" y2="180" stroke="rgba(255,255,255,0.22)" />
+                            <line x1="830" y1="145" x2="895" y2="145" stroke="rgba(255,255,255,0.22)" />
+                            <text x="862" y="210" class="zone-title" text-anchor="middle" transform="rotate(-90 862,210)">Лестница ↑</text>
 
-                            <line x1="1025" y1="255" x2="1090" y2="255" stroke="rgba(255,255,255,0.22)" />
-                            <line x1="1025" y1="228" x2="1090" y2="228" stroke="rgba(255,255,255,0.22)" />
-                            <line x1="1025" y1="201" x2="1090" y2="201" stroke="rgba(255,255,255,0.22)" />
-                            <line x1="1025" y1="175" x2="1090" y2="175" stroke="rgba(255,255,255,0.22)" />
-                            <text x="1057" y="225" class="zone-title" text-anchor="middle" transform="rotate(-90 1057,225)">Лестница ↑</text>
+                            <line x1="1025" y1="250" x2="1090" y2="250" stroke="rgba(255,255,255,0.22)" />
+                            <line x1="1025" y1="215" x2="1090" y2="215" stroke="rgba(255,255,255,0.22)" />
+                            <line x1="1025" y1="180" x2="1090" y2="180" stroke="rgba(255,255,255,0.22)" />
+                            <line x1="1025" y1="145" x2="1090" y2="145" stroke="rgba(255,255,255,0.22)" />
+                            <text x="1057" y="210" class="zone-title" text-anchor="middle" transform="rotate(-90 1057,210)">Лестница ↑</text>
 
-                            <text x="960" y="146" class="zone-title" text-anchor="middle">Центральный подъём</text>
+                            <text x="960" y="102" class="zone-title" text-anchor="middle">Центральный подъём</text>
                         </g>
 
                         <rect id="C1-03" class="room service" x="830" y="495" width="260" height="55" />
