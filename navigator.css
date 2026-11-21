@@ -105,3 +105,46 @@
 }
 .legend-row { display: flex; align-items: center; gap: 10px; }
 .legend-dot { width: 14px; height: 14px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); }
+
+/* Окно с поддержкой Zoom & Pan */
+.svg-container {
+    position: relative;
+    overflow: hidden;
+    height: 74vh;
+    min-height: 540px;
+    cursor: grab;
+    touch-action: none;
+}
+.svg-container:active { cursor: grabbing; }
+
+.zoom-controls {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+    background: rgba(15, 23, 42, 0.85);
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 215, 0, 0.35);
+    backdrop-filter: blur(8px);
+}
+.zoom-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.zoom-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+.zoom-btn.reset { width: auto; padding: 0 12px; font-size: 12px; }
+
