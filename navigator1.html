@@ -44,8 +44,8 @@
                         <rect class="corridor" x="62" y="195" width="573" height="38" />
                         <text x="275" y="214" class="zone-title" text-anchor="middle">Коридор</text>
 
-                        <!-- Коридор шириной ~3 метра (x=595..665) между одинаковыми Венткамерой и Тренажёркой + проход в Спортзал -->
-                        <path class="corridor" d="M 460 600 V 530 H 595 V 233 H 635 V 62 H 665 V 350 H 735 V 380 H 665 V 530 H 800 V 600 Z" />
+                        <!-- Коридор шириной ~3 метра (x=595..665) + проход в Спортзал (до x=800) -->
+                        <path class="corridor" d="M 460 600 V 530 H 595 V 233 H 635 V 62 H 665 V 350 H 800 V 380 H 665 V 530 H 800 V 600 Z" />
 
                         <!-- ==================== ЛЕВАЯ ЧАСТЬ: МАСТЕРСКИЕ ==================== -->
                         <rect id="B1-01" class="room service" x="62" y="62" width="68" height="133" />
@@ -85,22 +85,22 @@
                         <rect id="B1-06" class="room" x="665" y="380" width="135" height="150" />
                         <text x="732" y="455" class="room-label">Тренажёрный зал</text>
 
-                        <!-- Суженный ряд вдоль спортзала (x=665..735, до y=350) -->
-                        <rect id="B1-09" class="room service" x="665" y="62" width="70" height="72" />
-                        <text x="700" y="98" class="room-label" style="font-size: 9px;">Снарядная</text>
+                        <!-- Расширенный ряд вдоль спортзала (x=665..800, ширина 135 — вровень с Тренажёрным залом) -->
+                        <rect id="B1-09" class="room service" x="665" y="62" width="135" height="72" />
+                        <text x="732" y="98" class="room-label">Снарядная</text>
 
-                        <rect id="B1-10" class="room service" x="665" y="134" width="70" height="72" />
-                        <text x="700" y="170" class="room-label" style="font-size: 9px;">Раздевалка 1</text>
+                        <rect id="B1-10" class="room service" x="665" y="134" width="135" height="72" />
+                        <text x="732" y="170" class="room-label">Раздевалка 1</text>
 
-                        <rect id="B1-11" class="room service" x="665" y="206" width="70" height="72" />
-                        <text x="700" y="242" class="room-label" style="font-size: 8.5px;">Душевые / С/У</text>
+                        <rect id="B1-11" class="room service" x="665" y="206" width="135" height="72" />
+                        <text x="732" y="242" class="room-label">Душевые / С/У</text>
 
-                        <rect id="B1-12" class="room service" x="665" y="278" width="70" height="72" />
-                        <text x="700" y="314" class="room-label" style="font-size: 9px;">Раздевалка 2</text>
+                        <rect id="B1-12" class="room service" x="665" y="278" width="135" height="72" />
+                        <text x="732" y="314" class="room-label">Раздевалка 2</text>
 
-                        <!-- ==================== ПРАВОЕ КРЫЛО: СПОРТИВНЫЙ ЗАЛ ==================== -->
-                        <rect id="B1-13" class="room service" x="735" y="62" width="483" height="318" />
-                        <text x="976" y="221" class="room-label" style="font-size: 14px;">Спортивный зал</text>
+                        <!-- ==================== ПРАВОЕ КРЫЛО: СПОРТИВНЫЙ ЗАЛ (x=800..1218) ==================== -->
+                        <rect id="B1-13" class="room service" x="800" y="62" width="418" height="318" />
+                        <text x="1009" y="221" class="room-label" style="font-size: 14px;">Спортивный зал</text>
 
                         <!-- ДВЕРНЫЕ ПРОЕМЫ -->
                         <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
@@ -109,15 +109,15 @@
                             <line x1="575" y1="195" x2="595" y2="195" />
                             <line x1="205" y1="233" x2="230" y2="233" />
                             <line x1="365" y1="233" x2="390" y2="233" />
-                            <!-- Входы в Санузлы / Бытовые, Венткамеру и Тренажёрный зал из коридора шириной 3м -->
+                            <!-- Входы в Санузлы / Бытовые, Венткамеру и Тренажёрный зал -->
                             <line x1="595" y1="295" x2="595" y2="315" />
                             <line x1="595" y1="445" x2="595" y2="465" />
                             <line x1="665" y1="445" x2="665" y2="465" />
-                            <!-- Входы в раздевалки, снарядную и Спортзал -->
+                            <!-- Входы в раздевалки, снарядную и Спортзал (по новой линии x=800) -->
                             <line x1="665" y1="162" x2="665" y2="178" />
                             <line x1="665" y1="306" x2="665" y2="322" />
-                            <line x1="735" y1="90" x2="735" y2="110" />
-                            <line x1="735" y1="356" x2="735" y2="374" />
+                            <line x1="800" y1="90" x2="800" y2="110" />
+                            <line x1="800" y1="356" x2="800" y2="374" />
                         </g>
                     </svg>
                 </div>
