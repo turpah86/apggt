@@ -42,9 +42,67 @@
                             <!-- ВНЕШНИЙ КОНТУР ГЛАВНОГО КОРПУСА -->
                             <path class="building-shell" d="M 60 60 H 1780 V 640 H 1460 V 460 H 1080 V 495 H 760 V 460 H 380 V 640 H 60 Z" />
                         
-                            <!-- ЗАГОТОВКА ПОД ПРАВОЕ КРЫЛО (Шаг 3) -->
-                            <path class="wing-placeholder" d="M 1080 62 H 1778 V 638 H 1462 V 458 H 1080 Z" />
-                            <text x="1430" y="275" class="zone-title" text-anchor="middle" style="font-size: 14px;">Правое крыло (Шаг 3)</text>
+                            <!-- ПРАВОЕ КРЫЛО (X: 1080..1778) -->
+                            <rect class="corridor" x="1080" y="305" width="698" height="40" />
+                            <text x="1400" y="325" class="zone-title" text-anchor="middle">Главный коридор</text>
+                            <rect class="corridor" x="1580" y="345" width="45" height="115" />
+                        
+                            <!-- Правая лестница -->
+                            <rect class="corridor" x="1720" y="62" width="58" height="243" />
+                            <line x1="1720" y1="115" x2="1778" y2="115" stroke="rgba(255,255,255,0.15)" />
+                            <line x1="1720" y1="165" x2="1778" y2="165" stroke="rgba(255,255,255,0.15)" />
+                            <line x1="1720" y1="215" x2="1778" y2="215" stroke="rgba(255,255,255,0.15)" />
+                            <line x1="1720" y1="265" x2="1778" y2="265" stroke="rgba(255,255,255,0.15)" />
+                            <text x="1749" y="183" class="zone-title" text-anchor="middle" transform="rotate(-90 1749,183)">Лестница</text>
+                        
+                            <!-- Верхний ряд правого крыла -->
+                            <rect id="R2-01" class="room service" x="1080" y="62" width="160" height="243" />
+                            <text x="1160" y="183" class="room-label">Книгохранилище</text>
+                        
+                            <rect id="R2-02" class="room service" x="1240" y="62" width="270" height="243" />
+                            <text x="1375" y="176" class="room-label" style="font-size: 13px;">Библиотека</text>
+                            <text x="1375" y="194" class="room-label" style="font-size: 9px; fill: var(--gold);">Читальный зал</text>
+                        
+                            <rect id="R2-03" class="room" x="1510" y="62" width="210" height="243" />
+                            <text x="1615" y="183" class="room-label">Учебный кабинет СД</text>
+                        
+                            <!-- Нижний ряд вдоль основного фасада (1080..1460) -->
+                            <rect id="R2-04" class="room" x="1080" y="345" width="64" height="113" />
+                            <text x="1112" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 1112,401)">Бухгалтерия</text>
+                        
+                            <rect id="R2-05" class="room" x="1144" y="345" width="64" height="113" />
+                            <text x="1176" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 1176,401)">Гл. бухгалтер</text>
+                        
+                            <rect id="R2-06" class="room" x="1208" y="345" width="64" height="113" />
+                            <text x="1240" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 1240,401)">Отдел кадров</text>
+                        
+                            <rect id="R2-07" class="room" x="1272" y="345" width="64" height="113" />
+                            <text x="1304" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 1304,401)">Зам. дир. АХЧ</text>
+                        
+                            <rect id="R2-08" class="room service" x="1336" y="345" width="62" height="113" />
+                            <text x="1367" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 1367,401)">Серверная / ИТ</text>
+                        
+                            <rect id="R2-09" class="room service" x="1398" y="345" width="62" height="113" />
+                            <text x="1429" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 1429,401)">Архив / Хоз.</text>
+                        
+                            <!-- Санузлы правого крыла (над санузлами 1 этажа: 1460..1580) -->
+                            <path id="R2-10" class="room service" d="M 1460 345 H 1503 V 387 H 1520 V 460 H 1460 Z" />
+                            <text x="1490" y="420" class="room-label">Санузел 1</text>
+                        
+                            <rect id="R2-10a" class="room service" x="1503" y="345" width="34" height="42" />
+                            <text x="1520" y="366" class="room-label" style="font-size: 8px;">Хоз.</text>
+                        
+                            <path id="R2-11" class="room service" d="M 1537 345 H 1580 V 460 H 1520 V 387 H 1537 Z" />
+                            <text x="1550" y="420" class="room-label">Санузел 2</text>
+                        
+                            <!-- Кабинет в торце справа от прохода -->
+                            <rect id="R2-12" class="room" x="1625" y="345" width="153" height="115" />
+                            <text x="1701" y="402" class="room-label">Кабинет</text>
+                        
+                            <!-- Большой кабинет в торцевом выступе (над музеем 1 этажа) -->
+                            <rect id="R2-13" class="room" x="1460" y="460" width="318" height="178" />
+                            <text x="1619" y="549" class="room-label">Учебный кабинет СД</text>
+
                         
                             <!-- ЛЕВОЕ КРЫЛО (X: 62..760) -->
                             <rect class="corridor" x="62" y="305" width="698" height="40" />
@@ -162,6 +220,22 @@
                                 <line x1="815" y1="345" x2="845" y2="345" />
                                 <line x1="995" y1="345" x2="1025" y2="345" />
                                 <line x1="905" y1="495" x2="935" y2="495" />
+                                        <!-- Двери правого крыла -->
+                                <line x1="1738" y1="305" x2="1758" y2="305" />
+                                <line x1="1150" y1="305" x2="1170" y2="305" />
+                                <line x1="1360" y1="305" x2="1390" y2="305" />
+                                <line x1="1605" y1="305" x2="1625" y2="305" />
+                                <line x1="1105" y1="345" x2="1119" y2="345" />
+                                <line x1="1169" y1="345" x2="1183" y2="345" />
+                                <line x1="1233" y1="345" x2="1247" y2="345" />
+                                <line x1="1297" y1="345" x2="1311" y2="345" />
+                                <line x1="1360" y1="345" x2="1374" y2="345" />
+                                <line x1="1422" y1="345" x2="1436" y2="345" />
+                                <line x1="1475" y1="345" x2="1489" y2="345" />
+                                <line x1="1514" y1="345" x2="1526" y2="345" />
+                                <line x1="1551" y1="345" x2="1565" y2="345" />
+                                <line x1="1625" y1="415" x2="1625" y2="432" />
+                                <line x1="1592" y1="460" x2="1612" y2="460" />
                             </g>
 
                             <!-- МАРКЕР «ВЫ ЗДЕСЬ» (срабатывает по ?loc=...) -->
@@ -218,6 +292,21 @@
             'C2-03': { title: 'Фойе 2 этажа (C2-03)', desc: 'ГК, 2 этаж, центральный холл между крыльями' },
             'C2-04': { title: 'Конференц-зал (C2-04)', desc: 'ГК, 2 этаж, центральный блок (выход на балкон)' },
             'C2-05': { title: 'Балкон (C2-05)', desc: 'ГК, 2 этаж, балкон над главным входом' }
+            'R2-01': { title: 'Книгохранилище (R2-01)', desc: 'ГК, 2 этаж, правое крыло (библиотечный блок)' },
+            'R2-02': { title: 'Библиотека / Читальный зал (R2-02)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-03': { title: 'Учебный кабинет СД (R2-03)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-04': { title: 'Бухгалтерия (R2-04)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-05': { title: 'Главный бухгалтер / Экономист (R2-05)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-06': { title: 'Отдел кадров / Канцелярия (R2-06)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-07': { title: 'Зам. директора по АХЧ (R2-07)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-08': { title: 'Серверная / ИТ-отдел (R2-08)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-09': { title: 'Архив / Хоз. помещение (R2-09)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-10': { title: 'Санузел 1 (R2-10)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-10a': { title: 'Хоз. блок / Инвентарная (R2-10a)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-11': { title: 'Санузел 2 (R2-11)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-12': { title: 'Кабинет (R2-12)', desc: 'ГК, 2 этаж, правое крыло' },
+            'R2-13': { title: 'Учебный кабинет СД (R2-13)', desc: 'ГК, 2 этаж, правое крыло (торцевой выступ)' },
+
         };
 
 
