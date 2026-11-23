@@ -45,7 +45,7 @@
                             <!-- ПРАВОЕ КРЫЛО (X: 1080..1778) -->
                             <rect class="corridor" x="1080" y="305" width="698" height="40" />
                             <text x="1400" y="325" class="zone-title" text-anchor="middle">Главный коридор</text>
-                            <rect class="corridor" x="1580" y="345" width="45" height="115" />
+                            <rect class="corridor" x="1580" y="345" width="45" height="293" />
                         
                             <!-- Правая лестница -->
                             <rect class="corridor" x="1720" y="62" width="58" height="243" />
@@ -56,15 +56,19 @@
                             <text x="1749" y="183" class="zone-title" text-anchor="middle" transform="rotate(-90 1749,183)">Лестница</text>
                         
                             <!-- Верхний ряд правого крыла -->
-                            <rect id="R2-01" class="room service" x="1080" y="62" width="160" height="243" />
-                            <text x="1160" y="183" class="room-label">Книгохранилище</text>
+                            <rect id="R2-01" class="room service" x="1080" y="62" width="140" height="243" />
+                            <text x="1150" y="183" class="room-label">Книгохранилище</text>
                         
-                            <rect id="R2-02" class="room service" x="1240" y="62" width="270" height="243" />
-                            <text x="1375" y="176" class="room-label" style="font-size: 13px;">Библиотека</text>
-                            <text x="1375" y="194" class="room-label" style="font-size: 9px; fill: var(--gold);">Читальный зал</text>
+                            <rect id="R2-02" class="room service" x="1220" y="62" width="240" height="243" />
+                            <text x="1340" y="176" class="room-label" style="font-size: 13px;">Библиотека</text>
+                            <text x="1340" y="194" class="room-label" style="font-size: 9px; fill: var(--gold);">Читальный зал</text>
                         
-                            <rect id="R2-03" class="room" x="1510" y="62" width="210" height="243" />
-                            <text x="1615" y="183" class="room-label">Учебный кабинет СД</text>
+                            <!-- Помещение между библиотекой и R2-03 (шириной 120px, ровно как санузлы) -->
+                            <rect id="R2-02a" class="room" x="1460" y="62" width="120" height="243" />
+                            <text x="1520" y="183" class="room-label">Помещение</text>
+                        
+                            <rect id="R2-03" class="room" x="1580" y="62" width="140" height="243" />
+                            <text x="1650" y="183" class="room-label">Учебный кабинет СД</text>
                         
                             <!-- Нижний ряд вдоль основного фасада (1080..1460) -->
                             <rect id="R2-04" class="room" x="1080" y="345" width="64" height="113" />
@@ -85,7 +89,7 @@
                             <rect id="R2-09" class="room service" x="1398" y="345" width="62" height="113" />
                             <text x="1429" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 1429,401)">Архив / Хоз.</text>
                         
-                            <!-- Санузлы правого крыла (над санузлами 1 этажа: 1460..1580) -->
+                            <!-- Санузлы правого крыла (1460..1580) -->
                             <path id="R2-10" class="room service" d="M 1460 345 H 1503 V 387 H 1520 V 460 H 1460 Z" />
                             <text x="1490" y="420" class="room-label">Санузел 1</text>
                         
@@ -95,13 +99,17 @@
                             <path id="R2-11" class="room service" d="M 1537 345 H 1580 V 460 H 1520 V 387 H 1537 Z" />
                             <text x="1550" y="420" class="room-label">Санузел 2</text>
                         
-                            <!-- Кабинет в торце справа от прохода -->
-                            <rect id="R2-12" class="room" x="1625" y="345" width="153" height="115" />
-                            <text x="1701" y="402" class="room-label">Кабинет</text>
+                            <!-- Кабинет в торцевом выступе под санузлами (зеркально L2-08) -->
+                            <rect id="R2-13" class="room" x="1460" y="460" width="120" height="178" />
+                            <text x="1520" y="549" class="room-label">Учебный кабинет СД</text>
                         
-                            <!-- Большой кабинет в торцевом выступе (над музеем 1 этажа) -->
-                            <rect id="R2-13" class="room" x="1460" y="460" width="318" height="178" />
-                            <text x="1619" y="549" class="room-label">Учебный кабинет СД</text>
+                            <!-- Кабинеты в торце справа от коридора (зеркально L2-03 и L2-05) -->
+                            <rect id="R2-12" class="room" x="1625" y="345" width="153" height="140" />
+                            <text x="1701" y="415" class="room-label">Кабинет</text>
+                        
+                            <rect id="R2-14" class="room" x="1625" y="485" width="153" height="153" />
+                            <text x="1701" y="561" class="room-label">Кабинет</text>
+
 
                         
                             <!-- ЛЕВОЕ КРЫЛО (X: 62..760) -->
@@ -220,11 +228,13 @@
                                 <line x1="815" y1="345" x2="845" y2="345" />
                                 <line x1="995" y1="345" x2="1025" y2="345" />
                                 <line x1="905" y1="495" x2="935" y2="495" />
-                                        <!-- Двери правого крыла -->
+
+                                <!-- Двери правого крыла -->
                                 <line x1="1738" y1="305" x2="1758" y2="305" />
-                                <line x1="1150" y1="305" x2="1170" y2="305" />
-                                <line x1="1360" y1="305" x2="1390" y2="305" />
-                                <line x1="1605" y1="305" x2="1625" y2="305" />
+                                <line x1="1140" y1="305" x2="1160" y2="305" />
+                                <line x1="1325" y1="305" x2="1355" y2="305" />
+                                <line x1="1510" y1="305" x2="1530" y2="305" />
+                                <line x1="1640" y1="305" x2="1660" y2="305" />
                                 <line x1="1105" y1="345" x2="1119" y2="345" />
                                 <line x1="1169" y1="345" x2="1183" y2="345" />
                                 <line x1="1233" y1="345" x2="1247" y2="345" />
@@ -234,8 +244,10 @@
                                 <line x1="1475" y1="345" x2="1489" y2="345" />
                                 <line x1="1514" y1="345" x2="1526" y2="345" />
                                 <line x1="1551" y1="345" x2="1565" y2="345" />
-                                <line x1="1625" y1="415" x2="1625" y2="432" />
-                                <line x1="1592" y1="460" x2="1612" y2="460" />
+                                <line x1="1580" y1="605" x2="1580" y2="625" />
+                                <line x1="1625" y1="407" x2="1625" y2="423" />
+                                <line x1="1625" y1="495" x2="1625" y2="512" />
+
                             </g>
 
                             <!-- МАРКЕР «ВЫ ЗДЕСЬ» (срабатывает по ?loc=...) -->
@@ -305,7 +317,10 @@
             'R2-10a': { title: 'Хоз. блок / Инвентарная (R2-10a)', desc: 'ГК, 2 этаж, правое крыло' },
             'R2-11': { title: 'Санузел 2 (R2-11)', desc: 'ГК, 2 этаж, правое крыло' },
             'R2-12': { title: 'Кабинет (R2-12)', desc: 'ГК, 2 этаж, правое крыло' },
-            'R2-13': { title: 'Учебный кабинет СД (R2-13)', desc: 'ГК, 2 этаж, правое крыло (торцевой выступ)' }
+            'R2-13': { title: 'Учебный кабинет СД (R2-13)', desc: 'ГК, 2 этаж, правое крыло (торцевой выступ)' },
+            'R2-02a': { title: 'Помещение (R2-02a)', desc: 'ГК, 2 этаж, правое крыло (между библиотекой и R2-03)' },
+            'R2-14': { title: 'Кабинет (R2-14)', desc: 'ГК, 2 этаж, правое крыло (нижний правый угол)' },
+
         };
 
 
