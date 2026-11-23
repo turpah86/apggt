@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Пермяков А.Н. | Навигатор — ГК 2 этаж (Тест: Центр)</title>
+    <title>Пермяков А.Н. | Навигатор — ГК 2 этаж</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="navigator.css">
 </head>
@@ -25,9 +25,9 @@
         <a href="index.html" class="back-btn">← Назад на главную</a>
 
         <div class="glass-card">
-            <span class="badge">СБОРКА ПЛАНА • ГЛАВНЫЙ КОРПУС • 2 ЭТАЖ (ШАГ 1: ЦЕНТР)</span>
+            <span class="badge">СБОРКА ПЛАНА • ГЛАВНЫЙ КОРПУС • 2 ЭТАЖ</span>
             <h1 style="margin-bottom: 10px; font-size: 2rem;">Главный корпус — 2 этаж</h1>
-            <p style="color: var(--text-dim); margin-bottom: 20px;">Проверяем центральный блок (оси 9–17) и работу меток «Вы здесь» по QR-кодам (?loc=код).</p>
+            <p style="color: var(--text-dim); margin-bottom: 20px;">Приближайте карту колёсиком мыши или кнопками справа, перетаскивайте мышью и нажимайте на любое помещение.</p>
 
             <div class="map-workspace">
                 <div class="svg-container" id="mapViewport">
@@ -39,17 +39,69 @@
 
                     <svg id="gk-floor-2" viewBox="0 0 1840 760" preserveAspectRatio="xMidYMid meet">
                         <g id="mapPanZoomGroup">
-                            <!-- ВНЕШНИЙ КОНТУР ГЛАВНОГО КОРПУСА (выступ в центре только по ширине тамбура) -->
-                            <path class="building-shell" d="M 60 60 H 1780 V 640 H 1460 V 460 H 1010 V 545 H 830 V 460 H 380 V 640 H 60 Z" />
+                            <!-- ВНЕШНИЙ КОНТУР ГЛАВНОГО КОРПУСА -->
+                            <path class="building-shell" d="M 60 60 H 1780 V 640 H 1460 V 460 H 1080 V 495 H 760 V 460 H 380 V 640 H 60 Z" />
 
-                            <!-- ЗАГОТОВКИ ПОД ЛЕВОЕ И ПРАВОЕ КРЫЛЬЯ -->
-                            <path class="wing-placeholder" d="M 62 62 H 760 V 458 H 378 V 638 H 62 Z" />
-                            <text x="410" y="275" class="zone-title" text-anchor="middle" style="font-size: 14px;">Левое крыло (Шаг 2)</text>
-
+                            <!-- ЗАГОТОВКА ПОД ПРАВОЕ КРЫЛО -->
                             <path class="wing-placeholder" d="M 1080 62 H 1778 V 638 H 1462 V 458 H 1080 Z" />
                             <text x="1430" y="275" class="zone-title" text-anchor="middle" style="font-size: 14px;">Правое крыло (Шаг 3)</text>
 
-                            <!-- ЦЕНТРАЛЬНЫЙ БЛОК (X: 760..1080, Y: 60..545) -->
+                            <!-- ЛЕВОЕ КРЫЛО (X: 62..760) -->
+                            <rect class="corridor" x="62" y="305" width="698" height="40" />
+                            <text x="440" y="325" class="zone-title" text-anchor="middle">Главный коридор</text>
+                            <rect class="corridor" x="215" y="345" width="40" height="150" />
+
+                            <rect class="corridor" x="62" y="62" width="58" height="243" />
+                            <line x1="62" y1="115" x2="120" y2="115" stroke="rgba(255,255,255,0.15)" />
+                            <line x1="62" y1="165" x2="120" y2="165" stroke="rgba(255,255,255,0.15)" />
+                            <line x1="62" y1="215" x2="120" y2="215" stroke="rgba(255,255,255,0.15)" />
+                            <line x1="62" y1="265" x2="120" y2="265" stroke="rgba(255,255,255,0.15)" />
+                            <text x="91" y="183" class="zone-title" text-anchor="middle" transform="rotate(-90 91,183)">Лестница</text>
+
+                            <rect id="L2-01" class="room" x="120" y="62" width="210" height="243" />
+                            <text x="225" y="183" class="room-label">Учебный кабинет СД</text>
+
+                            <rect id="L2-02" class="room service" x="330" y="62" width="430" height="243" />
+                            <rect x="330" y="62" width="82" height="243" fill="rgba(255, 215, 0, 0.08)" stroke="rgba(255, 215, 0, 0.35)" stroke-dasharray="5 4" pointer-events="none" />
+                            <text x="371" y="183" class="zone-title" style="font-size: 9px;" text-anchor="middle" transform="rotate(-90 371,183)">Сцена</text>
+                            <text x="565" y="183" class="room-label" style="font-size: 14px;">Актовый зал</text>
+
+                            <rect id="L2-03" class="room" x="62" y="345" width="153" height="70" />
+                            <text x="138" y="380" class="room-label">Зам. директора</text>
+
+                            <rect id="L2-04" class="room" x="62" y="415" width="153" height="70" />
+                            <text x="138" y="450" class="room-label">Приёмная</text>
+
+                            <rect id="L2-05" class="room" x="62" y="485" width="153" height="153" />
+                            <text x="138" y="561" class="room-label">Кабинет директора</text>
+
+                            <rect id="L2-06" class="room service" x="255" y="345" width="125" height="75" />
+                            <text x="317" y="382" class="room-label">Санузел 1</text>
+
+                            <rect id="L2-07" class="room service" x="255" y="420" width="125" height="75" />
+                            <text x="317" y="457" class="room-label">Санузел 2</text>
+
+                            <rect id="L2-08" class="room" x="255" y="495" width="125" height="143" />
+                            <text x="317" y="566" class="room-label">Учебный кабинет СД</text>
+
+                            <rect id="L2-09" class="room service" x="380" y="345" width="54" height="113" />
+                            <text x="407" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 407,401)">Хоз. пом.</text>
+
+                            <rect id="L2-10" class="room" x="434" y="345" width="62" height="113" />
+                            <text x="465" y="401" class="room-label" style="font-size: 9px;" transform="rotate(-90 465,401)">Студсовет</text>
+
+                            <rect id="L2-11" class="room" x="496" y="345" width="66" height="113" />
+                            <text x="529" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 529,401)">Зам. дир. УВР</text>
+
+                            <rect id="L2-12" class="room" x="562" y="345" width="66" height="113" />
+                            <text x="595" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 595,401)">Зам. дир. НМР</text>
+
+                            <rect id="L2-13" class="room" x="628" y="345" width="66" height="113" />
+                            <text x="661" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 661,401)">Зам. дир. УПР</text>
+
+                            <rect id="L2-14" class="room" x="694" y="345" width="66" height="113" />
+                            <text x="727" y="401" class="room-label" style="font-size: 8.5px;" transform="rotate(-90 727,401)">Методист / ОП</text>
+                            <!-- ЦЕНТРАЛЬНЫЙ БЛОК (X: 760..1080) -->
                             <path id="C2-03" class="room service" d="M 760 220 H 1080 V 345 H 760 Z" />
                             <text x="920" y="282" class="room-label" style="font-size: 12px;">Рекреация</text>
 
@@ -72,26 +124,40 @@
                             <rect id="C2-02" class="room" x="1012" y="62" width="68" height="158" />
                             <text x="1046" y="141" class="room-label" style="font-size: 9.5px;" transform="rotate(-90 1046,141)">Методкабинет</text>
 
-                            <!-- Конференц-зал (выступает внизу строго по ширине входного тамбура 830..1010) -->
-                            <path id="C2-04" class="room service" d="M 760 345 H 1080 V 460 H 1010 V 545 H 830 V 460 H 760 Z" />
-                            <text x="920" y="435" class="room-label" style="font-size: 13px;">Конференц-зал</text>
+                            <rect id="C2-04" class="room service" x="760" y="345" width="320" height="150" />
+                            <text x="920" y="420" class="room-label" style="font-size: 13px;">Конференц-зал</text>
 
-                            <!-- Полукруглый балкон над крыльцом -->
-                            <path id="C2-05" class="room balcony-zone" d="M 845 545 A 75 58 0 0 0 995 545 Z" />
-                            <text x="920" y="578" class="room-label" style="font-size: 10px; fill: var(--gold);">Балкон</text>
+                            <path id="C2-05" class="room balcony-zone" d="M 835 495 A 85 65 0 0 0 1005 495 Z" />
+                            <text x="920" y="532" class="room-label" style="font-size: 10px; fill: var(--gold);">Балкон</text>
 
-                            <!-- ДВЕРНЫЕ ПРОЁМЫ ЦЕНТРА -->
+                            <!-- ДВЕРНЫЕ ПРОЁМЫ -->
                             <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
+                                <line x1="82" y1="305" x2="102" y2="305" />
+                                <line x1="215" y1="305" x2="235" y2="305" />
+                                <line x1="435" y1="305" x2="465" y2="305" />
+                                <line x1="680" y1="305" x2="710" y2="305" />
+                                <line x1="215" y1="372" x2="215" y2="388" />
+                                <line x1="215" y1="442" x2="215" y2="458" />
+                                <line x1="175" y1="485" x2="195" y2="485" />
+                                <line x1="255" y1="375" x2="255" y2="390" />
+                                <line x1="255" y1="450" x2="255" y2="465" />
+                                <line x1="255" y1="505" x2="255" y2="522" />
+                                <line x1="400" y1="345" x2="414" y2="345" />
+                                <line x1="458" y1="345" x2="472" y2="345" />
+                                <line x1="522" y1="345" x2="536" y2="345" />
+                                <line x1="588" y1="345" x2="602" y2="345" />
+                                <line x1="654" y1="345" x2="668" y2="345" />
+                                <line x1="720" y1="345" x2="734" y2="345" />
                                 <line x1="784" y1="220" x2="804" y2="220" />
                                 <line x1="1036" y1="220" x2="1056" y2="220" />
                                 <line x1="852" y1="220" x2="882" y2="220" />
                                 <line x1="958" y1="220" x2="988" y2="220" />
                                 <line x1="815" y1="345" x2="845" y2="345" />
                                 <line x1="995" y1="345" x2="1025" y2="345" />
-                                <line x1="905" y1="545" x2="935" y2="545" />
+                                <line x1="905" y1="495" x2="935" y2="495" />
                             </g>
 
-                            <!-- МАРКЕР «ВЫ ЗДЕСЬ» -->
+                            <!-- МАРКЕР «ВЫ ЗДЕСЬ» (срабатывает по ?loc=...) -->
                             <g id="youAreHereLayer" style="display: none;">
                                 <circle id="yahPulse" class="you-are-here-pulse" cx="0" cy="0" r="14" />
                                 <circle id="yahDot" class="you-are-here-dot" cx="0" cy="0" r="7" />
@@ -99,37 +165,47 @@
                                 <text id="yahLabel" class="you-are-here-text" x="0" y="-23">ВЫ ЗДЕСЬ</text>
                             </g>
                         </g>
-
-
                     </svg>
                 </div>
 
                 <div class="room-info-box">
                     <span class="badge" id="roomCodeBadge">КОД БЛОКА: —</span>
                     <h2 id="roomTitle">Выберите помещение</h2>
-                    <p id="roomDesc">Нажмите на помещение или выберите тестовую QR-точку ниже.</p>
+                    <p id="roomDesc">Используйте колёсико мыши для масштабирования, перетаскивайте карту и нажимайте на любой кабинет.</p>
 
                     <div class="map-legend">
                         <div class="legend-row"><span class="legend-dot" style="background: rgba(30, 41, 59, 0.85);"></span> Кабинеты</div>
-                        <div class="legend-row"><span class="legend-dot" style="background: rgba(255, 215, 0, 0.15); border-color: var(--gold);"></span> Рекреация, конференц-зал, балкон</div>
-                        <div class="legend-row"><span class="legend-dot" style="background: #ef4444; border-color: #fff;"></span> Метка «Вы здесь»</div>
-                    </div>
-
-                    <div class="qr-test-panel">
-                        <div class="qr-test-title">Тест QR-точек («Вы здесь»):</div>
-                        <div class="qr-btn-grid">
-                            <button class="qr-sim-btn" data-qr="QR-C2-STAIRS">Лестница 2 эт.</button>
-                            <button class="qr-sim-btn" data-qr="QR-C2-HALL">Рекреация</button>
-                            <button class="qr-sim-btn" data-qr="QR-C2-CONF">У конференц-зала</button>
-                            <button class="qr-sim-btn" data-qr="QR-CLEAR">Скрыть метку</button>
-                        </div>
+                        <div class="legend-row"><span class="legend-dot" style="background: rgba(255, 215, 0, 0.15); border-color: var(--gold);"></span> Рекреация, залы, балкон</div>
+                        <div class="legend-row"><span class="legend-dot" style="background: var(--gold);"></span> Выбранное помещение</div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+    <footer class="glass-footer">
+        <div class="footer-container">
+            <div class="footer-bottom" style="margin-top: 0; border: none; padding-top: 0;">
+                © 2026 PERMYAKOV DESIGN | ТЕСТОВАЯ СБОРКА НАВИГАТОРА ГБПОУ РС(Я) «ГГТ»
+            </div>
+        </div>
+    </footer>
+
     <script>
         const floorData = {
+            'L2-01': { title: 'Учебный кабинет СД (L2-01)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-02': { title: 'Актовый зал (L2-02)', desc: 'ГК, 2 этаж, левое крыло (сцена / эстрада)' },
+            'L2-03': { title: 'Заместитель директора (L2-03)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-04': { title: 'Приёмная директора (L2-04)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-05': { title: 'Кабинет директора (L2-05)', desc: 'ГК, 2 этаж, левое крыло (вход через приёмную)' },
+            'L2-06': { title: 'Санузел 1 (L2-06)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-07': { title: 'Санузел 2 (L2-07)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-08': { title: 'Учебный кабинет СД (L2-08)', desc: 'ГК, 2 этаж, левое крыло (торцевой выступ)' },
+            'L2-09': { title: 'Хозяйственное помещение (L2-09)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-10': { title: 'Студсовет / Студенческий орган (L2-10)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-11': { title: 'Зам. директора по УВР (L2-11)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-12': { title: 'Зам. директора по НМР (L2-12)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-13': { title: 'Зам. директора по УПР (L2-13)', desc: 'ГК, 2 этаж, левое крыло' },
+            'L2-14': { title: 'Методист / Отдел практики (L2-14)', desc: 'ГК, 2 этаж, левое крыло' },
             'C2-01': { title: 'Служебное помещение (C2-01)', desc: 'ГК, 2 этаж, центральный блок (слева от лестницы)' },
             'C2-02': { title: 'Методический кабинет (C2-02)', desc: 'ГК, 2 этаж, центральный блок (справа от лестницы)' },
             'C2-03': { title: 'Рекреация (C2-03)', desc: 'ГК, 2 этаж, центральный холл между крыльями' },
@@ -138,9 +214,9 @@
         };
 
         const qrPoints = {
-            'QR-C2-STAIRS': { x: 920, y: 212, roomId: 'C2-03', title: 'Вы у центральной лестницы (2 этаж)', desc: 'ГК, 2 этаж. Прямо — рекреация и конференц-зал.' },
-            'QR-C2-HALL': { x: 920, y: 292, roomId: 'C2-03', title: 'Вы в центральной рекреации (2 этаж)', desc: 'ГК, 2 этаж. Переход между левым и правым крыльями.' },
-            'QR-C2-CONF': { x: 830, y: 365, roomId: 'C2-04', title: 'Вы у входа в Конференц-зал (2 этаж)', desc: 'ГК, 2 этаж, центральный блок.' }
+            'QR-C2-STAIRS': { x: 920, y: 212, roomId: 'C2-03', title: 'Вы у центральной лестницы (2 этаж)', desc: 'ГК, 2 этаж. Налево — актовый зал и администрация, направо — библиотека.' },
+            'QR-C2-HALL': { x: 920, y: 282, roomId: 'C2-03', title: 'Вы в центральной рекреации (2 этаж)', desc: 'ГК, 2 этаж. Центр здания.' },
+            'QR-L2-HALL': { x: 565, y: 325, roomId: 'L2-02', title: 'Вы в коридоре у Актового зала (2 этаж)', desc: 'ГК, 2 этаж, левое крыло.' }
         };
 
         const viewport = document.getElementById('mapViewport');
@@ -161,8 +237,7 @@
 
         function showYouAreHere(locKey) {
             const layer = document.getElementById('youAreHereLayer');
-            document.querySelectorAll('.qr-sim-btn').forEach(b => b.classList.remove('active'));
-            if (!locKey || locKey === 'QR-CLEAR' || !qrPoints[locKey]) {
+            if (!locKey || !qrPoints[locKey]) {
                 layer.style.display = 'none';
                 return;
             }
@@ -182,8 +257,6 @@
             document.getElementById('roomCodeBadge').textContent = `QR-ТОЧКА: ${locKey}`;
             document.getElementById('roomTitle').textContent = pt.title;
             document.getElementById('roomDesc').textContent = pt.desc;
-            const activeBtn = document.querySelector(`.qr-sim-btn[data-qr="${locKey}"]`);
-            if (activeBtn) activeBtn.classList.add('active');
 
             scale = 1.55;
             pointX = (SVG_W / 2) - pt.x * scale;
@@ -232,10 +305,6 @@
                 document.getElementById('roomTitle').textContent = info.title;
                 document.getElementById('roomDesc').textContent = info.desc;
             });
-        });
-
-        document.querySelectorAll('.qr-sim-btn').forEach(btn => {
-            btn.addEventListener('click', () => showYouAreHere(btn.dataset.qr));
         });
 
         window.addEventListener('DOMContentLoaded', () => {
