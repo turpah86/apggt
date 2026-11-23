@@ -285,11 +285,11 @@
     box-shadow: 0 0 18px rgba(255, 215, 0, 0.28);
 }
 
-.floor-svg {
+.svg-container svg.floor-svg {
     display: none;
 }
 
-.floor-svg.active {
+.svg-container svg.floor-svg.active {
     display: block;
 }
 
