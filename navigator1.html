@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Пермяков А.Н. | Навигатор — 1 этаж (Лабораторный корпус)</title>
+    <title>Пермяков А.Н. | Навигатор — ГК 2 этаж (Тест: Центр)</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="navigator.css">
 </head>
@@ -15,8 +15,8 @@
             <a href="index.html" style="color: var(--gold); font-weight: 800; text-decoration: none; font-size: 1.2rem;">ПЕРМЯКОВ А.Н.</a>
             <div class="nav-links">
                 <a href="index.html">Главная</a>
-                <a href="navigator.html">1 этаж (Главный)</a>
-                <a href="navigator1.html" style="color: var(--gold);">Лабораторный корпус</a>
+                <a href="navigator.html">1 этаж (общий)</a>
+                <a href="navigator1.html" style="color: var(--gold);">Тест: ГК 2 этаж</a>
             </div>
         </div>
     </nav>
@@ -25,157 +25,213 @@
         <a href="index.html" class="back-btn">← Назад на главную</a>
 
         <div class="glass-card">
-            <span class="badge">ЧЕРТЕЖ: ПЛАН 1 ЭТАЖА В ОСЯХ 5–21; Л–У</span>
-            <h1 style="margin-bottom: 10px; font-size: 2rem;">Лабораторный корпус и Спортзал (1 этаж)</h1>
-            <p style="color: var(--text-dim); margin-bottom: 25px;">Нажмите на любое помещение, чтобы увидеть его технический ID и проверить планировку.</p>
+            <span class="badge">СБОРКА ПЛАНА • ГЛАВНЫЙ КОРПУС • 2 ЭТАЖ (ШАГ 1: ЦЕНТР)</span>
+            <h1 style="margin-bottom: 10px; font-size: 2rem;">Главный корпус — 2 этаж</h1>
+            <p style="color: var(--text-dim); margin-bottom: 20px;">Проверяем центральный блок (оси 9–17) и работу меток «Вы здесь» по QR-кодам (?loc=код).</p>
 
             <div class="map-workspace">
-                <div class="svg-container">
-                    <svg id="floor-1-back" viewBox="0 0 1280 680">
-                        <path class="building-shell" d="M 60 60 H 1220 V 380 H 800 V 600 H 740 M 670 600 H 590 M 520 600 H 460 V 380 H 60 V 60" />
+                <div class="svg-container" id="mapViewport">
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" id="zoomIn" title="Приблизить">+</button>
+                        <button class="zoom-btn" id="zoomOut" title="Отдалить">−</button>
+                        <button class="zoom-btn reset" id="zoomReset" title="Показать весь этаж">Весь этаж</button>
+                    </div>
 
-                        <text x="555" y="625" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ Вход из вестибюля</text>
-                        <text x="705" y="625" style="font-size: 10px; font-weight: 700; fill: var(--gold);" text-anchor="middle">↑ Вход из вестибюля</text>
+                    <svg id="gk-floor-2" viewBox="0 0 1840 760" preserveAspectRatio="xMidYMid meet">
+                        <g id="mapPanZoomGroup">
+                            <path class="building-shell" d="M 60 60 H 1780 V 640 H 1460 V 490 H 1080 V 560 H 760 V 490 H 380 V 640 H 60 Z" />
 
-                        <!-- Коридоры -->
-                        <rect class="corridor" x="62" y="195" width="573" height="38" />
-                        <text x="275" y="214" class="zone-title" text-anchor="middle">Коридор</text>
+                            <rect class="wing-placeholder" x="62" y="62" width="698" height="576" />
+                            <text x="410" y="340" class="zone-title" text-anchor="middle" style="font-size: 14px;">Левое крыло (Шаг 2)</text>
 
-                        <path class="corridor" d="M 460 600 V 530 H 595 V 233 H 635 V 62 H 665 V 350 H 800 V 380 H 665 V 530 H 800 V 600 Z" />
+                            <rect class="wing-placeholder" x="1080" y="62" width="698" height="576" />
+                            <text x="1430" y="340" class="zone-title" text-anchor="middle" style="font-size: 14px;">Правое крыло (Шаг 3)</text>
 
-                        <!-- Левая часть: мастерские -->
-                        <rect id="B1-01" class="room service" x="62" y="62" width="46" height="133" />
-                        <text x="85" y="128" class="room-label" style="font-size:8.5px;" transform="rotate(-90 85,128)">Лаборантская</text>
+                            <path id="C2-03" class="room service" d="M 760 220 H 1080 V 365 H 760 Z" />
+                            <text x="920" y="292" class="room-label" style="font-size: 12px;">Рекреация</text>
 
-                        <rect id="B1-02" class="room" x="108" y="62" width="352" height="133" />
-                        <text x="284" y="128" class="room-label">Сварочный цех</text>
+                            <rect id="C2-01" class="room" x="760" y="62" width="68" height="158" />
+                            <text x="794" y="141" class="room-label" style="font-size: 9.5px;" transform="rotate(-90 794,141)">Служебное пом.</text>
 
-                        <rect class="corridor" x="62" y="233" width="46" height="147" />
-                        <text x="85" y="306" class="zone-title" style="font-size:9px;" text-anchor="middle" transform="rotate(-90 85,306)">Тамбур</text>
+                            <g id="C2-stairs">
+                                <rect x="828" y="62" width="184" height="158" fill="#0f172a" stroke="rgba(255, 215, 0, 0.55)" stroke-width="1.8" />
+                                <rect x="840" y="96" width="52" height="106" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.25)" />
+                                <line x1="840" y1="120" x2="892" y2="120" stroke="rgba(255,255,255,0.25)" />
+                                <line x1="840" y1="145" x2="892" y2="145" stroke="rgba(255,255,255,0.25)" />
+                                <line x1="840" y1="170" x2="892" y2="170" stroke="rgba(255,255,255,0.25)" />
+                                <rect x="948" y="96" width="52" height="106" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.25)" />
+                                <line x1="948" y1="120" x2="1000" y2="120" stroke="rgba(255,255,255,0.25)" />
+                                <line x1="948" y1="145" x2="1000" y2="145" stroke="rgba(255,255,255,0.25)" />
+                                <line x1="948" y1="170" x2="1000" y2="170" stroke="rgba(255,255,255,0.25)" />
+                                <text x="920" y="80" class="zone-title" style="font-size: 8.5px;" text-anchor="middle">Центральная лестница</text>
+                            </g>
 
-                        <rect id="B1-03" class="room" x="108" y="233" width="127" height="147" />
-                        <text x="171" y="306" class="room-label">Электромонтажная</text>
+                            <rect id="C2-02" class="room" x="1012" y="62" width="68" height="158" />
+                            <text x="1046" y="141" class="room-label" style="font-size: 9.5px;" transform="rotate(-90 1046,141)">Методкабинет</text>
 
-                        <rect id="B1-04" class="room" x="235" y="233" width="252" height="147" />
-                        <text x="361" y="306" class="room-label">Мастерская МРОА</text>
+                            <rect id="C2-04" class="room service" x="760" y="365" width="320" height="195" />
+                            <text x="920" y="462" class="room-label" style="font-size: 13px;">Конференц-зал</text>
 
-                        <!-- Центральный узел и ножка "Т" -->
-                        <rect class="corridor" x="460" y="62" width="55" height="133" />
-                        <line x1="460" y1="95" x2="515" y2="95" stroke="rgba(255,255,255,0.2)" />
-                        <line x1="460" y1="128" x2="515" y2="128" stroke="rgba(255,255,255,0.2)" />
-                        <line x1="460" y1="161" x2="515" y2="161" stroke="rgba(255,255,255,0.2)" />
-                        <text x="487" y="128" class="zone-title" text-anchor="middle" transform="rotate(-90 487,128)">Лестница</text>
+                            <path id="C2-05" class="room balcony-zone" d="M 820 560 A 100 72 0 0 0 1020 560 Z" />
+                            <text x="920" y="602" class="room-label" style="font-size: 10px; fill: var(--gold);">Балкон</text>
 
-                        <rect id="B1-07" class="room" x="515" y="62" width="80" height="133" />
-                        <text x="555" y="122" class="room-label" style="font-size: 9px;">Кабинет</text>
-                        <text x="555" y="135" class="room-label" style="font-size: 9px;">физруков</text>
+                            <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
+                                <line x1="784" y1="220" x2="804" y2="220" />
+                                <line x1="1036" y1="220" x2="1056" y2="220" />
+                                <line x1="852" y1="220" x2="882" y2="220" />
+                                <line x1="958" y1="220" x2="988" y2="220" />
+                                <line x1="815" y1="365" x2="845" y2="365" />
+                                <line x1="995" y1="365" x2="1025" y2="365" />
+                                <line x1="905" y1="560" x2="935" y2="560" />
+                            </g>
 
-                        <rect id="B1-08a" class="room service" x="487" y="233" width="108" height="91" />
-                        <text x="541" y="278" class="room-label">Снарядная</text>
-
-                        <rect id="B1-08b" class="room service" x="487" y="324" width="108" height="56" />
-                        <text x="541" y="352" class="room-label">Инвентарная</text>
-
-                        <rect id="B1-05" class="room service" x="460" y="380" width="135" height="150" />
-                        <text x="527" y="455" class="room-label">Тех. помещение</text>
-
-                        <rect id="B1-06" class="room" x="665" y="380" width="135" height="150" />
-                        <text x="732" y="455" class="room-label">Тренажёрный зал</text>
-
-                        <!-- Ряд вдоль спортзала -->
-                        <rect id="B1-09" class="room service" x="665" y="62" width="135" height="72" />
-                        <text x="732" y="98" class="room-label">Снарядная</text>
-
-                        <path id="B1-10" class="room service" d="M 665 134 H 800 V 178 H 733 V 242 H 665 Z" />
-                        <text x="700" y="160" class="room-label" style="font-size: 9px;">Женская</text>
-                        <text x="700" y="172" class="room-label" style="font-size: 9px;">раздевалка</text>
-
-                        <rect id="B1-11a" class="room service" x="733" y="178" width="67" height="64" />
-                        <text x="766" y="210" class="room-label" style="font-size:8.5px;">Душ / С/У</text>
-
-                        <rect id="B1-11b" class="room service" x="733" y="242" width="67" height="64" />
-                        <text x="766" y="274" class="room-label" style="font-size:8.5px;">Душ / С/У</text>
-
-                        <path id="B1-12" class="room service" d="M 665 242 H 733 V 306 H 800 V 350 H 665 Z" />
-                        <text x="700" y="318" class="room-label" style="font-size: 9px;">Мужская</text>
-                        <text x="700" y="330" class="room-label" style="font-size: 9px;">раздевалка</text>
-
-                        <!-- Спортивный зал -->
-                        <rect id="B1-13" class="room service" x="800" y="62" width="418" height="318" />
-                        <text x="1009" y="221" class="room-label" style="font-size: 14px;">Спортивный зал</text>
-
-                        <!-- Дверные проемы -->
-                        <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
-                            <line x1="78" y1="195" x2="92" y2="195" />
-                            <line x1="122" y1="195" x2="142" y2="195" />
-                            <line x1="426" y1="195" x2="446" y2="195" />
-                            <line x1="548" y1="195" x2="564" y2="195" />
-                            <line x1="122" y1="233" x2="142" y2="233" />
-                            <line x1="248" y1="233" x2="272" y2="233" />
-                            <line x1="532" y1="233" x2="550" y2="233" />
-                            <line x1="595" y1="344" x2="595" y2="360" />
-                            <line x1="595" y1="445" x2="595" y2="465" />
-                            <line x1="665" y1="445" x2="665" y2="465" />
-                            <line x1="665" y1="202" x2="665" y2="218" />
-                            <line x1="665" y1="266" x2="665" y2="282" />
-                            <line x1="800" y1="90" x2="800" y2="110" />
-                            <line x1="800" y1="356" x2="800" y2="374" />
+                            <g id="youAreHereLayer" style="display: none;">
+                                <circle id="yahPulse" class="you-are-here-pulse" cx="0" cy="0" r="14" />
+                                <circle id="yahDot" class="you-are-here-dot" cx="0" cy="0" r="7" />
+                                <rect id="yahBadge" class="you-are-here-tag" x="-44" y="-32" width="88" height="18" rx="5" />
+                                <text id="yahLabel" class="you-are-here-text" x="0" y="-23">ВЫ ЗДЕСЬ</text>
+                            </g>
                         </g>
                     </svg>
                 </div>
+
                 <div class="room-info-box">
                     <span class="badge" id="roomCodeBadge">КОД БЛОКА: —</span>
                     <h2 id="roomTitle">Выберите помещение</h2>
-                    <p id="roomDesc">Проверьте планировку лабораторного корпуса и спортивного зала на 1 этаже.</p>
+                    <p id="roomDesc">Нажмите на помещение или выберите тестовую QR-точку ниже.</p>
 
                     <div class="map-legend">
-                        <div class="legend-row"><span class="legend-dot" style="background: rgba(30, 41, 59, 0.85);"></span> Мастерские и тренажёрный зал</div>
-                        <div class="legend-row"><span class="legend-dot" style="background: rgba(255, 215, 0, 0.15); border-color: var(--gold);"></span> Спортзал, раздевалки, подсобные</div>
-                        <div class="legend-row"><span class="legend-dot" style="background: var(--gold);"></span> Выбранное помещение</div>
+                        <div class="legend-row"><span class="legend-dot" style="background: rgba(30, 41, 59, 0.85);"></span> Кабинеты</div>
+                        <div class="legend-row"><span class="legend-dot" style="background: rgba(255, 215, 0, 0.15); border-color: var(--gold);"></span> Рекреация, конференц-зал, балкон</div>
+                        <div class="legend-row"><span class="legend-dot" style="background: #ef4444; border-color: #fff;"></span> Метка «Вы здесь»</div>
+                    </div>
+
+                    <div class="qr-test-panel">
+                        <div class="qr-test-title">Тест QR-точек («Вы здесь»):</div>
+                        <div class="qr-btn-grid">
+                            <button class="qr-sim-btn" data-qr="QR-C2-STAIRS">Лестница 2 эт.</button>
+                            <button class="qr-sim-btn" data-qr="QR-C2-HALL">Рекреация</button>
+                            <button class="qr-sim-btn" data-qr="QR-C2-CONF">У конференц-зала</button>
+                            <button class="qr-sim-btn" data-qr="QR-CLEAR">Скрыть метку</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
-    <footer class="glass-footer">
-        <div class="footer-container">
-            <div class="footer-bottom" style="margin-top: 0; border: none; padding-top: 0;">
-                © 2026 PERMYAKOV DESIGN | ИНТЕРАКТИВНАЯ КАРТА ГБПОУ РС(Я) «ГГТ»
-            </div>
-        </div>
-    </footer>
-
     <script>
-        const backWing1 = {
-            'B1-01': { title: 'Лаборантская', desc: '1 этаж, лабораторный корпус' },
-            'B1-02': { title: 'Сварочный цех', desc: '1 этаж, лабораторный корпус' },
-            'B1-03': { title: 'Электромонтажная', desc: '1 этаж, лабораторный корпус' },
-            'B1-04': { title: 'Мастерская МРОА', desc: '1 этаж, лабораторный корпус' },
-            'B1-05': { title: 'Тех. помещение', desc: '1 этаж, переходной блок' },
-            'B1-06': { title: 'Тренажёрный зал', desc: '1 этаж, переходной блок' },
-            'B1-07': { title: 'Кабинет физруков', desc: '1 этаж, центральный узел' },
-            'B1-08a': { title: 'Снарядная', desc: '1 этаж, центральный узел' },
-            'B1-08b': { title: 'Инвентарная', desc: '1 этаж, центральный узел' },
-            'B1-09': { title: 'Снарядная', desc: '1 этаж, спортивный блок' },
-            'B1-10': { title: 'Женская раздевалка', desc: '1 этаж, спортивный блок' },
-            'B1-11a': { title: 'Душ / Санузел (жен.)', desc: '1 этаж, спортивный блок' },
-            'B1-11b': { title: 'Душ / Санузел (муж.)', desc: '1 этаж, спортивный блок' },
-            'B1-12': { title: 'Мужская раздевалка', desc: '1 этаж, спортивный блок' },
-            'B1-13': { title: 'Спортивный зал', desc: '1 этаж, спортивный блок' }
+        const floorData = {
+            'C2-01': { title: 'Служебное помещение (C2-01)', desc: 'ГК, 2 этаж, центральный блок (слева от лестницы)' },
+            'C2-02': { title: 'Методический кабинет (C2-02)', desc: 'ГК, 2 этаж, центральный блок (справа от лестницы)' },
+            'C2-03': { title: 'Рекреация (C2-03)', desc: 'ГК, 2 этаж, центральный холл между крыльями' },
+            'C2-04': { title: 'Конференц-зал (C2-04)', desc: 'ГК, 2 этаж, центральный блок (выход на балкон)' },
+            'C2-05': { title: 'Балкон (C2-05)', desc: 'ГК, 2 этаж, балкон над главным входом' }
         };
 
-        document.querySelectorAll('.room').forEach(room => {
-            room.addEventListener('click', () => {
-                document.querySelectorAll('.room').forEach(r => r.classList.remove('selected'));
-                room.classList.add('selected');
-                const info = backWing1[room.id];
-                if (info) {
-                    document.getElementById('roomCodeBadge').textContent = `БЛОК: ${room.id}`;
-                    document.getElementById('roomTitle').textContent = info.title;
-                    document.getElementById('roomDesc').textContent = info.desc;
-                }
+        const qrPoints = {
+            'QR-C2-STAIRS': { x: 920, y: 212, roomId: 'C2-03', title: 'Вы у центральной лестницы (2 этаж)', desc: 'ГК, 2 этаж. Прямо — рекреация и конференц-зал.' },
+            'QR-C2-HALL': { x: 920, y: 292, roomId: 'C2-03', title: 'Вы в центральной рекреации (2 этаж)', desc: 'ГК, 2 этаж. Переход между левым и правым крыльями.' },
+            'QR-C2-CONF': { x: 830, y: 365, roomId: 'C2-04', title: 'Вы у входа в Конференц-зал (2 этаж)', desc: 'ГК, 2 этаж, центральный блок.' }
+        };
+
+        const viewport = document.getElementById('mapViewport');
+        const svgEl = document.getElementById('gk-floor-2');
+        const group = document.getElementById('mapPanZoomGroup');
+        const SVG_W = 1840, SVG_H = 760;
+        let scale = 1, pointX = 0, pointY = 0, startX = 0, startY = 0, isPanning = false, hasMoved = false;
+
+        function getSvgScaleRatio() {
+            const rect = svgEl.getBoundingClientRect();
+            return rect.width ? (SVG_W / rect.width) : 1;
+        }
+
+        function updateTransform(smooth = false) {
+            group.style.transition = smooth ? 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)' : 'none';
+            group.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        }
+
+        function showYouAreHere(locKey) {
+            const layer = document.getElementById('youAreHereLayer');
+            document.querySelectorAll('.qr-sim-btn').forEach(b => b.classList.remove('active'));
+            if (!locKey || locKey === 'QR-CLEAR' || !qrPoints[locKey]) {
+                layer.style.display = 'none';
+                return;
+            }
+            const pt = qrPoints[locKey];
+            document.getElementById('yahPulse').setAttribute('cx', pt.x);
+            document.getElementById('yahPulse').setAttribute('cy', pt.y);
+            document.getElementById('yahDot').setAttribute('cx', pt.x);
+            document.getElementById('yahDot').setAttribute('cy', pt.y);
+            document.getElementById('yahBadge').setAttribute('x', pt.x - 44);
+            document.getElementById('yahBadge').setAttribute('y', pt.y - 32);
+            document.getElementById('yahLabel').setAttribute('x', pt.x);
+            document.getElementById('yahLabel').setAttribute('y', pt.y - 23);
+            layer.style.display = 'block';
+
+            document.querySelectorAll('.room.selected').forEach(r => r.classList.remove('selected'));
+            if (pt.roomId && document.getElementById(pt.roomId)) document.getElementById(pt.roomId).classList.add('selected');
+            document.getElementById('roomCodeBadge').textContent = `QR-ТОЧКА: ${locKey}`;
+            document.getElementById('roomTitle').textContent = pt.title;
+            document.getElementById('roomDesc').textContent = pt.desc;
+            const activeBtn = document.querySelector(`.qr-sim-btn[data-qr="${locKey}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            scale = 1.55;
+            pointX = (SVG_W / 2) - pt.x * scale;
+            pointY = (SVG_H / 2) - pt.y * scale;
+            updateTransform(true);
+        }
+
+        viewport.addEventListener('mousedown', (e) => {
+            if (e.button !== 0 || e.target.closest('.zoom-controls')) return;
+            isPanning = true; hasMoved = false; startX = e.clientX; startY = e.clientY;
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!isPanning) return;
+            const dx = (e.clientX - startX) * getSvgScaleRatio();
+            const dy = (e.clientY - startY) * getSvgScaleRatio();
+            if (Math.abs(e.clientX - startX) > 3 || Math.abs(e.clientY - startY) > 3) hasMoved = true;
+            pointX += dx; pointY += dy; startX = e.clientX; startY = e.clientY;
+            updateTransform(false);
+        });
+        window.addEventListener('mouseup', () => { isPanning = false; });
+
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const rect = svgEl.getBoundingClientRect();
+            const ratio = getSvgScaleRatio();
+            const xs = ((e.clientX - rect.left) * ratio - pointX) / scale;
+            const ys = ((e.clientY - rect.top) * ratio - pointY) / scale;
+            const newScale = Math.min(Math.max(scale * (e.deltaY < 0 ? 1.18 : 0.85), 0.7), 6);
+            pointX = (e.clientX - rect.left) * ratio - xs * newScale;
+            pointY = (e.clientY - rect.top) * ratio - ys * newScale;
+            scale = newScale;
+            updateTransform(false);
+        }, { passive: false });
+
+        document.getElementById('zoomIn').addEventListener('click', () => { scale = Math.min(scale * 1.3, 6); updateTransform(true); });
+        document.getElementById('zoomOut').addEventListener('click', () => { scale = Math.max(scale / 1.3, 0.7); updateTransform(true); });
+        document.getElementById('zoomReset').addEventListener('click', () => { scale = 1; pointX = 0; pointY = 0; updateTransform(true); });
+
+        document.querySelectorAll('.room').forEach(el => {
+            el.addEventListener('click', () => {
+                if (hasMoved) return;
+                document.querySelectorAll('.room.selected').forEach(r => r.classList.remove('selected'));
+                el.classList.add('selected');
+                const info = floorData[el.id] || { title: el.id, desc: 'Главный корпус, 2 этаж' };
+                document.getElementById('roomCodeBadge').textContent = `КОД БЛОКА: ${el.id}`;
+                document.getElementById('roomTitle').textContent = info.title;
+                document.getElementById('roomDesc').textContent = info.desc;
             });
+        });
+
+        document.querySelectorAll('.qr-sim-btn').forEach(btn => {
+            btn.addEventListener('click', () => showYouAreHere(btn.dataset.qr));
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const loc = new URLSearchParams(window.location.search).get('loc');
+            if (loc) showYouAreHere(loc);
         });
     </script>
 </body>
