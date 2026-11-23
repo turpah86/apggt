@@ -39,16 +39,19 @@
 
                     <svg id="gk-floor-2" viewBox="0 0 1840 760" preserveAspectRatio="xMidYMid meet">
                         <g id="mapPanZoomGroup">
-                            <path class="building-shell" d="M 60 60 H 1780 V 640 H 1460 V 490 H 1080 V 560 H 760 V 490 H 380 V 640 H 60 Z" />
+                            <!-- ВНЕШНИЙ КОНТУР ГЛАВНОГО КОРПУСА (точно по геометрии 1 этажа) -->
+                            <path class="building-shell" d="M 60 60 H 1780 V 640 H 1460 V 460 H 1080 V 560 H 760 V 460 H 380 V 640 H 60 Z" />
 
-                            <rect class="wing-placeholder" x="62" y="62" width="698" height="576" />
-                            <text x="410" y="340" class="zone-title" text-anchor="middle" style="font-size: 14px;">Левое крыло (Шаг 2)</text>
+                            <!-- ЗАГОТОВКИ ПОД ЛЕВОЕ И ПРАВОЕ КРЫЛЬЯ (повторяют реальный контур) -->
+                            <path class="wing-placeholder" d="M 62 62 H 760 V 458 H 378 V 638 H 62 Z" />
+                            <text x="410" y="275" class="zone-title" text-anchor="middle" style="font-size: 14px;">Левое крыло (Шаг 2)</text>
 
-                            <rect class="wing-placeholder" x="1080" y="62" width="698" height="576" />
-                            <text x="1430" y="340" class="zone-title" text-anchor="middle" style="font-size: 14px;">Правое крыло (Шаг 3)</text>
+                            <path class="wing-placeholder" d="M 1080 62 H 1778 V 638 H 1462 V 458 H 1080 Z" />
+                            <text x="1430" y="275" class="zone-title" text-anchor="middle" style="font-size: 14px;">Правое крыло (Шаг 3)</text>
 
-                            <path id="C2-03" class="room service" d="M 760 220 H 1080 V 365 H 760 Z" />
-                            <text x="920" y="292" class="room-label" style="font-size: 12px;">Рекреация</text>
+                            <!-- ЦЕНТРАЛЬНЫЙ БЛОК (X: 760..1080, Y: 60..560) -->
+                            <path id="C2-03" class="room service" d="M 760 220 H 1080 V 350 H 760 Z" />
+                            <text x="920" y="285" class="room-label" style="font-size: 12px;">Рекреация</text>
 
                             <rect id="C2-01" class="room" x="760" y="62" width="68" height="158" />
                             <text x="794" y="141" class="room-label" style="font-size: 9.5px;" transform="rotate(-90 794,141)">Служебное пом.</text>
@@ -69,22 +72,24 @@
                             <rect id="C2-02" class="room" x="1012" y="62" width="68" height="158" />
                             <text x="1046" y="141" class="room-label" style="font-size: 9.5px;" transform="rotate(-90 1046,141)">Методкабинет</text>
 
-                            <rect id="C2-04" class="room service" x="760" y="365" width="320" height="195" />
-                            <text x="920" y="462" class="room-label" style="font-size: 13px;">Конференц-зал</text>
+                            <rect id="C2-04" class="room service" x="760" y="350" width="320" height="210" />
+                            <text x="920" y="455" class="room-label" style="font-size: 13px;">Конференц-зал</text>
 
                             <path id="C2-05" class="room balcony-zone" d="M 820 560 A 100 72 0 0 0 1020 560 Z" />
                             <text x="920" y="602" class="room-label" style="font-size: 10px; fill: var(--gold);">Балкон</text>
 
+                            <!-- ДВЕРНЫЕ ПРОЁМЫ ЦЕНТРА -->
                             <g stroke="#ffd700" stroke-width="3.5" stroke-linecap="round">
                                 <line x1="784" y1="220" x2="804" y2="220" />
                                 <line x1="1036" y1="220" x2="1056" y2="220" />
                                 <line x1="852" y1="220" x2="882" y2="220" />
                                 <line x1="958" y1="220" x2="988" y2="220" />
-                                <line x1="815" y1="365" x2="845" y2="365" />
-                                <line x1="995" y1="365" x2="1025" y2="365" />
+                                <line x1="815" y1="350" x2="845" y2="350" />
+                                <line x1="995" y1="350" x2="1025" y2="350" />
                                 <line x1="905" y1="560" x2="935" y2="560" />
                             </g>
 
+                            <!-- МАРКЕР «ВЫ ЗДЕСЬ» -->
                             <g id="youAreHereLayer" style="display: none;">
                                 <circle id="yahPulse" class="you-are-here-pulse" cx="0" cy="0" r="14" />
                                 <circle id="yahDot" class="you-are-here-dot" cx="0" cy="0" r="7" />
@@ -92,6 +97,7 @@
                                 <text id="yahLabel" class="you-are-here-text" x="0" y="-23">ВЫ ЗДЕСЬ</text>
                             </g>
                         </g>
+
                     </svg>
                 </div>
 
