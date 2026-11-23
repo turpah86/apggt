@@ -47,9 +47,15 @@
                     <!-- ========================================================= -->
                     <!-- КАРТА 1: ГЛАВНЫЙ КОРПУС — 1 ЭТАЖ (твой оригинал без ЛК)   -->
                     <!-- ========================================================= -->
-                    <svg id="svg-gk-1" class="floor-svg active" viewBox="140 570 1640 660" preserveAspectRatio="xMidYMid meet">
+                    <svg id="svg-gk-1" class="floor-svg active" viewBox="140 560 1640 645" preserveAspectRatio="xMidYMid meet">
                         <g class="pan-zoom-group">
-                            <path class="building-shell" d="M 790 600 H 170 V 1200 H 470 V 1010 H 790 V 1090 H 860 M 1060 1090 H 1130 V 1010 H 1450 V 1200 H 1750 V 600 H 1130" />
+                            <!-- Замкнутый контур 1 этажа ГК -->
+                            <path class="building-shell" d="M 170 600 H 1750 V 1200 H 1450 V 1010 H 1130 V 1090 H 1060 M 860 1090 H 790 V 1010 H 470 V 1200 H 170 Z" />
+                    
+                            <!-- Отметка перехода в Лабораторный корпус (спортзал / мастерские) -->
+                            <rect x="865" y="572" width="190" height="28" rx="4" fill="rgba(255, 215, 0, 0.08)" stroke="rgba(255, 215, 0, 0.45)" stroke-dasharray="4 3" />
+                            <text x="960" y="586" class="zone-title" style="font-size: 8.5px; fill: var(--gold);" text-anchor="middle">↑ Переход в ЛК (Спортзал)</text>
+
 
                             <!-- ЛЕВОЕ КРЫЛО 1 ЭТАЖ -->
                             <rect class="corridor" x="172" y="850" width="618" height="40" />
