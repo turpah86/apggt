@@ -199,4 +199,96 @@
     .room-info-box h2 {
         font-size: 1.2rem;
     }
+    /* Заготовки крыльев при пошаговой сборке */
+    .wing-placeholder {
+        fill: rgba(255, 255, 255, 0.015);
+        stroke: rgba(255, 215, 0, 0.25);
+        stroke-width: 1.5;
+        stroke-dasharray: 8 6;
+    }
+    
+    /* Балкон */
+    .balcony-zone {
+        fill: rgba(255, 215, 0, 0.07);
+        stroke: rgba(255, 215, 0, 0.55);
+        stroke-width: 2;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .balcony-zone:hover,
+    .balcony-zone.selected {
+        fill: rgba(255, 215, 0, 0.25);
+        stroke: #ffffff;
+    }
+    
+    /* Пульсирующая метка «Вы здесь» (QR-навигация) */
+    @keyframes pulseRing {
+        0% { transform: scale(0.7); opacity: 0.95; }
+        100% { transform: scale(2.4); opacity: 0; }
+    }
+    .you-are-here-pulse {
+        fill: none;
+        stroke: #ef4444;
+        stroke-width: 3;
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: pulseRing 1.8s infinite ease-out;
+        pointer-events: none;
+    }
+    .you-are-here-dot {
+        fill: #ef4444;
+        stroke: #ffffff;
+        stroke-width: 2.5;
+        pointer-events: none;
+    }
+    .you-are-here-tag {
+        fill: #ef4444;
+        stroke: #ffffff;
+        stroke-width: 1.2;
+    }
+    .you-are-here-text {
+        fill: #ffffff;
+        font-size: 10px;
+        font-weight: 800;
+        text-anchor: middle;
+        dominant-baseline: middle;
+        letter-spacing: 0.04em;
+        pointer-events: none;
+    }
+    
+    /* Тестовая панель QR-точек в боковой карточке */
+    .qr-test-panel {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .qr-test-title {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--gold);
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .qr-btn-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .qr-sim-btn {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #e2e8f0;
+        border-radius: 8px;
+        padding: 5px 9px;
+        font-size: 0.76rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .qr-sim-btn:hover,
+    .qr-sim-btn.active {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        color: #ffffff;
+    }
 }
